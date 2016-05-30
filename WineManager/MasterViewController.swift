@@ -9,11 +9,18 @@
 import UIKit
 import CoreData
 
-class MasterViewController: UITableViewController, NSFetchedResultsControllerDelegate {
+class MasterViewController: UITableViewController, NSFetchedResultsControllerDelegate, NSXMLParserDelegate {
 
     var detailViewController: DetailViewController? = nil
     var managedObjectContext: NSManagedObjectContext? = nil
-
+    
+    var parser = NSXMLParser()
+    var bottles = NSMutableArray()
+    var elements = NSMutableDictionary()
+    var element = NSString()
+    var name = String()
+    var vintage = String()
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,6 +33,18 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
             let controllers = split.viewControllers
             self.detailViewController = (controllers[controllers.count-1] as! UINavigationController).topViewController as? DetailViewController
         }
+        
+        
+        let path = NSBundle.mainBundle().pathForResource("WineList", ofType: "xml")
+        if path != nil {
+            parser = NSXMLParser(contentsOfURL: NSURL(fileURLWithPath: path!))!
+        } else {
+            NSLog("Failed to find xml")
+        }
+        parser.delegate = self
+        parser.parse()
+        //insertNewBottle()
+        
     }
 
     override func viewWillAppear(animated: Bool) {
@@ -57,7 +76,66 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
             abort()
         }
     }
+    
+    func insertNewBottle() {
+        let newBottle = NSEntityDescription.insertNewObjectForEntityForName("Bottle", inManagedObjectContext: self.managedObjectContext!) as! Bottle
+        
+        //bottle.setValue(NSDate(), forKey: "timeStamp")
+        newBottle.name = name
+        if let myNumber = NSNumberFormatter().numberFromString(vintage) {
+            newBottle.vintage = myNumber
+        }
+        
+        
+        // Save the context.
+        do {
+            try self.managedObjectContext!.save()
+        } catch {
+            // Replace this implementation with code to handle the error appropriately.
+            // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+            
+            abort()
+        }
+    }
 
+    
+    // MARK: - Parser
+    func parser(parser: NSXMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String])
+    {
+        element = elementName
+        
+        if (elementName as NSString).isEqualToString("bottle")
+        {
+            elements = NSMutableDictionary()
+            elements = [:]
+            name = ""
+            vintage = ""
+        }
+    }
+    
+    func parser(parser: NSXMLParser, foundCharacters string: String)
+    {
+        if element.isEqualToString("Name") {
+            if (name.isEmpty) {
+                name = name + string
+            }
+            NSLog(name)
+        } else if element.isEqualToString("Vintage") {
+            if (vintage.isEmpty) {
+                vintage = vintage + string
+            }
+            NSLog(vintage)
+        }
+        
+        
+    }
+    
+    func parser(parser: NSXMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?)
+    {
+        if (elementName as NSString).isEqualToString("bottle") {
+            insertNewBottle()
+        }
+    }
     // MARK: - Segues
 
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
@@ -112,7 +190,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
     }
 
     func configureCell(cell: UITableViewCell, withObject object: NSManagedObject) {
-        cell.textLabel!.text = object.valueForKey("timeStamp")!.description
+        cell.textLabel!.text = object.valueForKey("vintage")!.description + " " + object.valueForKey("name")!.description
     }
 
     // MARK: - Fetched results controller
@@ -124,14 +202,14 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         
         let fetchRequest = NSFetchRequest()
         // Edit the entity name as appropriate.
-        let entity = NSEntityDescription.entityForName("Event", inManagedObjectContext: self.managedObjectContext!)
+        let entity = NSEntityDescription.entityForName("Bottle", inManagedObjectContext: self.managedObjectContext!)
         fetchRequest.entity = entity
         
         // Set the batch size to a suitable number.
         fetchRequest.fetchBatchSize = 20
         
         // Edit the sort key as appropriate.
-        let sortDescriptor = NSSortDescriptor(key: "timeStamp", ascending: false)
+        let sortDescriptor = NSSortDescriptor(key: "name", ascending: false)
         
         fetchRequest.sortDescriptors = [sortDescriptor]
         
