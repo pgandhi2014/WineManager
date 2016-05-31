@@ -20,6 +20,9 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
     var element = NSString()
     var name = String()
     var vintage = String()
+    var parsedBottle = WineBottle()
+    var parsedLot = Lot(purchaseDate: "", price: "", quantity: "")
+    var parsedLoc = Loc(status: "", location: "", drunkDate: "", rating: "", notes: "")
     
 
     override func viewDidLoad() {
@@ -80,11 +83,58 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
     func insertNewBottle() {
         let newBottle = NSEntityDescription.insertNewObjectForEntityForName("Bottle", inManagedObjectContext: self.managedObjectContext!) as! Bottle
         
-        //bottle.setValue(NSDate(), forKey: "timeStamp")
-        newBottle.name = name
-        if let myNumber = NSNumberFormatter().numberFromString(vintage) {
+        
+        newBottle.name = parsedBottle.name
+        if let myNumber = NSNumberFormatter().numberFromString(parsedBottle.vintage) {
             newBottle.vintage = myNumber
         }
+        newBottle.varietal = parsedBottle.varietal
+        newBottle.region = parsedBottle.region
+        newBottle.country = parsedBottle.country
+        newBottle.reviewSource = parsedBottle.reviewSource
+        if let myNumber = NSNumberFormatter().numberFromString(parsedBottle.points) {
+            newBottle.points = myNumber
+        }
+        newBottle.review = parsedBottle.review
+        
+        for (index, value) in parsedBottle.purchaseLots.enumerate() {
+            NSLog("Index = " + String(index))
+            let newLot = NSEntityDescription.insertNewObjectForEntityForName("PurchaseLot", inManagedObjectContext: self.managedObjectContext!) as! PurchaseLot
+            let lot = value as! Lot
+            newLot.bottle = newBottle
+            let dateFormatter = NSDateFormatter()
+            dateFormatter.dateFormat = "yyyy-MM-dd"
+            newLot.purchaseDate = dateFormatter.dateFromString(lot.purchaseDate)
+            if let myNumber = NSNumberFormatter().numberFromString(lot.price) {
+                newLot.price = NSDecimalNumber(decimal: myNumber.decimalValue)
+            }
+            if let myNumber = NSNumberFormatter().numberFromString(lot.quantity) {
+                newLot.quantity = myNumber
+            }
+        }
+        
+        for (index, value) in parsedBottle.locations.enumerate() {
+            NSLog("Index = " + String(index))
+            let newLoc = NSEntityDescription.insertNewObjectForEntityForName("Status", inManagedObjectContext: self.managedObjectContext!) as! Status
+            let loc = value as! Loc
+            newLoc.bottle = newBottle
+            let dateFormatter = NSDateFormatter()
+            dateFormatter.dateFormat = "yyyy-MM-dd"
+            if let myDate = dateFormatter.dateFromString(loc.drunkDate) {
+                newLoc.drunkDate = myDate
+            }
+            if (loc.status == "Drunk") {
+                newLoc.available = 0
+            } else {
+                newLoc.available = 1
+            }
+            newLoc.location = loc.location
+            newLoc.notes = loc.notes
+            if let myNumber = NSNumberFormatter().numberFromString(loc.rating) {
+                newLoc.rating = NSDecimalNumber(decimal: myNumber.decimalValue)
+            }
+        }
+        
         
         
         // Save the context.
@@ -102,39 +152,128 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
     // MARK: - Parser
     func parser(parser: NSXMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String])
     {
-        element = elementName
+        element = elementName as String
         
-        if (elementName as NSString).isEqualToString("bottle")
-        {
-            elements = NSMutableDictionary()
-            elements = [:]
-            name = ""
-            vintage = ""
+        if elementName == "bottle" {
+            parsedBottle.Erase()
+        } else if elementName == "Lot" {
+            parsedLot.Erase()
+        } else if elementName == "Loc" {
+            parsedLoc.Erase()
         }
+        
     }
     
     func parser(parser: NSXMLParser, foundCharacters string: String)
     {
+        NSLog(string)
         if element.isEqualToString("Name") {
-            if (name.isEmpty) {
-                name = name + string
+            if (parsedBottle.name.isEmpty) {
+                parsedBottle.name = parsedBottle.name + string
+                NSLog (string)
             }
-            NSLog(name)
         } else if element.isEqualToString("Vintage") {
-            if (vintage.isEmpty) {
-                vintage = vintage + string
+            if (parsedBottle.vintage.isEmpty) {
+                parsedBottle.vintage = parsedBottle.vintage + string
             }
-            NSLog(vintage)
+        } else if element.isEqualToString("Varietal") {
+            if (parsedBottle.varietal.isEmpty) {
+                parsedBottle.varietal = parsedBottle.varietal + string
+            }
+        } else if element.isEqualToString("Region") {
+            if (parsedBottle.region.isEmpty) {
+                parsedBottle.region = parsedBottle.region + string
+            }
+        } else if element.isEqualToString("Country") {
+            if (parsedBottle.country.isEmpty) {
+                parsedBottle.country = parsedBottle.country + string
+            }
+        } else if element.isEqualToString("ReviewSource") {
+            if (parsedBottle.reviewSource.isEmpty) {
+                parsedBottle.reviewSource = parsedBottle.reviewSource + string
+            }
+        } else if element.isEqualToString("Points") {
+            if (parsedBottle.points.isEmpty) {
+                parsedBottle.points = parsedBottle.points + string
+            }
+        } else if element.isEqualToString("Review") {
+            if (parsedBottle.review.isEmpty) {
+                parsedBottle.review = parsedBottle.review + string
+            }
+        } else if element.isEqualToString("PurchaseDate") {
+            if (parsedLot.purchaseDate.isEmpty) {
+                parsedLot.purchaseDate = parsedLot.purchaseDate + string
+            }
+        } else if element.isEqualToString("Price") {
+            if (parsedLot.price.isEmpty) {
+                parsedLot.price = parsedLot.price + string
+            }
+        } else if element.isEqualToString("Quantity") {
+            if (parsedLot.quantity.isEmpty) {
+                parsedLot.quantity = parsedLot.quantity + string
+            }
+        } else if element.isEqualToString("Status") {
+            if (parsedLoc.status.isEmpty) {
+                parsedLoc.status = parsedLoc.status + string
+            }
+        } else if element.isEqualToString("Location") {
+            if (parsedLoc.location.isEmpty) {
+                parsedLoc.location = parsedLoc.location + string
+            }
+        } else if element.isEqualToString("DrunkDate") {
+            if (parsedLoc.drunkDate.isEmpty && !string.containsString("\n")) {
+                parsedLoc.drunkDate = parsedLoc.drunkDate + string
+            }
+        } else if element.isEqualToString("Rating") {
+            if (parsedLoc.rating.isEmpty && !string.containsString("\n")) {
+                parsedLoc.rating = parsedLoc.rating + string
+            }
+        } else if element.isEqualToString("Notes") {
+            if (parsedLoc.notes.isEmpty && !string.containsString("\n")) {
+                parsedLoc.notes = parsedLoc.notes + string
+            }
         }
-        
         
     }
     
-    func parser(parser: NSXMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?)
+    /*
+ <Name>Stag's Leap Cask 23</Name>
+ <Vintage>2005</Vintage>
+ <Varietal>Cabernet Sauvignon</Varietal>
+ <Region>Napa</Region>
+ <Country>USA</Country>
+ <ReviewSource>Wine Spectator</ReviewSource>
+ <Points>92</Points>
+ <Review>A very good but not great Cask 23, showing plenty of decadence and flair but not perhaps that extra edge of complexity. It‚Äôs forward now in sweet new oak and flashy, jammy blackberries, cherries and raspberries. The tannins are quite an achievement, rich, vibrant and supple. Made from pure Cabernet, it is full-bodied and dense, with a chocolaty finish. Could gain in the bottle beyond 2012 to about 2018</Review>
+ <PurchaseLots>
+ <Lot>
+ <PurchaseDate>2014-07-03</PurchaseDate>
+ <Price>225</Price>
+ <Quantity>1</Quantity>
+ </Lot>
+ </PurchaseLots>
+ <Locations>
+ <Loc>
+ <Status>Drunk</Status>
+ <Location />
+ <DrunkDate>2015-05-19</DrunkDate>
+ <Rating>4</Rating>
+ <Notes />
+ </Loc>
+ </Locations>
+ </bottle>
+ */
+ 
+ func parser(parser: NSXMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?)
     {
-        if (elementName as NSString).isEqualToString("bottle") {
+        if (elementName == "bottle") {
             insertNewBottle()
+        } else if (elementName == "Lot") {
+            parsedBottle.purchaseLots.addObject(parsedLot.copy())
+        } else if (elementName == "Loc") {
+            parsedBottle.locations.addObject(parsedLoc.copy())
         }
+        
     }
     // MARK: - Segues
 
