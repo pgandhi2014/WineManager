@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="10174" systemVersion="15F34" minimumToolsVersion="Automatic">
     <entity name="Bottle" representedClassName=".Bottle" syncable="YES">
+        <attribute name="availableBottles" transient="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="country" attributeType="String" defaultValueString="None" syncable="YES"/>
         <attribute name="name" attributeType="String" defaultValueString="None" syncable="YES"/>
         <attribute name="points" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
@@ -36,10 +37,10 @@
         <relationship name="bottle" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Bottle" inverseName="statuses" inverseEntity="Bottle" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Bottle" positionX="657" positionY="2970" width="128" height="208"/>
-        <element name="PurchaseLot" positionX="457" positionY="2970" width="128" height="103"/>
-        <element name="Status" positionX="855" positionY="2970" width="128" height="133"/>
+        <element name="Bottle" positionX="657" positionY="2970" width="128" height="225"/>
         <element name="Country" positionX="646" positionY="3203" width="128" height="73"/>
         <element name="Location" positionX="844" positionY="3201" width="128" height="73"/>
+        <element name="PurchaseLot" positionX="457" positionY="2970" width="128" height="103"/>
+        <element name="Status" positionX="855" positionY="2970" width="128" height="133"/>
     </elements>
 </model>

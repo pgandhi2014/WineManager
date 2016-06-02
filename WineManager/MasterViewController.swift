@@ -30,8 +30,8 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         // Do any additional setup after loading the view, typically from a nib.
         self.navigationItem.leftBarButtonItem = self.editButtonItem()
 
-        let addButton = UIBarButtonItem(barButtonSystemItem: .Add, target: self, action: #selector(insertNewObject(_:)))
-        self.navigationItem.rightBarButtonItem = addButton
+        //let addButton = UIBarButtonItem(barButtonSystemItem: .Add, target: self, action: #selector(insertNewObject(_:)))
+        //self.navigationItem.rightBarButtonItem = addButton
         if let split = self.splitViewController {
             let controllers = split.viewControllers
             self.detailViewController = (controllers[controllers.count-1] as! UINavigationController).topViewController as? DetailViewController
@@ -44,9 +44,9 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         } else {
             NSLog("Failed to find xml")
         }
+        
         parser.delegate = self
         parser.parse()
-        //insertNewBottle()
         
     }
 
@@ -60,29 +60,28 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         // Dispose of any resources that can be recreated.
     }
 
-    func insertNewObject(sender: AnyObject) {
-        let context = self.fetchedResultsController.managedObjectContext
-        let entity = self.fetchedResultsController.fetchRequest.entity!
-        let newManagedObject = NSEntityDescription.insertNewObjectForEntityForName(entity.name!, inManagedObjectContext: context)
-             
-        // If appropriate, configure the new managed object.
-        // Normally you should use accessor methods, but using KVC here avoids the need to add a custom class to the template.
-        newManagedObject.setValue(NSDate(), forKey: "timeStamp")
-             
-        // Save the context.
-        do {
-            try context.save()
-        } catch {
-            // Replace this implementation with code to handle the error appropriately.
-            // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-            //print("Unresolved error \(error), \(error.userInfo)")
-            abort()
-        }
-    }
+//    func insertNewObject(sender: AnyObject) {
+//        let context = self.fetchedResultsController.managedObjectContext
+//        let entity = self.fetchedResultsController.fetchRequest.entity!
+//        let newManagedObject = NSEntityDescription.insertNewObjectForEntityForName(entity.name!, inManagedObjectContext: context)
+//             
+//        // If appropriate, configure the new managed object.
+//        // Normally you should use accessor methods, but using KVC here avoids the need to add a custom class to the template.
+//        newManagedObject.setValue(NSDate(), forKey: "timeStamp")
+//             
+//        // Save the context.
+//        do {
+//            try context.save()
+//        } catch {
+//            // Replace this implementation with code to handle the error appropriately.
+//            // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+//            //print("Unresolved error \(error), \(error.userInfo)")
+//            abort()
+//        }
+//    }
     
     func insertNewBottle() {
         let newBottle = NSEntityDescription.insertNewObjectForEntityForName("Bottle", inManagedObjectContext: self.managedObjectContext!) as! Bottle
-        
         
         newBottle.name = parsedBottle.name
         if let myNumber = NSNumberFormatter().numberFromString(parsedBottle.vintage) {
@@ -135,8 +134,6 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
             }
         }
         
-        
-        
         // Save the context.
         do {
             try self.managedObjectContext!.save()
@@ -166,7 +163,6 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
     
     func parser(parser: NSXMLParser, foundCharacters string: String)
     {
-        NSLog(string)
         if element.isEqualToString("Name") {
             if (parsedBottle.name.isEmpty) {
                 parsedBottle.name = parsedBottle.name + string
@@ -236,34 +232,6 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         
     }
     
-    /*
- <Name>Stag's Leap Cask 23</Name>
- <Vintage>2005</Vintage>
- <Varietal>Cabernet Sauvignon</Varietal>
- <Region>Napa</Region>
- <Country>USA</Country>
- <ReviewSource>Wine Spectator</ReviewSource>
- <Points>92</Points>
- <Review>A very good but not great Cask 23, showing plenty of decadence and flair but not perhaps that extra edge of complexity. It‚Äôs forward now in sweet new oak and flashy, jammy blackberries, cherries and raspberries. The tannins are quite an achievement, rich, vibrant and supple. Made from pure Cabernet, it is full-bodied and dense, with a chocolaty finish. Could gain in the bottle beyond 2012 to about 2018</Review>
- <PurchaseLots>
- <Lot>
- <PurchaseDate>2014-07-03</PurchaseDate>
- <Price>225</Price>
- <Quantity>1</Quantity>
- </Lot>
- </PurchaseLots>
- <Locations>
- <Loc>
- <Status>Drunk</Status>
- <Location />
- <DrunkDate>2015-05-19</DrunkDate>
- <Rating>4</Rating>
- <Notes />
- </Loc>
- </Locations>
- </bottle>
- */
- 
  func parser(parser: NSXMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?)
     {
         if (elementName == "bottle") {
@@ -329,7 +297,33 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
     }
 
     func configureCell(cell: UITableViewCell, withObject object: NSManagedObject) {
+        let currentBottle = object as! Bottle
+        var avgPrice = 0.0
+        var totalBottles = 0
+        var availBottles = 0
+        let formatter = NSNumberFormatter()
+        formatter.maximumFractionDigits = 1
+        formatter.minimumFractionDigits = 1
+        
+        for (_, value) in currentBottle.lots!.enumerate() {
+            let lot = value as! PurchaseLot
+            avgPrice = avgPrice + (lot.price!.doubleValue * lot.quantity!.doubleValue)
+            totalBottles = totalBottles + lot.quantity!.integerValue
+        }
+        avgPrice = avgPrice / Double(totalBottles)
+        availBottles = totalBottles
+        
+        for (_, value) in currentBottle.statuses!.enumerate() {
+            let loc = value as! Status
+            if (loc.available == 0) {
+                availBottles = availBottles - 1
+            }
+        }
+        
         cell.textLabel!.text = object.valueForKey("vintage")!.description + " " + object.valueForKey("name")!.description
+        cell.detailTextLabel!.text = "$" + formatter.stringFromNumber(avgPrice)! + "  " + currentBottle.varietal! + "  " + String(currentBottle.availableBottles!)
+        
+        
     }
 
     // MARK: - Fetched results controller
@@ -348,9 +342,13 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         fetchRequest.fetchBatchSize = 20
         
         // Edit the sort key as appropriate.
-        let sortDescriptor = NSSortDescriptor(key: "name", ascending: false)
+        let sortDescriptor = NSSortDescriptor(key: "name", ascending: true)
         
         fetchRequest.sortDescriptors = [sortDescriptor]
+        
+        //let firstName = "98"
+        fetchRequest.predicate = NSPredicate(format: "ANY statuses.available > 0")
+        
         
         // Edit the section name key path and cache name if appropriate.
         // nil for section name key path means "no sections".
