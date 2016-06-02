@@ -46,7 +46,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         }
         
         parser.delegate = self
-        parser.parse()
+        //parser.parse()
         
     }
 
@@ -96,8 +96,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         }
         newBottle.review = parsedBottle.review
         
-        for (index, value) in parsedBottle.purchaseLots.enumerate() {
-            NSLog("Index = " + String(index))
+        for (_, value) in parsedBottle.purchaseLots.enumerate() {
             let newLot = NSEntityDescription.insertNewObjectForEntityForName("PurchaseLot", inManagedObjectContext: self.managedObjectContext!) as! PurchaseLot
             let lot = value as! Lot
             newLot.bottle = newBottle
@@ -106,14 +105,17 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
             newLot.purchaseDate = dateFormatter.dateFromString(lot.purchaseDate)
             if let myNumber = NSNumberFormatter().numberFromString(lot.price) {
                 newLot.price = NSDecimalNumber(decimal: myNumber.decimalValue)
+                if (newLot.price!.compare(newBottle.maxPrice!) == NSComparisonResult.OrderedDescending) {
+                    newBottle.maxPrice = newLot.price
+                }
             }
             if let myNumber = NSNumberFormatter().numberFromString(lot.quantity) {
                 newLot.quantity = myNumber
+                newBottle.availableBottles = (newBottle.availableBottles?.integerValue)! + (newLot.quantity?.integerValue)!
             }
         }
         
-        for (index, value) in parsedBottle.locations.enumerate() {
-            NSLog("Index = " + String(index))
+        for (_, value) in parsedBottle.locations.enumerate() {
             let newLoc = NSEntityDescription.insertNewObjectForEntityForName("Status", inManagedObjectContext: self.managedObjectContext!) as! Status
             let loc = value as! Loc
             newLoc.bottle = newBottle
@@ -124,6 +126,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
             }
             if (loc.status == "Drunk") {
                 newLoc.available = 0
+                newBottle.availableBottles = (newBottle.availableBottles?.integerValue)! - 1
             } else {
                 newLoc.available = 1
             }
@@ -298,31 +301,24 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
 
     func configureCell(cell: UITableViewCell, withObject object: NSManagedObject) {
         let currentBottle = object as! Bottle
-        var avgPrice = 0.0
-        var totalBottles = 0
-        var availBottles = 0
         let formatter = NSNumberFormatter()
         formatter.maximumFractionDigits = 1
         formatter.minimumFractionDigits = 1
         
-        for (_, value) in currentBottle.lots!.enumerate() {
-            let lot = value as! PurchaseLot
-            avgPrice = avgPrice + (lot.price!.doubleValue * lot.quantity!.doubleValue)
-            totalBottles = totalBottles + lot.quantity!.integerValue
+        if (currentBottle.vintage! == 0) {
+            cell.textLabel!.text = "NV " + currentBottle.name!
+        } else {
+            cell.textLabel!.text = String(currentBottle.vintage!) + " " + currentBottle.name!
         }
-        avgPrice = avgPrice / Double(totalBottles)
-        availBottles = totalBottles
+        cell.detailTextLabel!.text = "$" + formatter.stringFromNumber(currentBottle.maxPrice!)! + "  " + currentBottle.varietal! + "  " + String(currentBottle.availableBottles!)
         
-        for (_, value) in currentBottle.statuses!.enumerate() {
-            let loc = value as! Status
-            if (loc.available == 0) {
-                availBottles = availBottles - 1
-            }
+        if (currentBottle.availableBottles?.integerValue == 0) {
+            cell.textLabel?.textColor = UIColor.redColor()
+            cell.detailTextLabel?.textColor = UIColor.redColor()
+        } else {
+            cell.textLabel?.textColor = UIColor.blackColor()
+            cell.detailTextLabel?.textColor = UIColor.blackColor()
         }
-        
-        cell.textLabel!.text = object.valueForKey("vintage")!.description + " " + object.valueForKey("name")!.description
-        cell.detailTextLabel!.text = "$" + formatter.stringFromNumber(avgPrice)! + "  " + currentBottle.varietal! + "  " + String(currentBottle.availableBottles!)
-        
         
     }
 
@@ -342,20 +338,21 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         fetchRequest.fetchBatchSize = 20
         
         // Edit the sort key as appropriate.
-        let sortDescriptor = NSSortDescriptor(key: "name", ascending: true)
+        let sortDescriptor = NSSortDescriptor(key: "maxPrice", ascending: false)
         
         fetchRequest.sortDescriptors = [sortDescriptor]
         
-        //let firstName = "98"
-        fetchRequest.predicate = NSPredicate(format: "ANY statuses.available > 0")
+        //fetchRequest.predicate = NSPredicate(format: "ANY lots.price > 300 AND ANY lots.price < 500")
+        //fetchRequest.predicate = NSPredicate(format: "availableBottles = 0")
         
         
         // Edit the section name key path and cache name if appropriate.
         // nil for section name key path means "no sections".
         let aFetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: self.managedObjectContext!, sectionNameKeyPath: nil, cacheName: "Master")
         aFetchedResultsController.delegate = self
+        NSFetchedResultsController.deleteCacheWithName(nil)
         _fetchedResultsController = aFetchedResultsController
-        
+
         do {
             try _fetchedResultsController!.performFetch()
         } catch {
