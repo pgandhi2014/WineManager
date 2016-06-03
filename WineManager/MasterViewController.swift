@@ -9,8 +9,9 @@
 import UIKit
 import CoreData
 
-class MasterViewController: UITableViewController, NSFetchedResultsControllerDelegate, NSXMLParserDelegate {
+class MasterViewController: UITableViewController, NSFetchedResultsControllerDelegate, NSXMLParserDelegate, UISearchBarDelegate {
 
+    @IBOutlet weak var searchBar: UISearchBar!
     var detailViewController: DetailViewController? = nil
     var managedObjectContext: NSManagedObjectContext? = nil
     
@@ -23,7 +24,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
     var parsedBottle = WineBottle()
     var parsedLot = Lot(purchaseDate: "", price: "", quantity: "")
     var parsedLoc = Loc(status: "", location: "", drunkDate: "", rating: "", notes: "")
-    
+    var fetchRequest = NSFetchRequest()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -45,6 +46,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
             NSLog("Failed to find xml")
         }
         
+        searchBar.delegate = self
         parser.delegate = self
         //parser.parse()
         
@@ -146,6 +148,55 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
             
             abort()
         }
+    }
+
+    
+    //MARK: - SearchBar
+    func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
+        var subORPredicates = [NSPredicate]()
+        var subANDPredicates = [NSPredicate]()
+        
+        if (searchText.isEmpty) {
+            fetchRequest.predicate = NSPredicate(value: true)
+        } else {
+            let searchWords = searchText.componentsSeparatedByString(" ")
+            for(_,value) in searchWords.enumerate() {
+                //NSLog(value)
+                if (!value.isEmpty) {
+                    let predicateName = NSPredicate(format: "name contains[cd] %@", value)
+                    subORPredicates.append(predicateName)
+                    let predicateVarietal = NSPredicate(format: "varietal contains[cd] %@", value)
+                    subORPredicates.append(predicateVarietal)
+                    let subOR = NSCompoundPredicate(type: NSCompoundPredicateType.OrPredicateType, subpredicates: subORPredicates)
+                    for (_, value) in subOR.subpredicates.enumerate() {
+                        //NSLog((value as! NSPredicate).predicateFormat)
+                    }
+                    subANDPredicates.append(subOR)
+                    subORPredicates.removeAll()
+                }
+            }
+            
+            let predicate = NSCompoundPredicate(type: NSCompoundPredicateType.AndPredicateType, subpredicates: subANDPredicates)
+            for (_, value) in predicate.subpredicates.enumerate() {
+                NSLog((value as! NSPredicate).predicateFormat)
+            }
+            
+            // Set the predicate on the fetch request
+            fetchRequest.predicate = predicate
+            
+        //fetchRequest.predicate = NSPredicate(format: "name contains[cd] %@ OR varietal contains[cd] %@ OR region contains[cd] %@ OR country contains[cd] %@", searchText, searchText, searchText, searchText)
+        }
+        NSFetchedResultsController.deleteCacheWithName(nil)
+        do {
+            try self.fetchedResultsController.performFetch()
+        } catch {
+            // Replace this implementation with code to handle the error appropriately.
+            // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+            //print("Unresolved error \(error), \(error.userInfo)")
+            abort()
+        }
+        self.tableView.reloadData()
+        
     }
 
     
@@ -329,7 +380,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
             return _fetchedResultsController!
         }
         
-        let fetchRequest = NSFetchRequest()
+        //let fetchRequest = NSFetchRequest()
         // Edit the entity name as appropriate.
         let entity = NSEntityDescription.entityForName("Bottle", inManagedObjectContext: self.managedObjectContext!)
         fetchRequest.entity = entity
