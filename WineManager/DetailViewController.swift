@@ -11,28 +11,57 @@ import UIKit
 class DetailViewController: UIViewController {
 
     @IBOutlet weak var detailDescriptionLabel: UILabel!
-
+    @IBOutlet weak var nameLabel: UILabel!
+    @IBOutlet weak var regionLabel: UILabel!
+    @IBOutlet weak var lotsLabel: UILabel!
+    @IBOutlet weak var locationsLabel: UILabel!
 
     var detailItem: AnyObject? {
         didSet {
             // Update the view.
-            self.configureView()
+            //self.configureView()
         }
     }
 
     func configureView() {
         // Update the user interface for the detail item.
-        if let detail = self.detailItem {
-            if let label = self.detailDescriptionLabel {
-                label.text = detail.valueForKey("review")!.description
+        let dateFormatter = NSDateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        var lotDescription = ""
+        var locDescrption = ""
+        
+        let bottleDetails = self.detailItem as! Bottle
+        if (bottleDetails.vintage! == 0) {
+            nameLabel.text = "NV " + bottleDetails.name!
+        } else {
+            nameLabel!.text = String(bottleDetails.vintage!) + " " + bottleDetails.name!
+        }
+        regionLabel!.text = bottleDetails.varietal! + " from " + bottleDetails.region! + ", " + bottleDetails.country!
+        for (_, value) in bottleDetails.lots!.enumerate() {
+            let lot = value as! PurchaseLot
+            if (lot.quantity == 1) {
+                lotDescription = lotDescription + lot.quantity!.stringValue + " bottle on " + dateFormatter.stringFromDate(lot.purchaseDate!) + " for $" + lot.price!.stringValue + "\n"
+            } else {
+                lotDescription = lotDescription + lot.quantity!.stringValue + " bottles on " + dateFormatter.stringFromDate(lot.purchaseDate!) + " for $" + lot.price!.stringValue + "\n"
             }
         }
+        lotsLabel!.text = lotDescription
+        for (_, value) in bottleDetails.statuses!.enumerate() {
+            let loc = value as! Status
+            if (loc.available == 1) {
+                locDescrption = locDescrption + "Stored in " + loc.location! + "\n"
+            } else {
+                locDescrption = locDescrption + loc.rating!.stringValue + " stars on " + dateFormatter.stringFromDate(loc.drunkDate!)
+            }
+        }
+        locationsLabel!.text = locDescrption
+
+
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-        self.configureView()
         
         let dateFormatter = NSDateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
@@ -58,6 +87,7 @@ class DetailViewController: UIViewController {
             NSLog(loc.notes!)
             NSLog(loc.rating!.stringValue)
         }
+        self.configureView()
         
         
     }

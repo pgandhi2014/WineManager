@@ -3,15 +3,21 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
         <!--Master-->
         <scene sceneID="pY4-Hu-kfo">
             <objects>
-                <navigationController title="Master" id="RMx-3f-FxP" sceneMemberID="viewController">
+                <navigationController title="Master" toolbarHidden="NO" id="RMx-3f-FxP" sceneMemberID="viewController">
+                    <toolbarItems/>
                     <navigationBar key="navigationBar" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="Pmd-2v-anx">
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
+                    <toolbar key="toolbar" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="Bvu-73-wS1">
+                        <rect key="frame" x="0.0" y="556" width="600" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </toolbar>
                     <connections>
                         <segue destination="7bK-jq-Zjz" kind="relationship" relationship="rootViewController" id="tsl-Nk-0bq"/>
                     </connections>
@@ -39,18 +45,90 @@
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2ib-ZU-PF8">
+                                <rect key="frame" x="20" y="72" width="560" height="40"/>
+                                <attributedString key="attributedText">
+                                    <fragment content="Name">
+                                        <attributes>
+                                            <font key="NSFont" size="24" name="HelveticaNeue-Medium"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
+                                        </attributes>
+                                    </fragment>
+                                </attributedString>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tHU-8c-7Df">
+                                <rect key="frame" x="20" y="137" width="560" height="30"/>
+                                <attributedString key="attributedText">
+                                    <fragment content="Region">
+                                        <attributes>
+                                            <color key="NSColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <font key="NSFont" size="17" name="HelveticaNeue"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
+                                        </attributes>
+                                    </fragment>
+                                </attributedString>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="5" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sKm-LK-yjS">
+                                <rect key="frame" x="20" y="175" width="560" height="30"/>
+                                <attributedString key="attributedText">
+                                    <fragment content="Lots">
+                                        <attributes>
+                                            <color key="NSColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <font key="NSFont" size="17" name="HelveticaNeue"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
+                                        </attributes>
+                                    </fragment>
+                                </attributedString>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="5" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZCN-5b-LUe">
+                                <rect key="frame" x="20" y="213" width="560" height="21"/>
+                                <attributedString key="attributedText">
+                                    <fragment content="Locations">
+                                        <attributes>
+                                            <color key="NSColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <font key="NSFont" size="17" name="HelveticaNeue"/>
+                                        </attributes>
+                                    </fragment>
+                                </attributedString>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstAttribute="leadingMargin" secondItem="sKm-LK-yjS" secondAttribute="leading" id="162-bV-I5Y"/>
+                            <constraint firstItem="2ib-ZU-PF8" firstAttribute="top" secondItem="SYR-Wa-9uf" secondAttribute="bottom" constant="8" id="1Cz-kO-NpF"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="tHU-8c-7Df" secondAttribute="trailing" id="5xJ-HN-dZv"/>
+                            <constraint firstItem="ZCN-5b-LUe" firstAttribute="centerX" secondItem="svH-Pt-448" secondAttribute="centerX" id="DSf-lr-wHF"/>
+                            <constraint firstItem="tHU-8c-7Df" firstAttribute="top" secondItem="2ib-ZU-PF8" secondAttribute="bottom" constant="15" id="Ft4-qX-dqz"/>
+                            <constraint firstItem="tHU-8c-7Df" firstAttribute="centerX" secondItem="svH-Pt-448" secondAttribute="centerX" id="HfJ-h1-DFw"/>
+                            <constraint firstAttribute="leadingMargin" secondItem="2ib-ZU-PF8" secondAttribute="leading" id="KFC-ZJ-kKo"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="ZCN-5b-LUe" secondAttribute="trailing" id="KpM-IH-IzH"/>
+                            <constraint firstAttribute="leadingMargin" secondItem="ZCN-5b-LUe" secondAttribute="leading" id="Lb4-ai-PTZ"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="sKm-LK-yjS" secondAttribute="trailing" id="Ncr-qk-77A"/>
+                            <constraint firstItem="sKm-LK-yjS" firstAttribute="centerX" secondItem="svH-Pt-448" secondAttribute="centerX" id="S4a-aZ-VYD"/>
                             <constraint firstItem="0XM-y9-sOw" firstAttribute="leading" secondItem="svH-Pt-448" secondAttribute="leading" constant="20" symbolic="YES" id="Tsc-yG-G1q"/>
+                            <constraint firstItem="ZCN-5b-LUe" firstAttribute="top" secondItem="sKm-LK-yjS" secondAttribute="bottom" constant="10" id="UTY-SZ-baZ"/>
+                            <constraint firstItem="2ib-ZU-PF8" firstAttribute="centerX" secondItem="svH-Pt-448" secondAttribute="centerX" id="Uga-jc-QgE"/>
+                            <constraint firstItem="tHU-8c-7Df" firstAttribute="leading" secondItem="svH-Pt-448" secondAttribute="leadingMargin" id="acV-3b-vll"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="2ib-ZU-PF8" secondAttribute="trailing" id="d0j-7W-Hfv"/>
                             <constraint firstItem="0XM-y9-sOw" firstAttribute="centerY" secondItem="svH-Pt-448" secondAttribute="centerY" id="jWN-iV-94e"/>
+                            <constraint firstItem="sKm-LK-yjS" firstAttribute="top" secondItem="tHU-8c-7Df" secondAttribute="bottom" constant="10" id="mVp-SL-aF8"/>
                             <constraint firstAttribute="trailing" secondItem="0XM-y9-sOw" secondAttribute="trailing" constant="20" symbolic="YES" id="tHV-ZD-HQj"/>
                         </constraints>
                     </view>
-                    <toolbarItems/>
+                    <toolbarItems>
+                        <barButtonItem title="Mark as Drunk" id="Lcd-Jt-O1o"/>
+                    </toolbarItems>
                     <navigationItem key="navigationItem" title="Detail" id="mOI-FS-AaM"/>
                     <connections>
                         <outlet property="detailDescriptionLabel" destination="0XM-y9-sOw" id="deQ-Na-JPF"/>
+                        <outlet property="locationsLabel" destination="ZCN-5b-LUe" id="gwP-u7-c7j"/>
+                        <outlet property="lotsLabel" destination="sKm-LK-yjS" id="7jV-uf-6QU"/>
+                        <outlet property="nameLabel" destination="2ib-ZU-PF8" id="y7N-12-13k"/>
+                        <outlet property="regionLabel" destination="tHU-8c-7Df" id="OQQ-xh-nSJ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FJe-Yq-33r" sceneMemberID="firstResponder"/>
@@ -120,6 +198,9 @@
                             <outlet property="delegate" destination="7bK-jq-Zjz" id="RA6-mI-bju"/>
                         </connections>
                     </tableView>
+                    <toolbarItems>
+                        <barButtonItem title="Filters" id="ISS-TC-OvO"/>
+                    </toolbarItems>
                     <navigationItem key="navigationItem" title="Master" id="Zdf-7t-Un8"/>
                     <connections>
                         <outlet property="searchBar" destination="iUl-Rt-5mv" id="bHc-IZ-kVF"/>
@@ -132,10 +213,14 @@
         <!--Navigation Controller-->
         <scene sceneID="r7l-gg-dq7">
             <objects>
-                <navigationController id="vC3-pB-5Vb" sceneMemberID="viewController">
+                <navigationController toolbarHidden="NO" id="vC3-pB-5Vb" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="DjV-YW-jjY">
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
+                    <toolbar key="toolbar" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="84O-nw-tQo">
+                        <rect key="frame" x="0.0" y="556" width="600" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </toolbar>
                     <connections>
                         <segue destination="JEX-9P-axG" kind="relationship" relationship="rootViewController" id="GKi-kA-LjT"/>
                     </connections>

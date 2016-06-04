@@ -149,11 +149,8 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
             abort()
         }
     }
-
     
-    //MARK: - SearchBar
-    func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
-        var subORPredicates = [NSPredicate]()
+    func setPredicateAndFilterResults(searchText: String) {
         var subANDPredicates = [NSPredicate]()
         
         if (searchText.isEmpty) {
@@ -161,31 +158,25 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         } else {
             let searchWords = searchText.componentsSeparatedByString(" ")
             for(_,value) in searchWords.enumerate() {
-                //NSLog(value)
                 if (!value.isEmpty) {
+                    var subORPredicates = [NSPredicate]()
                     let predicateName = NSPredicate(format: "name contains[cd] %@", value)
                     subORPredicates.append(predicateName)
                     let predicateVarietal = NSPredicate(format: "varietal contains[cd] %@", value)
                     subORPredicates.append(predicateVarietal)
+                    let predicateRegion = NSPredicate(format: "region contains[cd] %@", value)
+                    subORPredicates.append(predicateRegion)
+                    let predicateCountry = NSPredicate(format: "country contains[cd] %@", value)
+                    subORPredicates.append(predicateCountry)
                     let subOR = NSCompoundPredicate(type: NSCompoundPredicateType.OrPredicateType, subpredicates: subORPredicates)
-                    for (_, value) in subOR.subpredicates.enumerate() {
-                        //NSLog((value as! NSPredicate).predicateFormat)
-                    }
                     subANDPredicates.append(subOR)
                     subORPredicates.removeAll()
                 }
             }
-            
             let predicate = NSCompoundPredicate(type: NSCompoundPredicateType.AndPredicateType, subpredicates: subANDPredicates)
-            for (_, value) in predicate.subpredicates.enumerate() {
-                NSLog((value as! NSPredicate).predicateFormat)
-            }
-            
-            // Set the predicate on the fetch request
             fetchRequest.predicate = predicate
-            
-        //fetchRequest.predicate = NSPredicate(format: "name contains[cd] %@ OR varietal contains[cd] %@ OR region contains[cd] %@ OR country contains[cd] %@", searchText, searchText, searchText, searchText)
         }
+        
         NSFetchedResultsController.deleteCacheWithName(nil)
         do {
             try self.fetchedResultsController.performFetch()
@@ -197,6 +188,25 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         }
         self.tableView.reloadData()
         
+    }
+
+
+    
+    //MARK: - SearchBar
+    func searchBarTextDidBeginEditing(searchBar: UISearchBar) {
+        searchBar.showsCancelButton = true
+    }
+    
+    func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
+        setPredicateAndFilterResults(searchText)
+    }
+    
+    
+    func searchBarCancelButtonClicked(searchBar: UISearchBar) {
+        searchBar.showsCancelButton = false
+        searchBar.text = ""
+        setPredicateAndFilterResults("")
+        searchBar.resignFirstResponder()
     }
 
     
