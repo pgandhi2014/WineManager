@@ -73,22 +73,21 @@ class DetailViewController: UIViewController, SavingDrunkViewControllerDelegate 
             }
             lotsLabel!.text = lotDescription
             
-            let totalBottles = bottleDetails.statuses!.count
-            drunkLabel.numberOfLines = totalBottles
-            locationLabel.numberOfLines = totalBottles
-            for (index, value) in bottleDetails.statuses!.enumerate() {
+            for (_, value) in bottleDetails.statuses!.enumerate() {
                 let loc = value as! Status
                 if (loc.available == 0) {
                     drunkBottles += 1
-                    drunkDescription = drunkDescription + loc.rating!.stringValue + " stars on " + dateFormatter.stringFromDate(loc.drunkDate!) + "\n"
-                    if (index == totalBottles - 1) {
-                        drunkDescription = drunkDescription.stringByTrimmingCharactersInSet(NSCharacterSet.newlineCharacterSet())
+                    if (drunkBottles == 1) {
+                        drunkDescription = drunkDescription + loc.rating!.stringValue + " stars on " + dateFormatter.stringFromDate(loc.drunkDate!)
+                    } else {
+                        drunkDescription = drunkDescription + "\n" + loc.rating!.stringValue + " stars on " + dateFormatter.stringFromDate(loc.drunkDate!)
                     }
                 } else {
                     availBottles += 1
-                    locDescription = locDescription + loc.location! + ", "
-                    if (index == totalBottles - 1) {
-                        locDescription = locDescription.stringByTrimmingCharactersInSet(NSCharacterSet.init(charactersInString: ", "))
+                    if (availBottles == 1) {
+                        locDescription = locDescription + loc.location!
+                    } else {
+                        locDescription = locDescription + ", " + loc.location!
                     }
                 }
             }
@@ -98,6 +97,8 @@ class DetailViewController: UIViewController, SavingDrunkViewControllerDelegate 
                 drunkHistoryWidthConstraint.constant = 0.0
                 drunkHistorySpacingConstraint.constant = 0.0
             } else {
+                drunkLabelWidthConstraint.constant = 21.0 * CGFloat(drunkBottles)
+                drunkLabel.numberOfLines = drunkBottles
                 drunkLabel!.text = drunkDescription
             }
             
@@ -107,6 +108,7 @@ class DetailViewController: UIViewController, SavingDrunkViewControllerDelegate 
                 locationHistorySpacingConstraint.constant = 0.0
                 markDrunkButton.enabled = false
             } else {
+                locationLabel.numberOfLines = availBottles
                 locationLabel!.text = locDescription
             }
 
@@ -138,13 +140,50 @@ class DetailViewController: UIViewController, SavingDrunkViewControllerDelegate 
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "showMarkDrunk" {
             let controller = segue.destinationViewController as! MarkDrunkViewController
-            controller.bottleName = (detailItem as! Bottle).name!
+            let bottle = detailItem as! Bottle
+            controller.bottleName = bottle.name!
+            //var locations: [String] = []
+            var locations = Set<String>()
+            for (_, value) in bottle.statuses!.enumerate() {
+                let loc = value as! Status
+                if (loc.available == 1) {
+                    locations.insert(loc.location!)
+                }
+            }
+            controller.bottleLocations = locations
             controller.delegate = self
         }
     }
     
-    func saveDrunkInfo(rating: Float, date: NSDate) {
+    func saveDrunkInfo(rating: Float, date: NSDate, location: String) {
         NSLog(String(rating))
+        NSLog(String(date))
+        NSLog(location)
+        
+        let dateFormatter = NSDateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        
+        let bottle = detailItem as! Bottle
+        for (_, value) in bottle.statuses!.enumerate() {
+            let loc = value as! Status
+            if (loc.available! == 1 && loc.location! == location) {
+                loc.available = 0
+                loc.location = ""
+                loc.drunkDate! = date
+                loc.rating! = NSDecimalNumber(float: rating)
+                bottle.availableBottles! = (bottle.availableBottles?.integerValue)! - 1
+                break
+            }
+        }
+        do {
+            try bottle.managedObjectContext?.save()
+            detailItem = bottle
+            self.configureView()
+        } catch {
+            let saveError = error as NSError
+            NSLog(String(saveError))
+        }
+        
     }
 
 }

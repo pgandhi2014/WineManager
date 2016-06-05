@@ -55,7 +55,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         
         searchBar.delegate = self
         parser.delegate = self
-        //parser.parse()
+        parser.parse()
         
     }
 

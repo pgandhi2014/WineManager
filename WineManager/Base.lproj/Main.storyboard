@@ -330,20 +330,30 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <datePicker contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="date" minuteInterval="1" translatesAutoresizingMaskIntoConstraints="NO" id="a95-3z-XoG">
-                                <rect key="frame" x="0.0" y="140" width="600" height="216"/>
+                                <rect key="frame" x="0.0" y="114" width="600" height="216"/>
                                 <date key="date" timeIntervalSinceReferenceDate="486846640.10085303">
                                     <!--2016-06-05 19:10:40 +0000-->
                                 </date>
                             </datePicker>
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="fwM-T0-jxL">
+                                <rect key="frame" x="20" y="338" width="560" height="29"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="28" id="qwQ-0q-ds7"/>
+                                </constraints>
+                                <segments>
+                                    <segment title="First"/>
+                                    <segment title="Second"/>
+                                </segments>
+                            </segmentedControl>
                             <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qAG-pS-0mG">
-                                <rect key="frame" x="20" y="352" width="80" height="30"/>
+                                <rect key="frame" x="20" y="374" width="80" height="30"/>
                                 <state key="normal" title="Cancel"/>
                                 <connections>
                                     <action selector="dismissButtonPress:" destination="OOb-nY-f75" eventType="touchUpInside" id="Ib8-Ko-Mih"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Apx-oK-HDl">
-                                <rect key="frame" x="500" y="352" width="80" height="30"/>
+                                <rect key="frame" x="500" y="374" width="80" height="30"/>
                                 <state key="normal" title="Save"/>
                                 <connections>
                                     <action selector="saveButtonPress:" destination="OOb-nY-f75" eventType="touchUpInside" id="W1y-PS-eaW"/>
@@ -352,20 +362,23 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="a95-3z-XoG" firstAttribute="top" secondItem="VUQ-B3-oOL" secondAttribute="bottom" constant="25" id="ABd-US-leM"/>
+                            <constraint firstItem="qAG-pS-0mG" firstAttribute="top" secondItem="fwM-T0-jxL" secondAttribute="bottom" constant="10" id="1tg-PF-A7i"/>
+                            <constraint firstItem="a95-3z-XoG" firstAttribute="top" secondItem="VUQ-B3-oOL" secondAttribute="bottom" constant="15" id="ABd-US-leM"/>
                             <constraint firstAttribute="leadingMargin" secondItem="qAG-pS-0mG" secondAttribute="leading" id="Cxz-5E-fhq"/>
                             <constraint firstAttribute="trailingMargin" secondItem="a95-3z-XoG" secondAttribute="trailing" constant="-20" id="EBz-Fx-Pz2"/>
                             <constraint firstAttribute="leadingMargin" secondItem="VUQ-B3-oOL" secondAttribute="leading" id="Jzp-o1-Qwv"/>
+                            <constraint firstItem="fwM-T0-jxL" firstAttribute="top" secondItem="a95-3z-XoG" secondAttribute="bottom" constant="15" id="L53-zH-0fr"/>
                             <constraint firstItem="VUQ-B3-oOL" firstAttribute="top" secondItem="KDz-E3-sDk" secondAttribute="bottom" constant="25" id="Nsm-dd-Pnc"/>
-                            <constraint firstItem="Apx-oK-HDl" firstAttribute="top" secondItem="a95-3z-XoG" secondAttribute="bottom" id="PXr-M2-hOC"/>
+                            <constraint firstItem="Apx-oK-HDl" firstAttribute="top" secondItem="fwM-T0-jxL" secondAttribute="bottom" constant="10" id="Qeb-dF-fDl"/>
+                            <constraint firstAttribute="leadingMargin" secondItem="fwM-T0-jxL" secondAttribute="leading" id="U3x-Ip-uuw"/>
                             <constraint firstItem="KDz-E3-sDk" firstAttribute="top" secondItem="ww5-mJ-v4n" secondAttribute="bottom" constant="20" id="YuR-B2-QOd"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="fwM-T0-jxL" secondAttribute="trailing" id="ZPb-1c-XX6"/>
                             <constraint firstItem="KDz-E3-sDk" firstAttribute="centerX" secondItem="tQD-Lm-op5" secondAttribute="centerX" id="i5v-W0-lQv"/>
                             <constraint firstAttribute="leadingMargin" secondItem="KDz-E3-sDk" secondAttribute="leading" id="jBX-Mv-B4U"/>
                             <constraint firstAttribute="trailingMargin" secondItem="KDz-E3-sDk" secondAttribute="trailing" id="jHj-0Q-LCX"/>
                             <constraint firstItem="VUQ-B3-oOL" firstAttribute="centerY" secondItem="eco-lk-UET" secondAttribute="centerY" id="mG1-vq-mKX"/>
                             <constraint firstItem="VUQ-B3-oOL" firstAttribute="trailing" secondItem="eco-lk-UET" secondAttribute="leading" constant="-15" id="rTD-F9-DJ9"/>
                             <constraint firstItem="a95-3z-XoG" firstAttribute="leading" secondItem="tQD-Lm-op5" secondAttribute="leadingMargin" constant="-20" id="t2t-nc-DRL"/>
-                            <constraint firstItem="qAG-pS-0mG" firstAttribute="top" secondItem="a95-3z-XoG" secondAttribute="bottom" id="xUs-F5-vnK"/>
                             <constraint firstAttribute="trailingMargin" secondItem="Apx-oK-HDl" secondAttribute="trailing" id="yAg-yS-YfV"/>
                             <constraint firstAttribute="trailingMargin" secondItem="eco-lk-UET" secondAttribute="trailing" id="yMI-lt-jvt"/>
                         </constraints>
@@ -373,6 +386,8 @@
                     <connections>
                         <outlet property="datePicker" destination="a95-3z-XoG" id="aBl-Wh-WRj"/>
                         <outlet property="dismissButton" destination="qAG-pS-0mG" id="QQ9-jv-H2R"/>
+                        <outlet property="locationSelectionHeightConstraint" destination="qwQ-0q-ds7" id="d24-e7-er0"/>
+                        <outlet property="locationSelectionSegment" destination="fwM-T0-jxL" id="iH6-rb-NMd"/>
                         <outlet property="nameLabel" destination="KDz-E3-sDk" id="8Ag-f3-qNa"/>
                         <outlet property="ratingLabel" destination="eco-lk-UET" id="N3a-bN-4iB"/>
                         <outlet property="ratingSlider" destination="VUQ-B3-oOL" id="caz-TU-eXb"/>

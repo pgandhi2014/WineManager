@@ -1,6 +1,65 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bottles>
-   <bottle>
+    <bottle>
+        <Name>AAA Bottle</Name>
+        <Vintage>1900</Vintage>
+        <Varietal>Corvina</Varietal>
+        <Region>Verona</Region>
+        <Country>Italy</Country>
+        <ReviewSource>Wine Enthusiast</ReviewSource>
+        <Points>95</Points>
+        <Review>Boasting an enviable combination of opulence and finesse, this opens with aromas of black plum, vanilla, baking spices and grilled herbs. The rich palate doles out plum cake, black cherry, black pepper, cinnamon and nutmeg alongside smooth, velvety tannins. Gripping intensity holds on through the long finish. Drink through 2025</Review>
+        <PurchaseLots>
+            <Lot>
+                <PurchaseDate>2010-04-09</PurchaseDate>
+                <Price>2750</Price>
+                <Quantity>2</Quantity>
+            </Lot>
+            <Lot>
+                <PurchaseDate>2010-09-09</PurchaseDate>
+                <Price>3750</Price>
+                <Quantity>3</Quantity>
+            </Lot>
+        </PurchaseLots>
+        <Locations>
+            <Loc>
+                <Status>Available</Status>
+                <Location>Rack1</Location>
+                <DrunkDate />
+                <Rating />
+                <Notes />
+            </Loc>
+            <Loc>
+                <Status>Drunk</Status>
+                <Location />
+                <DrunkDate>2011-04-13</DrunkDate>
+                <Rating>4.5</Rating>
+                <Notes />
+            </Loc>
+            <Loc>
+                <Status>Available</Status>
+                <Location>Rack1</Location>
+                <DrunkDate />
+                <Rating />
+                <Notes />
+            </Loc>
+            <Loc>
+                <Status>Available</Status>
+                <Location>Bar</Location>
+                <DrunkDate />
+                <Rating />
+                <Notes />
+            </Loc>
+            <Loc>
+                <Status>Drunk</Status>
+                <Location />
+                <DrunkDate>2012-04-13</DrunkDate>
+                <Rating>4.0</Rating>
+                <Notes />
+            </Loc>
+        </Locations>
+    </bottle>
+    <bottle>
       <Name>Allegrini Amarone Classico</Name>
       <Vintage>2009</Vintage>
       <Varietal>Corvina</Varietal>

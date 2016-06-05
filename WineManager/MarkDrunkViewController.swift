@@ -10,7 +10,7 @@ import UIKit
 
 protocol SavingDrunkViewControllerDelegate
 {
-    func saveDrunkInfo(rating: Float, date: NSDate)
+    func saveDrunkInfo(rating: Float, date: NSDate, location: String)
 }
 
 
@@ -22,9 +22,12 @@ class MarkDrunkViewController: UIViewController {
     @IBOutlet weak var ratingLabel: UILabel!
     @IBOutlet weak var datePicker: UIDatePicker!
     @IBOutlet weak var saveButton: UIButton!
+    @IBOutlet weak var locationSelectionSegment: UISegmentedControl!
     
+    @IBOutlet weak var locationSelectionHeightConstraint: NSLayoutConstraint!
     let step: Float = 0.5
     var bottleName: String?
+    var bottleLocations = Set<String>()
     var delegate : SavingDrunkViewControllerDelegate?
     
     @IBAction func dismissButtonPress(sender: AnyObject) {
@@ -34,7 +37,13 @@ class MarkDrunkViewController: UIViewController {
     @IBAction func saveButtonPress(sender: AnyObject) {
         if((self.delegate) != nil)
         {
-            delegate?.saveDrunkInfo(ratingSlider.value, date: datePicker.date)
+            var location = ""
+            if (bottleLocations.count == 1) {
+                location = bottleLocations.first! as String
+            } else {
+                location = locationSelectionSegment.titleForSegmentAtIndex(locationSelectionSegment.selectedSegmentIndex)!
+            }
+            delegate?.saveDrunkInfo(ratingSlider.value, date: datePicker.date, location: location)
             dismissViewControllerAnimated(true, completion: nil)
         }
     }
@@ -50,6 +59,16 @@ class MarkDrunkViewController: UIViewController {
         // Do any additional setup after loading the view, typically from a nib.
         
         nameLabel.text = bottleName
+        if (bottleLocations.count > 1) {
+            locationSelectionSegment.removeAllSegments()
+            for (index, value) in bottleLocations.enumerate() {
+                locationSelectionSegment.insertSegmentWithTitle(value, atIndex: index, animated: false)
+            }
+            locationSelectionSegment.selectedSegmentIndex = 0
+        } else {
+            locationSelectionSegment.hidden = true;
+            locationSelectionHeightConstraint.constant = 0.0
+        }
     }
 
 }
