@@ -12,6 +12,11 @@ import CoreData
 class MasterViewController: UITableViewController, NSFetchedResultsControllerDelegate, NSXMLParserDelegate, UISearchBarDelegate {
 
     @IBOutlet weak var searchBar: UISearchBar!
+    @IBOutlet weak var filtersButton: UIBarButtonItem!
+    @IBOutlet weak var statsButton: UIBarButtonItem!
+    @IBOutlet weak var bottlesButton: UIBarButtonItem!
+    
+    
     var detailViewController: DetailViewController? = nil
     var managedObjectContext: NSManagedObjectContext? = nil
     
@@ -45,6 +50,8 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         } else {
             NSLog("Failed to find xml")
         }
+        let bottles = self.fetchedResultsController.sections![0].numberOfObjects
+        self.bottlesButton.title = String(bottles)
         
         searchBar.delegate = self
         parser.delegate = self
@@ -54,6 +61,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
 
     override func viewWillAppear(animated: Bool) {
         self.clearsSelectionOnViewWillAppear = self.splitViewController!.collapsed
+        (self.parentViewController as! UINavigationController).setToolbarHidden(false, animated: true)
         super.viewWillAppear(animated)
     }
 
@@ -148,6 +156,10 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
             
             abort()
         }
+        
+        let dateFormatter = NSDateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        
     }
     
     func setPredicateAndFilterResults(searchText: String) {
@@ -187,9 +199,11 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
             abort()
         }
         self.tableView.reloadData()
-        
+        let bottles = self.fetchedResultsController.sections![0].numberOfObjects
+        self.bottlesButton.title = String(bottles)
     }
 
+    
 
     
     //MARK: - SearchBar
@@ -323,6 +337,11 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
 
     // MARK: - Table View
 
+    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        let height = CGFloat(55.0)
+        return height
+    }
+    
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return self.fetchedResultsController.sections?.count ?? 0
     }

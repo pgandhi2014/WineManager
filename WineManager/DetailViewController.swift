@@ -10,11 +10,14 @@ import UIKit
 
 class DetailViewController: UIViewController {
 
-    @IBOutlet weak var detailDescriptionLabel: UILabel!
+    @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var regionLabel: UILabel!
     @IBOutlet weak var lotsLabel: UILabel!
-    @IBOutlet weak var locationsLabel: UILabel!
+    @IBOutlet weak var locationLabel: UILabel!
+    @IBOutlet weak var drunkLabel: UILabel!
+    @IBOutlet weak var ratingLabel: UILabel!
+    @IBOutlet weak var reviewView: UITextView!
 
     var detailItem: AnyObject? {
         didSet {
@@ -28,7 +31,8 @@ class DetailViewController: UIViewController {
         let dateFormatter = NSDateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
         var lotDescription = ""
-        var locDescrption = ""
+        var drunkDescription = ""
+        var locDescription = ""
         
         let bottleDetails = self.detailItem as! Bottle
         if (bottleDetails.vintage! == 0) {
@@ -37,25 +41,49 @@ class DetailViewController: UIViewController {
             nameLabel!.text = String(bottleDetails.vintage!) + " " + bottleDetails.name!
         }
         regionLabel!.text = bottleDetails.varietal! + " from " + bottleDetails.region! + ", " + bottleDetails.country!
-        for (_, value) in bottleDetails.lots!.enumerate() {
+        let totalLots = bottleDetails.lots!.count
+        lotsLabel.numberOfLines = totalLots
+        
+        for (index, value) in bottleDetails.lots!.enumerate() {
             let lot = value as! PurchaseLot
             if (lot.quantity == 1) {
                 lotDescription = lotDescription + lot.quantity!.stringValue + " bottle on " + dateFormatter.stringFromDate(lot.purchaseDate!) + " for $" + lot.price!.stringValue + "\n"
             } else {
                 lotDescription = lotDescription + lot.quantity!.stringValue + " bottles on " + dateFormatter.stringFromDate(lot.purchaseDate!) + " for $" + lot.price!.stringValue + "\n"
             }
-        }
-        lotsLabel!.text = lotDescription
-        for (_, value) in bottleDetails.statuses!.enumerate() {
-            let loc = value as! Status
-            if (loc.available == 1) {
-                locDescrption = locDescrption + "Stored in " + loc.location! + "\n"
-            } else {
-                locDescrption = locDescrption + loc.rating!.stringValue + " stars on " + dateFormatter.stringFromDate(loc.drunkDate!)
+            if (index == totalLots - 1) {
+                lotDescription = lotDescription.stringByTrimmingCharactersInSet(NSCharacterSet.newlineCharacterSet())
             }
         }
-        locationsLabel!.text = locDescrption
+        lotsLabel!.text = lotDescription
+        
+        let totalBottles = bottleDetails.statuses!.count
+        drunkLabel.numberOfLines = totalBottles
+        for (index, value) in bottleDetails.statuses!.enumerate() {
+            let loc = value as! Status
+            if (loc.available == 0) {
+                drunkDescription = drunkDescription + loc.rating!.stringValue + " stars on " + dateFormatter.stringFromDate(loc.drunkDate!) + "\n"
+            }
+            if (index == totalBottles - 1) {
+                drunkDescription = drunkDescription.stringByTrimmingCharactersInSet(NSCharacterSet.newlineCharacterSet())
+            }
+        }
+        drunkLabel!.text = drunkDescription
 
+        locationLabel.numberOfLines = totalBottles
+        for (index, value) in bottleDetails.statuses!.enumerate() {
+            let loc = value as! Status
+            if (loc.available == 1) {
+                locDescription = locDescription + loc.location! + ", "
+                }
+            if (index == totalBottles - 1) {
+                locDescription = locDescription.stringByTrimmingCharactersInSet(NSCharacterSet.init(charactersInString: ", "))
+            }
+        }
+        locationLabel!.text = locDescription
+
+        ratingLabel!.text = bottleDetails.points!.stringValue + " pts by " + bottleDetails.reviewSource!
+        reviewView!.text = bottleDetails.review!
 
     }
 
@@ -63,33 +91,13 @@ class DetailViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
-        let dateFormatter = NSDateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd"
-        
-        let details = self.detailItem as! Bottle
-        NSLog(details.name!)
-        NSLog(String(details.vintage!))
-        NSLog(details.varietal!)
-        NSLog(details.region!)
-        NSLog(details.country!)
-        NSLog(details.review!)
-        for (_, value) in details.lots!.enumerate() {
-            let lot = value as! PurchaseLot
-            NSLog(lot.price!.stringValue)
-            NSLog(lot.quantity!.stringValue)
-            NSLog(dateFormatter.stringFromDate(lot.purchaseDate!))
-        }
-        for (_, value) in details.statuses!.enumerate() {
-            let loc = value as! Status
-            NSLog(loc.location!)
-            NSLog(dateFormatter.stringFromDate(loc.drunkDate!))
-            NSLog(loc.available!.stringValue)
-            NSLog(loc.notes!)
-            NSLog(loc.rating!.stringValue)
-        }
         self.configureView()
-        
-        
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        (self.parentViewController as! UINavigationController).setToolbarHidden(false, animated: true)
+        scrollView.contentSize = CGSize(width: 1200, height: 2200)
+        super.viewWillAppear(animated)
     }
 
     override func didReceiveMemoryWarning() {
