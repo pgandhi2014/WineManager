@@ -64,13 +64,13 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="GmM-hS-lXi">
-                                <rect key="frame" x="0.0" y="134" width="600" height="398"/>
+                                <rect key="frame" x="0.0" y="151" width="600" height="381"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="60j-km-hby">
-                                        <rect key="frame" x="0.0" y="0.0" width="600" height="398"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="600" height="381"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sC6-zx-nyS">
-                                                <rect key="frame" x="20" y="8" width="560" height="21"/>
+                                                <rect key="frame" x="20" y="0.0" width="560" height="21"/>
                                                 <attributedString key="attributedText">
                                                     <fragment content="Purchase History:">
                                                         <attributes>
@@ -83,9 +83,9 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="5" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sKm-LK-yjS">
-                                                <rect key="frame" x="20" y="37" width="560" height="30"/>
+                                                <rect key="frame" x="20" y="20" width="560" height="30"/>
                                                 <attributedString key="attributedText">
-                                                    <fragment content="Lots">
+                                                    <fragment content=" ">
                                                         <attributes>
                                                             <color key="NSColor" cocoaTouchSystemColor="darkTextColor"/>
                                                             <font key="NSFont" size="18" name="HelveticaNeue"/>
@@ -96,7 +96,10 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="keO-nw-7LD">
-                                                <rect key="frame" x="20" y="75" width="560" height="21"/>
+                                                <rect key="frame" x="20" y="58" width="560" height="21"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="21" id="gtG-x7-n1u"/>
+                                                </constraints>
                                                 <attributedString key="attributedText">
                                                     <fragment content="Drunk History:">
                                                         <attributes>
@@ -109,9 +112,12 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="5" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZCN-5b-LUe" userLabel="Drunk Label">
-                                                <rect key="frame" x="20" y="104" width="560" height="21"/>
+                                                <rect key="frame" x="20" y="87" width="560" height="21"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="21" id="elc-7M-F4r"/>
+                                                </constraints>
                                                 <attributedString key="attributedText">
-                                                    <fragment content="Drunk">
+                                                    <fragment content=" ">
                                                         <attributes>
                                                             <color key="NSColor" cocoaTouchSystemColor="darkTextColor"/>
                                                             <font key="NSFont" size="18" name="HelveticaNeue"/>
@@ -122,7 +128,10 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DfZ-D0-qa4">
-                                                <rect key="frame" x="20" y="133" width="560" height="21"/>
+                                                <rect key="frame" x="20" y="116" width="560" height="21"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="21" id="eOg-YO-xjV"/>
+                                                </constraints>
                                                 <attributedString key="attributedText">
                                                     <fragment content="Stored in...">
                                                         <attributes>
@@ -135,9 +144,12 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KAr-gD-Fqg">
-                                                <rect key="frame" x="20" y="162" width="560" height="21"/>
+                                                <rect key="frame" x="20" y="145" width="560" height="21"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="21" id="yOU-o0-deL"/>
+                                                </constraints>
                                                 <attributedString key="attributedText">
-                                                    <fragment content="Locations">
+                                                    <fragment content=" ">
                                                         <attributes>
                                                             <color key="NSColor" cocoaTouchSystemColor="darkTextColor"/>
                                                             <font key="NSFont" size="18" name="HelveticaNeue"/>
@@ -148,7 +160,7 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mXX-jb-g6K">
-                                                <rect key="frame" x="20" y="191" width="560" height="18"/>
+                                                <rect key="frame" x="20" y="174" width="560" height="18"/>
                                                 <attributedString key="attributedText">
                                                     <fragment content="Rating">
                                                         <attributes>
@@ -161,11 +173,10 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" editable="NO" usesAttributedText="YES" translatesAutoresizingMaskIntoConstraints="NO" id="iZJ-Py-iGf">
-                                                <rect key="frame" x="20" y="220" width="560" height="178"/>
+                                                <rect key="frame" x="20" y="203" width="560" height="178"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <attributedString key="attributedText">
-                                                    <fragment>
-                                                        <string key="content">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
+                                                    <fragment content=" ">
                                                         <attributes>
                                                             <font key="NSFont" size="15" name="HelveticaNeue"/>
                                                             <paragraphStyle key="NSParagraphStyle" alignment="justified" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
@@ -238,13 +249,31 @@
                         </constraints>
                     </view>
                     <toolbarItems>
-                        <barButtonItem title="Mark as Drunk" id="Lcd-Jt-O1o"/>
+                        <barButtonItem style="plain" systemItem="flexibleSpace" id="54n-Aq-zR9"/>
+                        <barButtonItem title="Mark as Drunk" id="Lcd-Jt-O1o">
+                            <color key="tintColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                            <connections>
+                                <segue destination="OOb-nY-f75" kind="popoverPresentation" identifier="showMarkDrunk" popoverAnchorBarButtonItem="Lcd-Jt-O1o" id="eIB-xj-PQ4">
+                                    <popoverArrowDirection key="popoverArrowDirection" up="YES" down="YES" left="YES" right="YES"/>
+                                </segue>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem style="plain" systemItem="flexibleSpace" id="l8L-uu-ucf"/>
                     </toolbarItems>
                     <navigationItem key="navigationItem" title="Detail" id="mOI-FS-AaM"/>
                     <connections>
+                        <outlet property="drunkHistoryLabel" destination="keO-nw-7LD" id="Bwo-sc-6kT"/>
+                        <outlet property="drunkHistorySpacingConstraint" destination="0ZB-5Q-oXt" id="bcg-1j-bj5"/>
+                        <outlet property="drunkHistoryWidthConstraint" destination="gtG-x7-n1u" id="Uhc-x2-mms"/>
                         <outlet property="drunkLabel" destination="ZCN-5b-LUe" id="56n-53-gad"/>
+                        <outlet property="drunkLabelWidthConstraint" destination="elc-7M-F4r" id="r07-Lo-ndU"/>
+                        <outlet property="locationHistoryLabel" destination="DfZ-D0-qa4" id="Nm6-Wi-IqF"/>
+                        <outlet property="locationHistorySpacingConstraint" destination="9jy-7x-RJs" id="JVr-h7-aD9"/>
+                        <outlet property="locationHistoryWidthContraint" destination="eOg-YO-xjV" id="BXv-Cx-Fjw"/>
                         <outlet property="locationLabel" destination="KAr-gD-Fqg" id="ldb-8Q-Tgo"/>
+                        <outlet property="locationLabelWidthContraint" destination="yOU-o0-deL" id="XC7-ls-Tne"/>
                         <outlet property="lotsLabel" destination="sKm-LK-yjS" id="7jV-uf-6QU"/>
+                        <outlet property="markDrunkButton" destination="Lcd-Jt-O1o" id="EFX-9m-kuq"/>
                         <outlet property="nameLabel" destination="2ib-ZU-PF8" id="y7N-12-13k"/>
                         <outlet property="ratingLabel" destination="mXX-jb-g6K" id="MMw-6i-Aac"/>
                         <outlet property="regionLabel" destination="tHU-8c-7Df" id="OQQ-xh-nSJ"/>
@@ -255,6 +284,104 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FJe-Yq-33r" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="709" y="129"/>
+        </scene>
+        <!--Mark Drunk View Controller-->
+        <scene sceneID="rfc-af-HmD">
+            <objects>
+                <viewController storyboardIdentifier="markDrunkViewController" id="OOb-nY-f75" customClass="MarkDrunkViewController" customModule="WineManager" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="ww5-mJ-v4n"/>
+                        <viewControllerLayoutGuide type="bottom" id="pZH-Ja-4xT"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="tQD-Lm-op5">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KDz-E3-sDk">
+                                <rect key="frame" x="20" y="28" width="560" height="40"/>
+                                <attributedString key="attributedText">
+                                    <fragment content="Name">
+                                        <attributes>
+                                            <color key="NSColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <font key="NSFont" size="20" name="HelveticaNeue-Medium"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
+                                        </attributes>
+                                    </fragment>
+                                </attributedString>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <slider opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="3.5" minValue="0.0" maxValue="5" translatesAutoresizingMaskIntoConstraints="NO" id="VUQ-B3-oOL">
+                                <rect key="frame" x="18" y="76" width="456" height="31"/>
+                                <connections>
+                                    <action selector="ratingSliderValueChanged:" destination="OOb-nY-f75" eventType="valueChanged" id="PUk-gb-jKb"/>
+                                </connections>
+                            </slider>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eco-lk-UET">
+                                <rect key="frame" x="480" y="80" width="100" height="21"/>
+                                <attributedString key="attributedText">
+                                    <fragment content="3.5 stars">
+                                        <attributes>
+                                            <color key="NSColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <font key="NSFont" size="17" name="HelveticaNeue"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="right" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
+                                        </attributes>
+                                    </fragment>
+                                </attributedString>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <datePicker contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="date" minuteInterval="1" translatesAutoresizingMaskIntoConstraints="NO" id="a95-3z-XoG">
+                                <rect key="frame" x="0.0" y="140" width="600" height="216"/>
+                                <date key="date" timeIntervalSinceReferenceDate="486846640.10085303">
+                                    <!--2016-06-05 19:10:40 +0000-->
+                                </date>
+                            </datePicker>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qAG-pS-0mG">
+                                <rect key="frame" x="20" y="352" width="80" height="30"/>
+                                <state key="normal" title="Cancel"/>
+                                <connections>
+                                    <action selector="dismissButtonPress:" destination="OOb-nY-f75" eventType="touchUpInside" id="Ib8-Ko-Mih"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Apx-oK-HDl">
+                                <rect key="frame" x="500" y="352" width="80" height="30"/>
+                                <state key="normal" title="Save"/>
+                                <connections>
+                                    <action selector="saveButtonPress:" destination="OOb-nY-f75" eventType="touchUpInside" id="W1y-PS-eaW"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="a95-3z-XoG" firstAttribute="top" secondItem="VUQ-B3-oOL" secondAttribute="bottom" constant="25" id="ABd-US-leM"/>
+                            <constraint firstAttribute="leadingMargin" secondItem="qAG-pS-0mG" secondAttribute="leading" id="Cxz-5E-fhq"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="a95-3z-XoG" secondAttribute="trailing" constant="-20" id="EBz-Fx-Pz2"/>
+                            <constraint firstAttribute="leadingMargin" secondItem="VUQ-B3-oOL" secondAttribute="leading" id="Jzp-o1-Qwv"/>
+                            <constraint firstItem="VUQ-B3-oOL" firstAttribute="top" secondItem="KDz-E3-sDk" secondAttribute="bottom" constant="25" id="Nsm-dd-Pnc"/>
+                            <constraint firstItem="Apx-oK-HDl" firstAttribute="top" secondItem="a95-3z-XoG" secondAttribute="bottom" id="PXr-M2-hOC"/>
+                            <constraint firstItem="KDz-E3-sDk" firstAttribute="top" secondItem="ww5-mJ-v4n" secondAttribute="bottom" constant="20" id="YuR-B2-QOd"/>
+                            <constraint firstItem="KDz-E3-sDk" firstAttribute="centerX" secondItem="tQD-Lm-op5" secondAttribute="centerX" id="i5v-W0-lQv"/>
+                            <constraint firstAttribute="leadingMargin" secondItem="KDz-E3-sDk" secondAttribute="leading" id="jBX-Mv-B4U"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="KDz-E3-sDk" secondAttribute="trailing" id="jHj-0Q-LCX"/>
+                            <constraint firstItem="VUQ-B3-oOL" firstAttribute="centerY" secondItem="eco-lk-UET" secondAttribute="centerY" id="mG1-vq-mKX"/>
+                            <constraint firstItem="VUQ-B3-oOL" firstAttribute="trailing" secondItem="eco-lk-UET" secondAttribute="leading" constant="-15" id="rTD-F9-DJ9"/>
+                            <constraint firstItem="a95-3z-XoG" firstAttribute="leading" secondItem="tQD-Lm-op5" secondAttribute="leadingMargin" constant="-20" id="t2t-nc-DRL"/>
+                            <constraint firstItem="qAG-pS-0mG" firstAttribute="top" secondItem="a95-3z-XoG" secondAttribute="bottom" id="xUs-F5-vnK"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="Apx-oK-HDl" secondAttribute="trailing" id="yAg-yS-YfV"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="eco-lk-UET" secondAttribute="trailing" id="yMI-lt-jvt"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="datePicker" destination="a95-3z-XoG" id="aBl-Wh-WRj"/>
+                        <outlet property="dismissButton" destination="qAG-pS-0mG" id="QQ9-jv-H2R"/>
+                        <outlet property="nameLabel" destination="KDz-E3-sDk" id="8Ag-f3-qNa"/>
+                        <outlet property="ratingLabel" destination="eco-lk-UET" id="N3a-bN-4iB"/>
+                        <outlet property="ratingSlider" destination="VUQ-B3-oOL" id="caz-TU-eXb"/>
+                        <outlet property="saveButton" destination="Apx-oK-HDl" id="Y8c-Hw-UXN"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Rsy-9w-hu3" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="709" y="905"/>
         </scene>
         <!--Split View Controller-->
         <scene sceneID="Nki-YV-4Qg">

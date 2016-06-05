@@ -18,6 +18,7 @@
 		7507B4061CFCC0DD0072A92D /* Bottle+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7507B3FC1CFCC0DD0072A92D /* Bottle+CoreDataProperties.swift */; };
 		7507B4071CFCC0DD0072A92D /* Bottle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7507B3FD1CFCC0DD0072A92D /* Bottle.swift */; };
 		7507B4091CFD01390072A92D /* WineBottle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7507B4081CFD01390072A92D /* WineBottle.swift */; };
+		751AB0B81D04AD3D00A16375 /* MarkDrunkViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 751AB0B71D04AD3D00A16375 /* MarkDrunkViewController.swift */; };
 		75F9DBC11CFC191500272A75 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75F9DBC01CFC191500272A75 /* AppDelegate.swift */; };
 		75F9DBC41CFC191500272A75 /* WineManager.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 75F9DBC21CFC191500272A75 /* WineManager.xcdatamodeld */; };
 		75F9DBC61CFC191500272A75 /* MasterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75F9DBC51CFC191500272A75 /* MasterViewController.swift */; };
@@ -40,6 +41,7 @@
 		7507B3FC1CFCC0DD0072A92D /* Bottle+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Bottle+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		7507B3FD1CFCC0DD0072A92D /* Bottle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Bottle.swift; sourceTree = "<group>"; };
 		7507B4081CFD01390072A92D /* WineBottle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WineBottle.swift; sourceTree = "<group>"; };
+		751AB0B71D04AD3D00A16375 /* MarkDrunkViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MarkDrunkViewController.swift; sourceTree = "<group>"; };
 		75F9DBBD1CFC191400272A75 /* WineManager.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WineManager.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		75F9DBC01CFC191500272A75 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		75F9DBC31CFC191500272A75 /* WineManager.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = WineManager.xcdatamodel; sourceTree = "<group>"; };
@@ -97,6 +99,7 @@
 				75F9DBC01CFC191500272A75 /* AppDelegate.swift */,
 				75F9DBC51CFC191500272A75 /* MasterViewController.swift */,
 				75F9DBC71CFC191500272A75 /* DetailViewController.swift */,
+				751AB0B71D04AD3D00A16375 /* MarkDrunkViewController.swift */,
 				75F9DBC91CFC191500272A75 /* Main.storyboard */,
 				75F9DBCC1CFC191500272A75 /* Assets.xcassets */,
 				75F9DBCE1CFC191500272A75 /* LaunchScreen.storyboard */,
@@ -185,6 +188,7 @@
 				7507B4011CFCC0DD0072A92D /* Location.swift in Sources */,
 				75F9DBC41CFC191500272A75 /* WineManager.xcdatamodeld in Sources */,
 				75F9DBC11CFC191500272A75 /* AppDelegate.swift in Sources */,
+				751AB0B81D04AD3D00A16375 /* MarkDrunkViewController.swift in Sources */,
 				7507B4091CFD01390072A92D /* WineBottle.swift in Sources */,
 				75F9DBC61CFC191500272A75 /* MasterViewController.swift in Sources */,
 				7507B4021CFCC0DD0072A92D /* PurchaseLot+CoreDataProperties.swift in Sources */,
