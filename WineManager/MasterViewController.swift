@@ -27,10 +27,12 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
     var name = String()
     var vintage = String()
     var parsedBottle = WineBottle()
-    var parsedLot = Lot(purchaseDate: "", price: "", quantity: "")
+    var parsedLot = Lot(purchaseDate: "", price: "", quantity: "", locations: [Loc]())
     var parsedLoc = Loc(status: "", location: "", drunkDate: "", rating: "", notes: "")
     var fetchRequest = NSFetchRequest()
 
+    let dateFormatter = NSDateFormatter()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
@@ -43,8 +45,9 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
             self.detailViewController = (controllers[controllers.count-1] as! UINavigationController).topViewController as? DetailViewController
         }
         
+        dateFormatter.dateFormat = "yyyy-MM-dd"
         
-        let path = NSBundle.mainBundle().pathForResource("WineList", ofType: "xml")
+        let path = NSBundle.mainBundle().pathForResource("NewWineList", ofType: "xml")
         if path != nil {
             parser = NSXMLParser(contentsOfURL: NSURL(fileURLWithPath: path!))!
         } else {
@@ -55,7 +58,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         
         searchBar.delegate = self
         parser.delegate = self
-        parser.parse()
+        //parser.parse()
         
     }
 
@@ -110,9 +113,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
             let newLot = NSEntityDescription.insertNewObjectForEntityForName("PurchaseLot", inManagedObjectContext: self.managedObjectContext!) as! PurchaseLot
             let lot = value as! Lot
             newLot.bottle = newBottle
-            let dateFormatter = NSDateFormatter()
-            dateFormatter.dateFormat = "yyyy-MM-dd"
-            newLot.purchaseDate = dateFormatter.dateFromString(lot.purchaseDate)
+            newLot.purchaseDate = self.dateFormatter.dateFromString(lot.purchaseDate)
             if let myNumber = NSNumberFormatter().numberFromString(lot.price) {
                 newLot.price = NSDecimalNumber(decimal: myNumber.decimalValue)
                 if (newLot.price!.compare(newBottle.maxPrice!) == NSComparisonResult.OrderedDescending) {
@@ -121,30 +122,30 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
             }
             if let myNumber = NSNumberFormatter().numberFromString(lot.quantity) {
                 newLot.quantity = myNumber
-                newBottle.availableBottles = (newBottle.availableBottles?.integerValue)! + (newLot.quantity?.integerValue)!
             }
-        }
         
-        for (_, value) in parsedBottle.locations.enumerate() {
-            let newLoc = NSEntityDescription.insertNewObjectForEntityForName("Status", inManagedObjectContext: self.managedObjectContext!) as! Status
-            let loc = value as! Loc
-            newLoc.bottle = newBottle
-            let dateFormatter = NSDateFormatter()
-            dateFormatter.dateFormat = "yyyy-MM-dd"
-            if let myDate = dateFormatter.dateFromString(loc.drunkDate) {
-                newLoc.drunkDate = myDate
+            for (_, value) in lot.locations.enumerate() {
+                let newLoc = NSEntityDescription.insertNewObjectForEntityForName("Status", inManagedObjectContext: self.managedObjectContext!) as! Status
+                let loc = value
+                newLoc.lot = newLot
+                if let myDate = self.dateFormatter.dateFromString(loc.drunkDate) {
+                    newLoc.drunkDate = myDate
+                }
+                if (loc.status == "Drunk") {
+                    newLoc.available = 0
+                    newLot.drunkBottles = (newLot.drunkBottles?.integerValue)! + 1
+                } else {
+                    newLoc.available = 1
+                    newLot.availableBottles = (newLot.availableBottles?.integerValue)! + 1
+                }
+                newLoc.location = loc.location
+                newLoc.notes = loc.notes
+                if let myNumber = NSNumberFormatter().numberFromString(loc.rating) {
+                    newLoc.rating = NSDecimalNumber(decimal: myNumber.decimalValue)
+                }
             }
-            if (loc.status == "Drunk") {
-                newLoc.available = 0
-                newBottle.availableBottles = (newBottle.availableBottles?.integerValue)! - 1
-            } else {
-                newLoc.available = 1
-            }
-            newLoc.location = loc.location
-            newLoc.notes = loc.notes
-            if let myNumber = NSNumberFormatter().numberFromString(loc.rating) {
-                newLoc.rating = NSDecimalNumber(decimal: myNumber.decimalValue)
-            }
+            newBottle.availableBottles = (newBottle.availableBottles?.integerValue)! + (newLot.availableBottles?.integerValue)!
+            newBottle.drunkBottles = (newBottle.drunkBottles?.integerValue)! + (newLot.drunkBottles?.integerValue)!
         }
         
         // Save the context.
@@ -220,6 +221,10 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         searchBar.showsCancelButton = false
         searchBar.text = ""
         setPredicateAndFilterResults("")
+        searchBar.resignFirstResponder()
+    }
+    
+    func searchBarSearchButtonClicked(searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
     }
 
@@ -317,7 +322,8 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         } else if (elementName == "Lot") {
             parsedBottle.purchaseLots.addObject(parsedLot.copy())
         } else if (elementName == "Loc") {
-            parsedBottle.locations.addObject(parsedLoc.copy())
+            parsedLot.locations.append(parsedLoc.copy() as! Loc)
+//            parsedBottle.locations.addObject(parsedLoc.copy())
         }
         
     }
@@ -332,6 +338,11 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
                 controller.navigationItem.leftBarButtonItem = self.splitViewController?.displayModeButtonItem()
                 controller.navigationItem.leftItemsSupplementBackButton = true
             }
+        }
+        if segue.identifier == "showStats" {
+            let controller = (segue.destinationViewController as! UINavigationController).topViewController as! StatsViewController
+            controller.managedObjectContext = self.managedObjectContext
+            controller.fetchPredicate = self.fetchedResultsController.fetchRequest.predicate
         }
     }
 

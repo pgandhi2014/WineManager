@@ -8,29 +8,6 @@
 
 import Foundation
 
-class Lot : NSObject, NSCopying {
-    var purchaseDate: String = ""
-    var price: String = ""
-    var quantity: String = ""
-    
-    init(purchaseDate: String, price: String, quantity: String) {
-        self.purchaseDate = purchaseDate
-        self.price = price
-        self.quantity = quantity
-    }
-    
-    func Erase() {
-        purchaseDate = ""
-        price = ""
-        quantity = ""
-    }
-    
-    func copyWithZone(zone: NSZone) -> AnyObject {
-        let copy = Lot(purchaseDate: purchaseDate, price: price, quantity: quantity)
-        return copy
-    }
-}
-
 class Loc : NSObject, NSCopying {
     var status: String = ""
     var location: String = ""
@@ -60,6 +37,33 @@ class Loc : NSObject, NSCopying {
     }
 }
 
+class Lot : NSObject, NSCopying {
+    var purchaseDate: String = ""
+    var price: String = ""
+    var quantity: String = ""
+    var locations = [Loc]()
+    
+    init(purchaseDate: String, price: String, quantity: String, locations: [Loc]) {
+        self.purchaseDate = purchaseDate
+        self.price = price
+        self.quantity = quantity
+        self.locations = locations
+    }
+    
+    func Erase() {
+        purchaseDate = ""
+        price = ""
+        quantity = ""
+        locations.removeAll()
+    }
+    
+    func copyWithZone(zone: NSZone) -> AnyObject {
+        let copy = Lot(purchaseDate: purchaseDate, price: price, quantity: quantity, locations: locations)
+        return copy
+    }
+}
+
+
 class WineBottle {
     var name: String = ""
     var vintage: String = ""
@@ -70,7 +74,7 @@ class WineBottle {
     var points: String = ""
     var review: String = ""
     var purchaseLots: NSMutableArray = []
-    var locations: NSMutableArray = []
+    
     
     func Erase() {
         name = ""
@@ -82,6 +86,5 @@ class WineBottle {
         points = ""
         review = ""
         purchaseLots.removeAllObjects()
-        locations.removeAllObjects()
     }
 }
