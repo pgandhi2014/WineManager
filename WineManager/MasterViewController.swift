@@ -58,7 +58,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         
         searchBar.delegate = self
         parser.delegate = self
-        //parser.parse()
+        parser.parse()
         
     }
 
@@ -401,7 +401,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         } else {
             cell.textLabel!.text = String(currentBottle.vintage!) + " " + currentBottle.name!
         }
-        cell.detailTextLabel!.text = "$" + formatter.stringFromNumber(currentBottle.maxPrice!)! + "  " + currentBottle.varietal! + "  " + String(currentBottle.availableBottles!)
+        cell.detailTextLabel!.text = "$" + formatter.stringFromNumber(currentBottle.maxPrice!)! + "  " + currentBottle.varietal!
         
         if (currentBottle.availableBottles?.integerValue == 0) {
             cell.textLabel?.textColor = UIColor.redColor()
@@ -409,8 +409,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         } else {
             cell.textLabel?.textColor = UIColor.blackColor()
             cell.detailTextLabel?.textColor = UIColor.blackColor()
-        }
-        
+        }        
     }
 
     // MARK: - Fetched results controller

@@ -49,6 +49,8 @@ class DetailViewController: UIViewController, SavingDrunkViewControllerDelegate 
         var drunkBottles = 0
         var availBottles = 0
         
+        var drunkArray : [(date: NSDate, rating: Double)] = []
+        
         if let bottle = self.detailItem {
             let bottleDetails = bottle as! Bottle
             if (bottleDetails.vintage! == 0) {
@@ -60,7 +62,9 @@ class DetailViewController: UIViewController, SavingDrunkViewControllerDelegate 
             let totalLots = bottleDetails.lots!.count
             lotsLabel.numberOfLines = totalLots
             
-            for (index, value) in bottleDetails.lots!.enumerate() {
+            let sorter = NSSortDescriptor(key: "purchaseDate", ascending: false)
+            let sorted = bottleDetails.lots!.sortedArrayUsingDescriptors([sorter])
+            for (index, value) in sorted.enumerate() {//    for (index, value) in bottleDetails.lots!.enumerate() {
                 let lot = value as! PurchaseLot
                 if (lot.quantity == 1) {
                     lotDescription = lotDescription + lot.quantity!.stringValue + " bottle on " + dateFormatter.stringFromDate(lot.purchaseDate!) + " for $" + lot.price!.stringValue + "\n"
@@ -71,21 +75,20 @@ class DetailViewController: UIViewController, SavingDrunkViewControllerDelegate 
                     lotDescription = lotDescription.stringByTrimmingCharactersInSet(NSCharacterSet.newlineCharacterSet())
                 }
             
-                drunkBottles = 0
-                availBottles = 0
                 for (_, value) in lot.statuses!.enumerate() {
                     let loc = value as! Status
                     if (loc.available == 0) {
                         drunkBottles += 1
-                        if (drunkBottles == 1) {
-                            drunkDescription = drunkDescription + loc.rating!.stringValue + " stars on " + dateFormatter.stringFromDate(loc.drunkDate!)
+                        drunkArray.append((date: loc.drunkDate!, rating: loc.rating!.doubleValue))
+                        if (drunkDescription.isEmpty) {
+                            drunkDescription = loc.rating!.stringValue + " stars on " + dateFormatter.stringFromDate(loc.drunkDate!)
                         } else {
                             drunkDescription = drunkDescription + "\n" + loc.rating!.stringValue + " stars on " + dateFormatter.stringFromDate(loc.drunkDate!)
                         }
                     } else {
                         availBottles += 1
-                        if (availBottles == 1) {
-                            locDescription = locDescription + loc.location!
+                        if (locDescription.isEmpty) {
+                            locDescription = loc.location!
                         } else {
                             locDescription = locDescription + ", " + loc.location!
                         }
@@ -94,6 +97,17 @@ class DetailViewController: UIViewController, SavingDrunkViewControllerDelegate 
             }
             lotsLabel!.text = lotDescription
 
+            drunkArray.sortInPlace {
+                return $0.date.compare($1.date) == NSComparisonResult.OrderedDescending
+            }
+            drunkDescription = ""
+            for (_, value) in drunkArray.enumerate() {
+                if (drunkDescription.isEmpty) {
+                    drunkDescription = String(value.rating) + " stars on " + dateFormatter.stringFromDate(value.date)
+                } else {
+                    drunkDescription = drunkDescription + "\n" + String(value.rating) + " stars on " + dateFormatter.stringFromDate(value.date)
+                }
+            }
             
             if (drunkDescription.isEmpty) {
                 drunkLabelWidthConstraint.constant = 0.0

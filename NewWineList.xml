@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bottles>
-<!--    <bottle>
-        <Name>Chateau Margaux</Name>
-        <Vintage>1999</Vintage>
+    <bottle>
+        <Name>AAA Bottle</Name>
+        <Vintage>1900</Vintage>
         <Varietal>Cabernet Sauvignon</Varietal>
         <Region>Bordeaux</Region>
-        <Country>France</Country>
+        <Country>India</Country>
         <ReviewSource>Wine Advocate</ReviewSource>
         <Points>94</Points>
         <Review>The sexy, dark plum purple-colored 1999 Margaux is already revealing complex aromatics. This surprisingly charming and round offering is neither a blockbuster nor a heavyweight but it grows in the mouth revealing tremendous length as well as purity. This is an archetypical Chateau Margaux of richness, finesse, balance, and symmetry. It can be drunk young, but promises to age nicely for two decades.</Review>
         <PurchaseLots>
             <Lot>
                 <PurchaseDate>2016-03-17</PurchaseDate>
-                <Price>675</Price>
+                <Price>1775</Price>
                 <Quantity>2</Quantity>
                 <Locations>
                     <Loc>
@@ -24,7 +24,7 @@
                     </Loc>
                     <Loc>
                         <Status>Available</Status>
-                        <Location>Rack3</Location>
+                        <Location>Rack5</Location>
                         <DrunkDate />
                         <Rating />
                         <Notes />
@@ -32,8 +32,8 @@
                 </Locations>
             </Lot>
             <Lot>
-                <PurchaseDate>2014-07-25</PurchaseDate>
-                <Price>595</Price>
+                <PurchaseDate>2017-07-25</PurchaseDate>
+                <Price>1595</Price>
                 <Quantity>1</Quantity>
                 <Locations>
                     <Loc>
@@ -45,9 +45,29 @@
                     </Loc>
                 </Locations>
             </Lot>
+            <Lot>
+                <PurchaseDate>2015-11-25</PurchaseDate>
+                <Price>1895</Price>
+                <Quantity>2</Quantity>
+                <Locations>
+                    <Loc>
+                        <Status>Drunk</Status>
+                        <Location />
+                        <DrunkDate>2016-07-11</DrunkDate>
+                        <Rating>4</Rating>
+                        <Notes />
+                    </Loc>
+                    <Loc>
+                        <Status>Available</Status>
+                        <Location>Bar</Location>
+                        <DrunkDate />
+                        <Rating />
+                        <Notes />
+                    </Loc>
+                </Locations>
+            </Lot>
         </PurchaseLots>
     </bottle>
--->
     <bottle>
       <Name>Allegrini Amarone Classico</Name>
       <Vintage>2009</Vintage>

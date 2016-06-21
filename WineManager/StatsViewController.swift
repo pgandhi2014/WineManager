@@ -13,9 +13,12 @@ class StatsViewController: UITableViewController {
     var managedObjectContext: NSManagedObjectContext? = nil
     var fetchPredicate: NSPredicate? = nil
     
-    var statsAvailable = [String: String]()
-    var statsDrunk = [String: String]()
-    
+    let keys : [String] = ["Available inventory", "Number of bottles", "Average bottle price", "Max bottle price", "Min bottle price", "Average points", "Max points", "Min points"]
+    var valsAvailable = [String]()
+    var valsDrunk = [String]()
+    var valsTotal = [String]()
+    var valsFilter = [String]()
+
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
@@ -56,6 +59,10 @@ class StatsViewController: UITableViewController {
         var maxPoints = 0
         var avgPoints = 0.0
         var points = 0.0
+        
+        let formatter = NSNumberFormatter()
+        formatter.minimumFractionDigits = 1
+        formatter.maximumFractionDigits = 1
         
         NSFetchedResultsController.deleteCacheWithName(nil)
         do {
@@ -98,8 +105,43 @@ class StatsViewController: UITableViewController {
             let fetchError = error as NSError
             print(fetchError)
         }
-
-        
+        if (statsMode == "Available") {
+            valsAvailable.append("$" + String(cost))
+            valsAvailable.append(String(quantity))
+            valsAvailable.append("$" + formatter.stringFromNumber(avgCost)!)
+            valsAvailable.append("$" + String(maxCost))
+            valsAvailable.append("$" + String(minCost))
+            valsAvailable.append(formatter.stringFromNumber(avgPoints)! + " pts")
+            valsAvailable.append(String(maxPoints) + " pts")
+            valsAvailable.append(String(minPoints) + " pts")
+        } else if (statsMode == "Drunk") {
+            valsDrunk.append("$" + String(cost))
+            valsDrunk.append(String(quantity))
+            valsDrunk.append("$" + formatter.stringFromNumber(avgCost)!)
+            valsDrunk.append("$" + String(maxCost))
+            valsDrunk.append("$" + String(minCost))
+            valsDrunk.append(formatter.stringFromNumber(avgPoints)! + " pts")
+            valsDrunk.append(String(maxPoints) + " pts")
+            valsDrunk.append(String(minPoints) + " pts")
+        } else if (statsMode == "Total") {
+            valsTotal.append("$" + String(cost))
+            valsTotal.append(String(quantity))
+            valsTotal.append("$" + formatter.stringFromNumber(avgCost)!)
+            valsTotal.append("$" + String(maxCost))
+            valsTotal.append("$" + String(minCost))
+            valsTotal.append(formatter.stringFromNumber(avgPoints)! + " pts")
+            valsTotal.append(String(maxPoints) + " pts")
+            valsTotal.append(String(minPoints) + " pts")
+        } else if (statsMode == "Filter") {
+            valsFilter.append("$" + String(cost))
+            valsFilter.append(String(quantity))
+            valsFilter.append("$" + formatter.stringFromNumber(avgCost)!)
+            valsFilter.append("$" + String(maxCost))
+            valsFilter.append("$" + String(minCost))
+            valsFilter.append(formatter.stringFromNumber(avgPoints)! + " pts")
+            valsFilter.append(String(maxPoints) + " pts")
+            valsFilter.append(String(minPoints) + " pts")
+        }
     }
     
     
@@ -112,18 +154,27 @@ class StatsViewController: UITableViewController {
     
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         //return self.fetchedResultsController.sections?.count ?? 0
-        return 3
+        return 4
     }
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         //let sectionInfo = self.fetchedResultsController.sections![section]
         //return sectionInfo.numberOfObjects
-        return 7
+        return 8
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("CellStats", forIndexPath: indexPath)
-        //self.configureCell(cell, withObject: nil)
+        cell.textLabel?.text = keys[indexPath.row]
+        if (indexPath.section == 0) {
+            cell.detailTextLabel?.text = valsAvailable[indexPath.row]
+        } else if (indexPath.section == 1) {
+            cell.detailTextLabel?.text = valsDrunk[indexPath.row]
+        } else if (indexPath.section == 2) {
+            cell.detailTextLabel?.text = valsTotal[indexPath.row]
+        } else if (indexPath.section == 3) {
+            cell.detailTextLabel?.text = valsFilter[indexPath.row]
+        }
         return cell
     }
     
