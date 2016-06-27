@@ -23,8 +23,15 @@ extension Array where Element:Equatable {
     }
 }
 
+protocol SavingFilterViewControllerDelegate
+{
+    func applyFilters(filters: NSPredicate)
+}
+
 
 class FiltersViewController: UITableViewController, UIPickerViewDelegate, UIPickerViewDataSource, UITextFieldDelegate {
+    
+    var delegate : SavingFilterViewControllerDelegate?
     
     @IBOutlet weak var txtVarietal: UITextField!
     @IBOutlet weak var txtCountry: UITextField!
@@ -32,15 +39,56 @@ class FiltersViewController: UITableViewController, UIPickerViewDelegate, UIPick
     @IBOutlet weak var txtLocation: UITextField!
     @IBOutlet weak var txtPrice: UITextField!
     
+    @IBOutlet weak var btnApply: UIBarButtonItem!
+    
+    @IBAction func onBtnApplyPress(sender: UIBarButtonItem) {
+        NSLog("Btn pressed")
+        var subANDPredicates = [NSPredicate]()
+        
+        if (!(txtVarietal.text!.isEmpty)) {
+            let predicateVarietal = NSPredicate(format: "varietal contains[cd] %@", txtVarietal.text!)
+            subANDPredicates.append(predicateVarietal)
+        }
+        if (!(txtCountry.text!.isEmpty)) {
+            let predicateCountry = NSPredicate(format: "country contains[cd] %@", txtCountry.text!)
+            subANDPredicates.append(predicateCountry)
+        }
+        if (!(txtRegion.text!.isEmpty)) {
+            let predicateRegion = NSPredicate(format: "region contains[cd] %@", txtRegion.text!)
+            subANDPredicates.append(predicateRegion)
+        }
+        if (!(txtLocation.text!.isEmpty)) {
+            let predicateLocation = NSPredicate(format: "SUBQUERY(lots, $l, ANY $l.statuses.location == %@).@count > 0", txtLocation.text!)
+            subANDPredicates.append(predicateLocation)
+        }
+        if (!(txtPrice.text!.isEmpty)) {
+            let predicatePriceMin = NSPredicate(format: "ANY lots.price >= %d", priceMin)
+            let predicatePriceMax = NSPredicate(format: "ANY lots.price <= %d", priceMax)
+            subANDPredicates.append(predicatePriceMin)
+            subANDPredicates.append(predicatePriceMax)
+        }
+        
+        let predicate = NSCompoundPredicate(type: NSCompoundPredicateType.AndPredicateType, subpredicates: subANDPredicates)
+        if((self.delegate) != nil)
+        {
+            delegate?.applyFilters(predicate)
+        }
+    }
+    //SUBQUERY(models, $m, ANY $m.trims IN %@).@count > 0",arrayOfTrims];
+    
     @IBOutlet weak var sortVintage: UISwitch!
     
     var selectedRowIndex = 0
     var varietalsArray: [String] = []
     var countriesArray: [String] = []
-    
+    var regionsArray: [String] = []
+    var locationsArray: [String] = []
     let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
     let pickerView = UIPickerView()
+    let pricesArray = ["Any", "50", "100", "150", "200", "250", "300", "400", "500", "750", "1000", "2000"]
     
+    var priceMin = 0
+    var priceMax = 100000
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -48,18 +96,29 @@ class FiltersViewController: UITableViewController, UIPickerViewDelegate, UIPick
         self.tableView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(FiltersViewController.handleTap(_:))))
         
         getDistinctVarietals()
+        getDistinctLocatons()
+
         varietalsArray = varietalsArray.removeDuplicates()
         varietalsArray.sortInPlace()
         countriesArray = countriesArray.removeDuplicates()
         countriesArray.sortInPlace()
+        regionsArray = regionsArray.removeDuplicates()
+        regionsArray.sortInPlace()
+        locationsArray.removeDuplicates()
+        locationsArray.sortInPlace()
         
         pickerView.delegate = self
         txtVarietal.inputView = pickerView
         txtCountry.inputView = pickerView
+        txtRegion.inputView = pickerView
+        txtLocation.inputView = pickerView
+        txtPrice.inputView = pickerView
         
         txtVarietal.delegate = self
         txtCountry.delegate = self
         txtRegion.delegate = self
+        txtLocation.delegate = self
+        txtPrice.delegate = self
         
         
     }
@@ -68,7 +127,7 @@ class FiltersViewController: UITableViewController, UIPickerViewDelegate, UIPick
         let managedContext = appDelegate.managedObjectContext
         //FetchRequest
         let fetchRequest = NSFetchRequest(entityName: "Bottle")
-        fetchRequest.propertiesToFetch = ["varietal", "country"]
+        fetchRequest.propertiesToFetch = ["varietal", "country", "region"]
         fetchRequest.resultType = NSFetchRequestResultType.DictionaryResultType
         fetchRequest.returnsDistinctResults = true
         //Fetch
@@ -82,12 +141,40 @@ class FiltersViewController: UITableViewController, UIPickerViewDelegate, UIPick
                     if let country = dic["country"]{
                         countriesArray.append(country)
                     }
+                    if let region = dic["region"]{
+                        regionsArray.append(region)
+                    }
                 }
             }
         } catch {
             print("fetch failed:")
         }
     }
+    
+    func getDistinctLocatons() {
+        let managedContext = appDelegate.managedObjectContext
+        //FetchRequest
+        let fetchRequest = NSFetchRequest(entityName: "Status")
+        fetchRequest.propertiesToFetch = ["location"]
+        fetchRequest.resultType = NSFetchRequestResultType.DictionaryResultType
+        fetchRequest.returnsDistinctResults = true
+        //Fetch
+        do {
+            let results = try managedContext.executeFetchRequest(fetchRequest)
+            for i in 0 ..< results.count {
+                if let dic = (results[i] as? [String : String]){
+                    if let location = dic["location"]{
+                        if (!location.isEmpty) {
+                            locationsArray.append(location)
+                        }
+                    }
+                }
+            }
+        } catch {
+            print("fetch failed:")
+        }
+    }
+
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
@@ -107,6 +194,7 @@ class FiltersViewController: UITableViewController, UIPickerViewDelegate, UIPick
     func textFieldDidBeginEditing(textField: UITextField) {
         selectedRowIndex = textField.tag
         pickerView.reloadAllComponents()
+        pickerView.selectRow(0, inComponent: 0, animated: false)
         
     }
 
@@ -156,28 +244,53 @@ class FiltersViewController: UITableViewController, UIPickerViewDelegate, UIPick
     
     //MARK: Picker Data Sources
     func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
+        if (selectedRowIndex == 14) {
+            return 3
+        }
         return 1
     }
     func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        if (selectedRowIndex == 10) {
-            return varietalsArray.count
-        } else if (selectedRowIndex == 11) {
-            return countriesArray.count
+        if (component == 1) {
+            if (selectedRowIndex == 14) {
+                return 1
+            } else {
+                return 0
+            }
         } else {
-            return 0
+            if (selectedRowIndex == 10) {
+                return varietalsArray.count
+            } else if (selectedRowIndex == 11) {
+                return countriesArray.count
+            } else if (selectedRowIndex == 12) {
+                return regionsArray.count
+            } else if (selectedRowIndex == 13) {
+                return locationsArray.count
+            } else if (selectedRowIndex == 14) {
+                return pricesArray.count
+            } else {
+                return 0
+            }
         }
     }
     
     //MARK: Picker Delegates
     func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        if (component == 1) {
+            return "TO"
+        }
         if (selectedRowIndex == 10) {
             return varietalsArray[row]
         } else if (selectedRowIndex == 11) {
             return countriesArray[row]
+        } else if (selectedRowIndex == 12) {
+            return regionsArray[row]
+        } else if (selectedRowIndex == 13) {
+            return locationsArray[row]
+        } else if (selectedRowIndex == 14) {
+            return "$" + pricesArray[row]
         } else {
             return ""
         }
-
     }
     
     func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
@@ -185,6 +298,25 @@ class FiltersViewController: UITableViewController, UIPickerViewDelegate, UIPick
             txtVarietal.text = varietalsArray[row]
         } else if (selectedRowIndex == 11) {
             txtCountry.text = countriesArray[row]
+        } else if (selectedRowIndex == 12) {
+            txtRegion.text = regionsArray[row]
+        } else if (selectedRowIndex == 13) {
+            txtLocation.text = locationsArray[row]
+        } else if (selectedRowIndex == 14) {
+            if (component == 0) {
+                if (row == 0) {
+                    priceMin = 0
+                } else {
+                    priceMin = Int(pricesArray[row])!
+                }
+            } else if (component == 2) {
+                if (row == 0) {
+                    priceMax = 100000
+                } else {
+                    priceMax = Int(pricesArray[row])!
+                }
+            }
+            txtPrice.text = "$" + String(priceMin) + " to $" + String(priceMax)
         }
     }
     

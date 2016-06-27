@@ -9,7 +9,7 @@
 import UIKit
 import CoreData
 
-class MasterViewController: UITableViewController, NSFetchedResultsControllerDelegate, NSXMLParserDelegate, UISearchBarDelegate {
+class MasterViewController: UITableViewController, NSFetchedResultsControllerDelegate, NSXMLParserDelegate, UISearchBarDelegate, SavingFilterViewControllerDelegate {
 
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var filtersButton: UIBarButtonItem!
@@ -139,6 +139,12 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
                     newLot.availableBottles = (newLot.availableBottles?.integerValue)! + 1
                 }
                 newLoc.location = loc.location
+                if (loc.location.containsString(" ")) {
+                    NSLog("Empty here")
+                }
+                if (loc.location.isEmpty) {
+                    NSLog("Empty too")
+                }
                 newLoc.notes = loc.notes
                 if let myNumber = NSNumberFormatter().numberFromString(loc.rating) {
                     newLoc.rating = NSDecimalNumber(decimal: myNumber.decimalValue)
@@ -296,8 +302,9 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
                 parsedLoc.status = parsedLoc.status + string
             }
         } else if element.isEqualToString("Location") {
-            if (parsedLoc.location.isEmpty) {
+            if (parsedLoc.location.isEmpty && !(string.containsString("\n") || string.isEmpty)) {
                 parsedLoc.location = parsedLoc.location + string
+                NSLog (string)
             }
         } else if element.isEqualToString("DrunkDate") {
             if (parsedLoc.drunkDate.isEmpty && !string.containsString("\n")) {
@@ -344,6 +351,24 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
             controller.managedObjectContext = self.managedObjectContext
             controller.fetchPredicate = self.fetchedResultsController.fetchRequest.predicate
         }
+        if segue.identifier == "showFilters" {
+            let controller = (segue.destinationViewController as! UINavigationController).topViewController as! FiltersViewController
+            controller.delegate = self
+        }
+    }
+    
+    func applyFilters(filters: NSPredicate) {
+        fetchRequest.predicate = filters
+        self.navigationController?.popViewControllerAnimated(true)
+        NSFetchedResultsController.deleteCacheWithName(nil)
+        do {
+            try self.fetchedResultsController.performFetch()
+        } catch {
+            abort()
+        }
+        self.tableView.reloadData()
+        let bottles = self.fetchedResultsController.sections![0].numberOfObjects
+        self.bottlesButton.title = String(bottles)
     }
 
     // MARK: - Table View

@@ -1,5 +1,5 @@
 //
-//  Status+CoreDataProperties.swift
+//  Region+CoreDataProperties.swift
 //  WineManager
 //
 //  Created by Prashant Gandhi (Intel) on 6/26/16.
@@ -12,13 +12,10 @@
 import Foundation
 import CoreData
 
-extension Status {
+extension Region {
 
-    @NSManaged var available: NSNumber?
-    @NSManaged var drunkDate: NSDate?
-    @NSManaged var location: String?
-    @NSManaged var notes: String?
-    @NSManaged var rating: NSDecimalNumber?
-    @NSManaged var lot: PurchaseLot?
+    @NSManaged var region: String?
+    @NSManaged var inUse: NSNumber?
+    @NSManaged var country: Country?
 
 }

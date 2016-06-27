@@ -476,7 +476,7 @@
                     <toolbarItems>
                         <barButtonItem title="Filters" id="ISS-TC-OvO">
                             <connections>
-                                <segue destination="R3x-T1-9Lv" kind="showDetail" identifier="showFilters" id="JpP-oi-3M1"/>
+                                <segue destination="R3x-T1-9Lv" kind="show" identifier="showFilters" action="showDetailViewController:sender:" id="JpP-oi-3M1"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem systemItem="flexibleSpace" id="Qgu-9j-1W4"/>
@@ -565,16 +565,16 @@
             </objects>
             <point key="canvasLocation" x="1482" y="-630"/>
         </scene>
-        <!--Root View Controller-->
+        <!--Filters-->
         <scene sceneID="GBi-cR-HjR">
             <objects>
-                <tableViewController id="j9X-qv-fm3" customClass="FiltersViewController" customModule="WineManager" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController id="j9X-qv-fm3" userLabel="Filters" customClass="FiltersViewController" customModule="WineManager" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="default" allowsSelection="NO" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="nFI-I5-gni">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <sections>
-                            <tableViewSection headerTitle="FIlter By" id="OBT-aR-FOO">
+                            <tableViewSection headerTitle="Filter By" id="OBT-aR-FOO">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="fTc-S8-ZMa">
                                         <rect key="frame" x="0.0" y="92" width="600" height="44"/>
@@ -694,17 +694,16 @@
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RKc-P6-MIX">
+                                                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RKc-P6-MIX">
                                                     <rect key="frame" x="543" y="6" width="51" height="31"/>
                                                 </switch>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstAttribute="trailingMargin" secondItem="RKc-P6-MIX" secondAttribute="trailing" id="6Mi-7x-yTy"/>
-                                                <constraint firstItem="1ub-Bd-fp4" firstAttribute="trailing" secondItem="RKc-P6-MIX" secondAttribute="trailing" id="HuV-JR-rzq"/>
-                                                <constraint firstItem="RKc-P6-MIX" firstAttribute="centerY" secondItem="6UG-ST-w9z" secondAttribute="centerY" id="SKz-iy-smD"/>
-                                                <constraint firstItem="RKc-P6-MIX" firstAttribute="leading" secondItem="1ub-Bd-fp4" secondAttribute="leading" id="Td4-LO-Irt"/>
-                                                <constraint firstItem="1ub-Bd-fp4" firstAttribute="centerY" secondItem="6UG-ST-w9z" secondAttribute="centerY" id="n1e-8Y-hL6"/>
-                                                <constraint firstAttribute="leadingMargin" secondItem="1ub-Bd-fp4" secondAttribute="leading" id="t3a-in-Go4"/>
+                                                <constraint firstItem="1ub-Bd-fp4" firstAttribute="centerY" secondItem="6UG-ST-w9z" secondAttribute="centerY" id="3py-Qo-gyB"/>
+                                                <constraint firstItem="RKc-P6-MIX" firstAttribute="centerY" secondItem="6UG-ST-w9z" secondAttribute="centerY" id="Aya-6K-0pI"/>
+                                                <constraint firstAttribute="leadingMargin" secondItem="1ub-Bd-fp4" secondAttribute="leading" id="YXv-6N-lhw"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="RKc-P6-MIX" secondAttribute="trailing" id="Z4I-2d-qbx"/>
+                                                <constraint firstItem="1ub-Bd-fp4" firstAttribute="trailing" secondItem="RKc-P6-MIX" secondAttribute="leading" id="sgc-ZG-vXm"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
@@ -732,8 +731,17 @@
                             <outlet property="delegate" destination="j9X-qv-fm3" id="fl4-Fp-5kn"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Root View Controller" id="0jj-Aq-iA0"/>
+                    <toolbarItems/>
+                    <navigationItem key="navigationItem" title="Filters" id="0jj-Aq-iA0">
+                        <barButtonItem key="rightBarButtonItem" title="Apply" id="qNd-PB-EW2">
+                            <connections>
+                                <action selector="onBtnApplyPress:" destination="j9X-qv-fm3" id="zqU-WQ-4M3"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
+                        <outlet property="btnApply" destination="qNd-PB-EW2" id="qsI-jX-UBO"/>
                         <outlet property="sortVintage" destination="RKc-P6-MIX" id="LF2-bd-iCc"/>
                         <outlet property="txtCountry" destination="aED-Kc-EOb" id="BvR-eg-mBj"/>
                         <outlet property="txtLocation" destination="v1O-RT-SKj" id="TvA-3y-ZDb"/>
@@ -746,10 +754,10 @@
             </objects>
             <point key="canvasLocation" x="2302" y="129"/>
         </scene>
-        <!--Navigation Controller-->
+        <!--Filterss-->
         <scene sceneID="bsD-Ee-z2B">
             <objects>
-                <navigationController id="R3x-T1-9Lv" sceneMemberID="viewController">
+                <navigationController title="Filterss" id="R3x-T1-9Lv" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="GPi-Rj-GaM">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>

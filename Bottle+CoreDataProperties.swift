@@ -2,7 +2,7 @@
 //  Bottle+CoreDataProperties.swift
 //  WineManager
 //
-//  Created by Prashant Gandhi (Intel) on 6/19/16.
+//  Created by Prashant Gandhi (Intel) on 6/26/16.
 //  Copyright © 2016 Prashant Gandhi. All rights reserved.
 //
 //  Choose "Create NSManagedObject Subclass…" from the Core Data editor menu
