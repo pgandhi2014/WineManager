@@ -4,6 +4,8 @@
         <attribute name="availableBottles" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="country" attributeType="String" defaultValueString="None" syncable="YES"/>
         <attribute name="drunkBottles" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="lastDrunkDate" attributeType="Date" defaultDateTimeInterval="-1609394400" syncable="YES"/>
+        <attribute name="lastPurchaseDate" attributeType="Date" defaultDateTimeInterval="-1609394400" syncable="YES"/>
         <attribute name="maxPrice" attributeType="Decimal" defaultValueString="0" syncable="YES"/>
         <attribute name="name" attributeType="String" defaultValueString="None" syncable="YES"/>
         <attribute name="points" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
@@ -51,7 +53,7 @@
         <element name="Location" positionX="844" positionY="3302" width="128" height="73"/>
         <element name="PurchaseLot" positionX="457" positionY="2970" width="128" height="148"/>
         <element name="Status" positionX="277" positionY="3026" width="128" height="133"/>
-        <element name="Bottle" positionX="682" positionY="2901" width="128" height="238"/>
+        <element name="Bottle" positionX="682" positionY="2901" width="128" height="268"/>
         <element name="Region" positionX="484" positionY="3240" width="128" height="88"/>
     </elements>
 </model>

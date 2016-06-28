@@ -15,10 +15,27 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
     @IBOutlet weak var filtersButton: UIBarButtonItem!
     @IBOutlet weak var statsButton: UIBarButtonItem!
     @IBOutlet weak var bottlesButton: UIBarButtonItem!
+    @IBOutlet weak var clearFiltersButton: UIBarButtonItem!
     
+    @IBAction func onClearFilters(sender: UIBarButtonItem) {
+        clearFiltersButton.enabled = false
+        viewFilter = availableFilter
+        sorter = defaultSorter
+        fetchRequest.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [viewFilter, searchFilter])
+        fetchRequest.sortDescriptors = [sorter]
+        performFetchAndRefresh()
+    }
     
     var detailViewController: DetailViewController? = nil
     var managedObjectContext: NSManagedObjectContext? = nil
+    
+    var availableFilter = NSPredicate(format: "availableBottles > 0")
+    var defaultFilter = NSPredicate(value: true)
+    let defaultSorter = NSSortDescriptor(key: "maxPrice", ascending: false)
+    
+    var sorter = NSSortDescriptor()
+    var searchFilter = NSPredicate()
+    var viewFilter = NSPredicate()
     
     var parser = NSXMLParser()
     var bottles = NSMutableArray()
@@ -44,6 +61,10 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
             let controllers = split.viewControllers
             self.detailViewController = (controllers[controllers.count-1] as! UINavigationController).topViewController as? DetailViewController
         }
+        clearFiltersButton.enabled = false
+        sorter = defaultSorter
+        searchFilter = defaultFilter
+        viewFilter = availableFilter
         
         dateFormatter.dateFormat = "yyyy-MM-dd"
         
@@ -61,7 +82,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         //parser.parse()
         
     }
-
+    
     override func viewWillAppear(animated: Bool) {
         self.clearsSelectionOnViewWillAppear = self.splitViewController!.collapsed
         (self.parentViewController as! UINavigationController).setToolbarHidden(false, animated: true)
@@ -114,6 +135,9 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
             let lot = value as! Lot
             newLot.bottle = newBottle
             newLot.purchaseDate = self.dateFormatter.dateFromString(lot.purchaseDate)
+            if (newLot.purchaseDate!.compare(newBottle.lastPurchaseDate!) == NSComparisonResult.OrderedDescending) {
+                newBottle.lastPurchaseDate = newLot.purchaseDate
+            }
             if let myNumber = NSNumberFormatter().numberFromString(lot.price) {
                 newLot.price = NSDecimalNumber(decimal: myNumber.decimalValue)
                 if (newLot.price!.compare(newBottle.maxPrice!) == NSComparisonResult.OrderedDescending) {
@@ -130,6 +154,9 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
                 newLoc.lot = newLot
                 if let myDate = self.dateFormatter.dateFromString(loc.drunkDate) {
                     newLoc.drunkDate = myDate
+                    if (newLoc.drunkDate!.compare(newBottle.lastDrunkDate!) == NSComparisonResult.OrderedDescending) {
+                        newBottle.lastDrunkDate = newLoc.drunkDate
+                    }
                 }
                 if (loc.status == "Drunk") {
                     newLoc.available = 0
@@ -139,12 +166,6 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
                     newLot.availableBottles = (newLot.availableBottles?.integerValue)! + 1
                 }
                 newLoc.location = loc.location
-                if (loc.location.containsString(" ")) {
-                    NSLog("Empty here")
-                }
-                if (loc.location.isEmpty) {
-                    NSLog("Empty too")
-                }
                 newLoc.notes = loc.notes
                 if let myNumber = NSNumberFormatter().numberFromString(loc.rating) {
                     newLoc.rating = NSDecimalNumber(decimal: myNumber.decimalValue)
@@ -173,7 +194,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         var subANDPredicates = [NSPredicate]()
         
         if (searchText.isEmpty) {
-            fetchRequest.predicate = NSPredicate(value: true)
+            searchFilter = defaultFilter
         } else {
             let searchWords = searchText.componentsSeparatedByString(" ")
             for(_,value) in searchWords.enumerate() {
@@ -192,10 +213,13 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
                     subORPredicates.removeAll()
                 }
             }
-            let predicate = NSCompoundPredicate(type: NSCompoundPredicateType.AndPredicateType, subpredicates: subANDPredicates)
-            fetchRequest.predicate = predicate
+            searchFilter = NSCompoundPredicate(type: NSCompoundPredicateType.AndPredicateType, subpredicates: subANDPredicates)
         }
-        
+        fetchRequest.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [viewFilter, searchFilter])
+        performFetchAndRefresh()
+    }
+
+    func performFetchAndRefresh() {
         NSFetchedResultsController.deleteCacheWithName(nil)
         do {
             try self.fetchedResultsController.performFetch()
@@ -209,7 +233,6 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         let bottles = self.fetchedResultsController.sections![0].numberOfObjects
         self.bottlesButton.title = String(bottles)
     }
-
     
 
     
@@ -349,7 +372,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         if segue.identifier == "showStats" {
             let controller = (segue.destinationViewController as! UINavigationController).topViewController as! StatsViewController
             controller.managedObjectContext = self.managedObjectContext
-            controller.fetchPredicate = self.fetchedResultsController.fetchRequest.predicate
+            controller.fetchPredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [viewFilter, searchFilter])
         }
         if segue.identifier == "showFilters" {
             let controller = (segue.destinationViewController as! UINavigationController).topViewController as! FiltersViewController
@@ -357,18 +380,14 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         }
     }
     
-    func applyFilters(filters: NSPredicate) {
-        fetchRequest.predicate = filters
+    func applyFilters(filter: NSPredicate, sort: NSSortDescriptor) {
+        clearFiltersButton.enabled = true
+        viewFilter = filter
+        fetchRequest.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [viewFilter, searchFilter])
+        fetchRequest.sortDescriptors = [sort]
+        
         self.navigationController?.popViewControllerAnimated(true)
-        NSFetchedResultsController.deleteCacheWithName(nil)
-        do {
-            try self.fetchedResultsController.performFetch()
-        } catch {
-            abort()
-        }
-        self.tableView.reloadData()
-        let bottles = self.fetchedResultsController.sections![0].numberOfObjects
-        self.bottlesButton.title = String(bottles)
+        performFetchAndRefresh()
     }
 
     // MARK: - Table View
@@ -453,13 +472,8 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         fetchRequest.fetchBatchSize = 20
         
         // Edit the sort key as appropriate.
-        let sortDescriptor = NSSortDescriptor(key: "maxPrice", ascending: false)
-        
-        fetchRequest.sortDescriptors = [sortDescriptor]
-        
-        //fetchRequest.predicate = NSPredicate(format: "ANY lots.price > 300 AND ANY lots.price < 500")
-        //fetchRequest.predicate = NSPredicate(format: "availableBottles = 0")
-        
+        fetchRequest.sortDescriptors = [sorter]
+        fetchRequest.predicate = viewFilter
         
         // Edit the section name key path and cache name if appropriate.
         // nil for section name key path means "no sections".

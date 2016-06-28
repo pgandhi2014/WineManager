@@ -25,7 +25,7 @@ extension Array where Element:Equatable {
 
 protocol SavingFilterViewControllerDelegate
 {
-    func applyFilters(filters: NSPredicate)
+    func applyFilters(filter: NSPredicate, sort: NSSortDescriptor)
 }
 
 
@@ -38,6 +38,82 @@ class FiltersViewController: UITableViewController, UIPickerViewDelegate, UIPick
     @IBOutlet weak var txtRegion: UITextField!
     @IBOutlet weak var txtLocation: UITextField!
     @IBOutlet weak var txtPrice: UITextField!
+    
+    @IBOutlet weak var sortName: UISwitch!
+    @IBOutlet weak var sortVintage: UISwitch!
+    @IBOutlet weak var sortPrice: UISwitch!
+    @IBOutlet weak var sortPoints: UISwitch!
+    @IBOutlet weak var sortDate: UISwitch!
+    
+    @IBOutlet weak var viewOptions: UISegmentedControl!
+    var currentSortOrder = "Price"
+    
+    @IBAction func onNameToggle(sender: UISwitch) {
+        if sender.on {
+            sortVintage.setOn(false, animated: true)
+            sortPrice.setOn(false, animated: true)
+            sortPoints.setOn(false, animated: true)
+            sortDate.setOn(false, animated: true)
+            currentSortOrder = "Name"
+        } else {
+            sortPrice.setOn(true, animated: true)
+            currentSortOrder = "Price"
+        }
+    }
+    
+    @IBAction func onVintageToggle(sender: UISwitch) {
+        if sender.on {
+            sortName.setOn(false, animated: true)
+            sortPrice.setOn(false, animated: true)
+            sortPoints.setOn(false, animated: true)
+            sortDate.setOn(false, animated: true)
+            currentSortOrder = "Vintage"
+        } else {
+            sortPrice.setOn(true, animated: true)
+            currentSortOrder = "Price"
+        }
+    }
+    
+    @IBAction func onPriceToggle(sender: UISwitch) {
+        if sender.on {
+            sortVintage.setOn(false, animated: true)
+            sortName.setOn(false, animated: true)
+            sortPoints.setOn(false, animated: true)
+            sortDate.setOn(false, animated: true)
+            currentSortOrder = "Price"
+        } else {
+            sortPrice.setOn(true, animated: true)
+            currentSortOrder = "Price"
+        }
+    }
+    
+    @IBAction func onPointsToggle(sender: UISwitch) {
+        if sender.on {
+            sortVintage.setOn(false, animated: true)
+            sortPrice.setOn(false, animated: true)
+            sortName.setOn(false, animated: true)
+            sortDate.setOn(false, animated: true)
+            currentSortOrder = "Points"
+        } else {
+            sortPrice.setOn(true, animated: true)
+            currentSortOrder = "Price"
+        }
+    }
+    
+    @IBAction func onDateToggle(sender: UISwitch) {
+        if sender.on {
+            sortVintage.setOn(false, animated: true)
+            sortPrice.setOn(false, animated: true)
+            sortPoints.setOn(false, animated: true)
+            sortName.setOn(false, animated: true)
+            currentSortOrder = "Date"
+        } else {
+            sortPrice.setOn(true, animated: true)
+            currentSortOrder = "Price"
+        }
+    }
+    
+    
     
     @IBOutlet weak var btnApply: UIBarButtonItem!
     
@@ -67,16 +143,34 @@ class FiltersViewController: UITableViewController, UIPickerViewDelegate, UIPick
             subANDPredicates.append(predicatePriceMin)
             subANDPredicates.append(predicatePriceMax)
         }
+        if (viewOptions.selectedSegmentIndex == 0) {
+            let predicateView = NSPredicate(format: "availableBottles > 0")
+            subANDPredicates.append(predicateView)
+        } else if (viewOptions.selectedSegmentIndex == 1) {
+            let predicateView = NSPredicate(format: "drunkBottles > 0")
+            subANDPredicates.append(predicateView)
+        } else if (viewOptions.selectedSegmentIndex == 2) {
+            let predicateView = NSPredicate(value: true)
+            subANDPredicates.append(predicateView)
+        }
         
         let predicate = NSCompoundPredicate(type: NSCompoundPredicateType.AndPredicateType, subpredicates: subANDPredicates)
+        
+        var sortDescriptor = NSSortDescriptor(key: "maxPrice", ascending: false)
+        if (currentSortOrder == "Name") {
+            sortDescriptor = NSSortDescriptor(key: "name", ascending: true)
+        } else if (currentSortOrder == "Vintage") {
+            sortDescriptor = NSSortDescriptor(key: "vintage", ascending: true)
+        } else if (currentSortOrder == "Points") {
+            sortDescriptor = NSSortDescriptor(key: "points", ascending: false)
+        } else if (currentSortOrder == "Date") {
+            sortDescriptor = NSSortDescriptor(key: "lastPurchaseDate", ascending: false)
+        }
         if((self.delegate) != nil)
         {
-            delegate?.applyFilters(predicate)
+            delegate?.applyFilters(predicate, sort: sortDescriptor)
         }
     }
-    //SUBQUERY(models, $m, ANY $m.trims IN %@).@count > 0",arrayOfTrims];
-    
-    @IBOutlet weak var sortVintage: UISwitch!
     
     var selectedRowIndex = 0
     var varietalsArray: [String] = []
@@ -94,6 +188,12 @@ class FiltersViewController: UITableViewController, UIPickerViewDelegate, UIPick
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         self.tableView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(FiltersViewController.handleTap(_:))))
+        
+        sortName.setOn(false, animated: false)
+        sortVintage.setOn(false, animated: false)
+        sortPrice.setOn(true, animated: false)
+        sortPoints.setOn(false, animated: false)
+        sortDate.setOn(false, animated: false)
         
         getDistinctVarietals()
         getDistinctLocatons()
@@ -212,14 +312,14 @@ class FiltersViewController: UITableViewController, UIPickerViewDelegate, UIPick
     }
     
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return 2
+        return 3
     }
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if (section == 0) {
-            return 5
+        if (section == 2) {
+            return 1
         } else {
-            return 3
+            return 5
         }
     }
     
