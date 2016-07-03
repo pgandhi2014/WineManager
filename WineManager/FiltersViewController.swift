@@ -44,9 +44,19 @@ class FiltersViewController: UITableViewController, UIPickerViewDelegate, UIPick
     @IBOutlet weak var sortPrice: UISwitch!
     @IBOutlet weak var sortPoints: UISwitch!
     @IBOutlet weak var sortDate: UISwitch!
+    @IBOutlet weak var lblSortDate: UILabel!
     
     @IBOutlet weak var viewOptions: UISegmentedControl!
     var currentSortOrder = "Price"
+    
+    @IBAction func onViewOptionChange(sender: UISegmentedControl) {
+        if (viewOptions.selectedSegmentIndex == 1) {
+            lblSortDate.text = "Drunk Date"
+        } else {
+            lblSortDate.text = "Purchase Date"
+        }
+    }
+    
     
     @IBAction func onNameToggle(sender: UISwitch) {
         if sender.on {
@@ -164,7 +174,11 @@ class FiltersViewController: UITableViewController, UIPickerViewDelegate, UIPick
         } else if (currentSortOrder == "Points") {
             sortDescriptor = NSSortDescriptor(key: "points", ascending: false)
         } else if (currentSortOrder == "Date") {
-            sortDescriptor = NSSortDescriptor(key: "lastPurchaseDate", ascending: false)
+            if (viewOptions.selectedSegmentIndex == 1) {
+                sortDescriptor = NSSortDescriptor(key: "lastDrunkDate", ascending: false)
+            } else {
+                sortDescriptor = NSSortDescriptor(key: "lastPurchaseDate", ascending: false)
+            }
         }
         if((self.delegate) != nil)
         {

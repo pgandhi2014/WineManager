@@ -28,7 +28,8 @@ class DetailViewController: UIViewController, SavingDrunkViewControllerDelegate 
     @IBOutlet weak var locationHistoryWidthContraint: NSLayoutConstraint!
     @IBOutlet weak var locationLabelWidthContraint: NSLayoutConstraint!
     @IBOutlet weak var locationHistorySpacingConstraint: NSLayoutConstraint!
-    
+
+
     @IBOutlet weak var markDrunkButton: UIBarButtonItem!
     
     
@@ -115,6 +116,8 @@ class DetailViewController: UIViewController, SavingDrunkViewControllerDelegate 
                 drunkHistorySpacingConstraint.constant = 0.0
             } else {
                 drunkLabelWidthConstraint.constant = 21.0 * CGFloat(drunkBottles)
+                drunkHistoryWidthConstraint.constant = 21.0
+                drunkHistorySpacingConstraint.constant = 10.0
                 drunkLabel.numberOfLines = drunkBottles
                 drunkLabel!.text = drunkDescription
             }
@@ -176,10 +179,7 @@ class DetailViewController: UIViewController, SavingDrunkViewControllerDelegate 
     }
     
     func saveDrunkInfo(rating: Float, date: NSDate, location: String) {
-        NSLog(String(rating))
-        NSLog(String(date))
-        NSLog(location)
-        
+        var flagDone = false
         let dateFormatter = NSDateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
         
@@ -188,12 +188,17 @@ class DetailViewController: UIViewController, SavingDrunkViewControllerDelegate 
             let lot = value as! PurchaseLot
             for (_, value) in lot.statuses!.enumerate() {
                 let loc = value as! Status
-                if (loc.available! == 1 && loc.location! == location) {
+                if (loc.available! == 1 && loc.location! == location && !flagDone) {
                     loc.available = 0
                     loc.location = ""
                     loc.drunkDate! = date
                     loc.rating! = NSDecimalNumber(float: rating)
+                    lot.availableBottles = (lot.availableBottles?.integerValue)! - 1
+                    lot.drunkBottles = (lot.drunkBottles?.integerValue)! + 1
                     bottle.availableBottles! = (bottle.availableBottles?.integerValue)! - 1
+                    bottle.drunkBottles! = (bottle.drunkBottles?.integerValue)! + 1
+                    bottle.lastDrunkDate! = date
+                    flagDone = true
                     break
                 }
             }
@@ -210,4 +215,37 @@ class DetailViewController: UIViewController, SavingDrunkViewControllerDelegate 
     }
 
 }
+
+/*
+ @NSManaged var availableBottles: NSNumber?
+ @NSManaged var country: String?
+ @NSManaged var maxPrice: NSDecimalNumber?
+ @NSManaged var name: String?
+ @NSManaged var points: NSNumber?
+ @NSManaged var region: String?
+ @NSManaged var review: String?
+ @NSManaged var reviewSource: String?
+ @NSManaged var uniqueID: NSNumber?
+ @NSManaged var varietal: String?
+ @NSManaged var vintage: NSNumber?
+ @NSManaged var drunkBottles: NSNumber?
+ @NSManaged var lastPurchaseDate: NSDate?
+ @NSManaged var lastDrunkDate: NSDate?
+ @NSManaged var lots: NSOrderedSet?
+ 
+ @NSManaged var price: NSDecimalNumber?
+ @NSManaged var purchaseDate: NSDate?
+ @NSManaged var quantity: NSNumber?
+ @NSManaged var availableBottles: NSNumber?
+ @NSManaged var drunkBottles: NSNumber?
+ @NSManaged var bottle: Bottle?
+ @NSManaged var statuses: NSOrderedSet?
+
+ @NSManaged var available: NSNumber?
+ @NSManaged var drunkDate: NSDate?
+ @NSManaged var location: String?
+ @NSManaged var notes: String?
+ @NSManaged var rating: NSDecimalNumber?
+ @NSManaged var lot: PurchaseLot?
+*/
 

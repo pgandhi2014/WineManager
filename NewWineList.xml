@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bottles>
-    <bottle>
+<!--    <bottle>
         <Name>AAA Bottle</Name>
         <Vintage>1900</Vintage>
         <Varietal>Cabernet Sauvignon</Varietal>
@@ -67,7 +67,7 @@
                 </Locations>
             </Lot>
         </PurchaseLots>
-    </bottle>
+    </bottle> -->
     <bottle>
       <Name>Allegrini Amarone Classico</Name>
       <Vintage>2009</Vintage>
@@ -4673,10 +4673,10 @@
                   <Notes />
                </Loc>
                <Loc>
-                  <Status>Available</Status>
-                  <Location>Bar</Location>
-                  <DrunkDate />
-                  <Rating />
+                  <Status>Drunk</Status>
+                  <Location />
+                  <DrunkDate>2016-06-18</DrunkDate>
+                  <Rating>4</Rating>
                   <Notes />
                </Loc>
             </Locations>
@@ -6548,10 +6548,10 @@
             <Quantity>1</Quantity>
             <Locations>
                <Loc>
-                  <Status>Available</Status>
-                  <Location>Rack12</Location>
-                  <DrunkDate />
-                  <Rating />
+                  <Status>Drunk</Status>
+                  <Location />
+                  <DrunkDate>2016-06-25</DrunkDate>
+                  <Rating>4</Rating>
                   <Notes />
                </Loc>
             </Locations>

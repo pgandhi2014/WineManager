@@ -81,6 +81,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         parser.delegate = self
         //parser.parse()
         
+        
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -124,6 +125,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         newBottle.varietal = parsedBottle.varietal
         newBottle.region = parsedBottle.region
         newBottle.country = parsedBottle.country
+        
         newBottle.reviewSource = parsedBottle.reviewSource
         if let myNumber = NSNumberFormatter().numberFromString(parsedBottle.points) {
             newBottle.points = myNumber
@@ -377,6 +379,10 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         if segue.identifier == "showFilters" {
             let controller = (segue.destinationViewController as! UINavigationController).topViewController as! FiltersViewController
             controller.delegate = self
+        }
+        if segue.identifier == "showAddWine" {
+            let controller = (segue.destinationViewController as! UINavigationController).topViewController as! AddEditViewController
+            controller.managedObjectContext = self.managedObjectContext
         }
     }
     
