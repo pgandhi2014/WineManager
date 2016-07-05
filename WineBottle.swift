@@ -8,7 +8,15 @@
 
 import Foundation
 
-class Loc : NSObject, NSCopying {
+struct SimpleLot {
+    var purchaseDate: NSDate = NSDate()
+    var bottlePrice: Float = 0.0
+    var totalBottles: Int = 0
+    var locations = [String:Int]()
+}
+
+
+class ParsedLoc : NSObject, NSCopying {
     var status: String = ""
     var location: String = ""
     var drunkDate: String = ""
@@ -32,18 +40,18 @@ class Loc : NSObject, NSCopying {
     }
     
     func copyWithZone(zone: NSZone) -> AnyObject {
-        let copy = Loc(status: status, location: location, drunkDate: drunkDate, rating: rating, notes: notes)
+        let copy = ParsedLoc(status: status, location: location, drunkDate: drunkDate, rating: rating, notes: notes)
         return copy
     }
 }
 
-class Lot : NSObject, NSCopying {
+class ParsedLot : NSObject, NSCopying {
     var purchaseDate: String = ""
     var price: String = ""
     var quantity: String = ""
-    var locations = [Loc]()
+    var locations = [ParsedLoc]()
     
-    init(purchaseDate: String, price: String, quantity: String, locations: [Loc]) {
+    init(purchaseDate: String, price: String, quantity: String, locations: [ParsedLoc]) {
         self.purchaseDate = purchaseDate
         self.price = price
         self.quantity = quantity
@@ -58,13 +66,13 @@ class Lot : NSObject, NSCopying {
     }
     
     func copyWithZone(zone: NSZone) -> AnyObject {
-        let copy = Lot(purchaseDate: purchaseDate, price: price, quantity: quantity, locations: locations)
+        let copy = ParsedLot(purchaseDate: purchaseDate, price: price, quantity: quantity, locations: locations)
         return copy
     }
 }
 
 
-class WineBottle {
+class ParsedWineBottle {
     var name: String = ""
     var vintage: String = ""
     var varietal: String = ""

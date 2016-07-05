@@ -28,6 +28,7 @@
 		756C7AFA1D24AC6E004B8DF7 /* AddLotViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 756C7AF91D24AC6E004B8DF7 /* AddLotViewController.swift */; };
 		756C7AFC1D273727004B8DF7 /* LotEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 756C7AFB1D273727004B8DF7 /* LotEntity.swift */; };
 		756C7AFE1D28D236004B8DF7 /* ToastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 756C7AFD1D28D236004B8DF7 /* ToastView.swift */; };
+		756C7B021D2B2E7C004B8DF7 /* download.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 756C7B011D2B2E7C004B8DF7 /* download.jpeg */; };
 		75F9DBC11CFC191500272A75 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75F9DBC01CFC191500272A75 /* AppDelegate.swift */; };
 		75F9DBC41CFC191500272A75 /* WineManager.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 75F9DBC21CFC191500272A75 /* WineManager.xcdatamodeld */; };
 		75F9DBC61CFC191500272A75 /* MasterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75F9DBC51CFC191500272A75 /* MasterViewController.swift */; };
@@ -60,6 +61,7 @@
 		756C7AF91D24AC6E004B8DF7 /* AddLotViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AddLotViewController.swift; path = ../AddLotViewController.swift; sourceTree = "<group>"; };
 		756C7AFB1D273727004B8DF7 /* LotEntity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LotEntity.swift; sourceTree = "<group>"; };
 		756C7AFD1D28D236004B8DF7 /* ToastView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToastView.swift; sourceTree = "<group>"; };
+		756C7B011D2B2E7C004B8DF7 /* download.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = download.jpeg; sourceTree = "<group>"; };
 		75F9DBBD1CFC191400272A75 /* WineManager.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WineManager.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		75F9DBC01CFC191500272A75 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		75F9DBC31CFC191500272A75 /* WineManager.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = WineManager.xcdatamodel; sourceTree = "<group>"; };
@@ -86,6 +88,7 @@
 		75F9DBB41CFC191400272A75 = {
 			isa = PBXGroup;
 			children = (
+				756C7B011D2B2E7C004B8DF7 /* download.jpeg */,
 				756C7AF11D209636004B8DF7 /* Region+CoreDataProperties.swift */,
 				756C7AF21D209636004B8DF7 /* Region.swift */,
 				7507B4081CFD01390072A92D /* WineBottle.swift */,
@@ -200,6 +203,7 @@
 				75F9DBCD1CFC191500272A75 /* Assets.xcassets in Resources */,
 				75F9DBD81CFC19D500272A75 /* WineList.xml in Resources */,
 				75F9DBCB1CFC191500272A75 /* Main.storyboard in Resources */,
+				756C7B021D2B2E7C004B8DF7 /* download.jpeg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

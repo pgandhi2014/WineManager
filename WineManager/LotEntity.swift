@@ -8,10 +8,4 @@
 
 import UIKit
 
-struct ALot {
-    var purchaseDate: NSDate = NSDate()
-    var bottlePrice: Float = 0.0
-    var totalBottles: Int = 0
-    var locations = [String:Int]()
-}
 

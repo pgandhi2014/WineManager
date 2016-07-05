@@ -710,10 +710,10 @@
             <Quantity>2</Quantity>
             <Locations>
                <Loc>
-                  <Status>Available</Status>
-                  <Location>Fridge</Location>
-                  <DrunkDate />
-                  <Rating />
+                  <Status>Drunk</Status>
+                  <Location />
+                  <DrunkDate>2016-07-01</DrunkDate>
+                  <Rating>5</Rating>
                   <Notes />
                </Loc>
                <Loc>
@@ -2132,10 +2132,10 @@
             <Quantity>1</Quantity>
             <Locations>
                <Loc>
-                  <Status>Available</Status>
-                  <Location>Rack10</Location>
-                  <DrunkDate />
-                  <Rating />
+                  <Status>Drunk</Status>
+                  <Location />
+                  <DrunkDate>2016-06-28</DrunkDate>
+                  <Rating>5</Rating>
                   <Notes />
                </Loc>
             </Locations>

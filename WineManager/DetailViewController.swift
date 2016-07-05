@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreData
 
 class DetailViewController: UIViewController, SavingDrunkViewControllerDelegate {
 
@@ -32,7 +33,7 @@ class DetailViewController: UIViewController, SavingDrunkViewControllerDelegate 
 
     @IBOutlet weak var markDrunkButton: UIBarButtonItem!
     
-    
+    var managedObjectContext: NSManagedObjectContext? = nil
     var detailItem: AnyObject? {
         didSet {
             // Update the view.
@@ -175,6 +176,13 @@ class DetailViewController: UIViewController, SavingDrunkViewControllerDelegate 
             }
             controller.bottleLocations = locations
             controller.delegate = self
+        }
+        if segue.identifier == "showEditDetails" {
+            let controller = (segue.destinationViewController as! UINavigationController).topViewController as! AddEditViewController
+            controller.bottleInfo = self.detailItem
+            controller.viewMode = "Edit"
+            controller.managedObjectContext = self.managedObjectContext
+            
         }
     }
     

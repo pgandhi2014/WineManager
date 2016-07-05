@@ -11,7 +11,7 @@ import CoreData
 
 protocol SaveALotViewControllerDelegate
 {
-    func saveLot(lot: ALot)
+    func saveLot(lot: SimpleLot)
 }
 
 class AddLotController: UITableViewController, UIPickerViewDelegate, UIPickerViewDataSource, UITextFieldDelegate {
@@ -32,13 +32,32 @@ class AddLotController: UITableViewController, UIPickerViewDelegate, UIPickerVie
     var locationsArray: [String] = []
     let quantitiesArray = [Int](0...100)
     
+    var lotInfo = SimpleLot()
+    var viewMode = "Add"
+
     let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
     
     @IBAction func onSaveLot(sender: AnyObject) {
-        var newLot = ALot()
+        let keyWindow = UIApplication.sharedApplication().keyWindow
+        var newLot = SimpleLot()
+        if ((txtPurchaseDate.text!).isEmpty) {
+            keyWindow!.makeToast(message: "Must provide a valid date", duration: 2.0, position: HRToastPositionCenter)
+            return
+        }
         newLot.purchaseDate = dateFormatter.dateFromString(txtPurchaseDate.text!)!
+        
+        if ((txtPrice.text!).isEmpty) {
+            keyWindow!.makeToast(message: "Must provide a valid purchase price", duration: 2.0, position: HRToastPositionCenter)
+            return
+        }
         newLot.bottlePrice = Float(txtPrice.text!)!
+        
+        if ((txtQuantity.text!).isEmpty) {
+            keyWindow!.makeToast(message: "Must provide number of bottles", duration: 2.0, position: HRToastPositionCenter)
+            return
+        }
         newLot.totalBottles = Int(txtQuantity.text!)!
+        
         var tag = 0
         for location in txtLocations {
             if (!(location.text?.isEmpty)!) {
@@ -46,10 +65,15 @@ class AddLotController: UITableViewController, UIPickerViewDelegate, UIPickerVie
             }
             tag += 1
         }
+        if (newLot.locations.count == 0) {
+            keyWindow!.makeToast(message: "Must provide atleast 1 location", duration: 2.0, position: HRToastPositionCenter)
+            return
+        }
+        
         if((self.delegate) != nil)
         {
             delegate?.saveLot(newLot)
-            UIApplication.sharedApplication().keyWindow?.makeToast(message: "Saved", duration: 2.0, position: HRToastPositionCenter)
+            keyWindow!.makeToast(message: "Saved", duration: 2.0, position: HRToastPositionCenter)
         }
     }
     
@@ -85,6 +109,7 @@ class AddLotController: UITableViewController, UIPickerViewDelegate, UIPickerVie
         pickerView.delegate = self
         txtPurchaseDate.inputView = datePicker
         txtPurchaseDate.delegate = self
+        txtPurchaseDate.text = dateFormatter.stringFromDate(NSDate())
         var tag = 0
         for location in txtLocations {
             location.delegate = self
@@ -94,6 +119,19 @@ class AddLotController: UITableViewController, UIPickerViewDelegate, UIPickerVie
             location.tag = tag
             self.txtBottles[tag].tag = tag
             tag += 1
+        }
+        
+        if (viewMode == "Edit") {
+            txtPurchaseDate.text = dateFormatter.stringFromDate(lotInfo.purchaseDate)
+            txtPrice.text = String(lotInfo.bottlePrice)
+            txtQuantity.text = String(lotInfo.totalBottles)
+            var loopIndex = 0
+            for lot in lotInfo.locations {
+                txtLocations[loopIndex].text = lot.0
+                txtBottles[loopIndex].text = String(lot.1)
+                loopIndex += 1
+            }
+            
         }
     }
     

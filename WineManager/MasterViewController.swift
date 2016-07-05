@@ -14,8 +14,31 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var filtersButton: UIBarButtonItem!
     @IBOutlet weak var statsButton: UIBarButtonItem!
-    @IBOutlet weak var bottlesButton: UIBarButtonItem!
     @IBOutlet weak var clearFiltersButton: UIBarButtonItem!
+    
+    var detailViewController: DetailViewController? = nil
+    var managedObjectContext: NSManagedObjectContext? = nil
+    
+    var availableFilter = NSPredicate(format: "availableBottles > 0")
+    var defaultFilter = NSPredicate(value: true)
+    let defaultSorter = NSSortDescriptor(key: "maxPrice", ascending: false)
+    
+    var sorter = NSSortDescriptor()
+    var searchFilter = NSPredicate()    //Filter for the searchbar
+    var viewFilter = NSPredicate()      //Filter for the filtersview
+    
+    var parser = NSXMLParser()
+    var bottles = NSMutableArray()
+    var elements = NSMutableDictionary()
+    var element = NSString()
+    var name = String()
+    var vintage = String()
+    var parsedBottle = ParsedWineBottle()
+    var parsedLot = ParsedLot(purchaseDate: "", price: "", quantity: "", locations: [ParsedLoc]())
+    var parsedLoc = ParsedLoc(status: "", location: "", drunkDate: "", rating: "", notes: "")
+    var fetchRequest = NSFetchRequest()
+    
+    let dateFormatter = NSDateFormatter()
     
     @IBAction func onClearFilters(sender: UIBarButtonItem) {
         clearFiltersButton.enabled = false
@@ -26,37 +49,13 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         performFetchAndRefresh()
     }
     
-    var detailViewController: DetailViewController? = nil
-    var managedObjectContext: NSManagedObjectContext? = nil
     
-    var availableFilter = NSPredicate(format: "availableBottles > 0")
-    var defaultFilter = NSPredicate(value: true)
-    let defaultSorter = NSSortDescriptor(key: "maxPrice", ascending: false)
-    
-    var sorter = NSSortDescriptor()
-    var searchFilter = NSPredicate()
-    var viewFilter = NSPredicate()
-    
-    var parser = NSXMLParser()
-    var bottles = NSMutableArray()
-    var elements = NSMutableDictionary()
-    var element = NSString()
-    var name = String()
-    var vintage = String()
-    var parsedBottle = WineBottle()
-    var parsedLot = Lot(purchaseDate: "", price: "", quantity: "", locations: [Loc]())
-    var parsedLoc = Loc(status: "", location: "", drunkDate: "", rating: "", notes: "")
-    var fetchRequest = NSFetchRequest()
-
-    let dateFormatter = NSDateFormatter()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-        self.navigationItem.leftBarButtonItem = self.editButtonItem()
+        //self.navigationItem.leftBarButtonItem = self.editButtonItem()
 
-        //let addButton = UIBarButtonItem(barButtonSystemItem: .Add, target: self, action: #selector(insertNewObject(_:)))
-        //self.navigationItem.rightBarButtonItem = addButton
         if let split = self.splitViewController {
             let controllers = split.viewControllers
             self.detailViewController = (controllers[controllers.count-1] as! UINavigationController).topViewController as? DetailViewController
@@ -75,7 +74,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
             NSLog("Failed to find xml")
         }
         let bottles = self.fetchedResultsController.sections![0].numberOfObjects
-        self.bottlesButton.title = String(bottles)
+        self.title = "Wine Manager (" + String(bottles) + ")"
         
         searchBar.delegate = self
         parser.delegate = self
@@ -94,26 +93,6 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
-//    func insertNewObject(sender: AnyObject) {
-//        let context = self.fetchedResultsController.managedObjectContext
-//        let entity = self.fetchedResultsController.fetchRequest.entity!
-//        let newManagedObject = NSEntityDescription.insertNewObjectForEntityForName(entity.name!, inManagedObjectContext: context)
-//             
-//        // If appropriate, configure the new managed object.
-//        // Normally you should use accessor methods, but using KVC here avoids the need to add a custom class to the template.
-//        newManagedObject.setValue(NSDate(), forKey: "timeStamp")
-//             
-//        // Save the context.
-//        do {
-//            try context.save()
-//        } catch {
-//            // Replace this implementation with code to handle the error appropriately.
-//            // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-//            //print("Unresolved error \(error), \(error.userInfo)")
-//            abort()
-//        }
-//    }
     
     func insertNewBottle() {
         let newBottle = NSEntityDescription.insertNewObjectForEntityForName("Bottle", inManagedObjectContext: self.managedObjectContext!) as! Bottle
@@ -134,7 +113,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         
         for (_, value) in parsedBottle.purchaseLots.enumerate() {
             let newLot = NSEntityDescription.insertNewObjectForEntityForName("PurchaseLot", inManagedObjectContext: self.managedObjectContext!) as! PurchaseLot
-            let lot = value as! Lot
+            let lot = value as! ParsedLot
             newLot.bottle = newBottle
             newLot.purchaseDate = self.dateFormatter.dateFromString(lot.purchaseDate)
             if (newLot.purchaseDate!.compare(newBottle.lastPurchaseDate!) == NSComparisonResult.OrderedDescending) {
@@ -233,7 +212,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         }
         self.tableView.reloadData()
         let bottles = self.fetchedResultsController.sections![0].numberOfObjects
-        self.bottlesButton.title = String(bottles)
+        self.title = "Wine Manager (" + String(bottles) + ")"
     }
     
 
@@ -354,8 +333,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         } else if (elementName == "Lot") {
             parsedBottle.purchaseLots.addObject(parsedLot.copy())
         } else if (elementName == "Loc") {
-            parsedLot.locations.append(parsedLoc.copy() as! Loc)
-//            parsedBottle.locations.addObject(parsedLoc.copy())
+            parsedLot.locations.append(parsedLoc.copy() as! ParsedLoc)
         }
         
     }
@@ -369,6 +347,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
                 controller.detailItem = object
                 controller.navigationItem.leftBarButtonItem = self.splitViewController?.displayModeButtonItem()
                 controller.navigationItem.leftItemsSupplementBackButton = true
+                controller.managedObjectContext = self.managedObjectContext
             }
         }
         if segue.identifier == "showStats" {
@@ -420,8 +399,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
     }
 
     override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
+        return false
     }
 
     override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
@@ -452,6 +430,9 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
             cell.textLabel!.text = String(currentBottle.vintage!) + " " + currentBottle.name!
         }
         cell.detailTextLabel!.text = "$" + formatter.stringFromNumber(currentBottle.maxPrice!)! + "  " + currentBottle.varietal!
+        
+        let imageName = UIImage(named: "download.jpeg")
+        cell.imageView?.image = imageName
         
         if (currentBottle.availableBottles?.integerValue == 0) {
             cell.textLabel?.textColor = UIColor.redColor()
