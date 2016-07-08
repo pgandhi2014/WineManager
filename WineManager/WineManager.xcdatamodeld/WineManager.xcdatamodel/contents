@@ -15,12 +15,12 @@
         <attribute name="uniqueID" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="varietal" attributeType="String" defaultValueString="None" syncable="YES"/>
         <attribute name="vintage" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
-        <relationship name="lots" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="PurchaseLot" inverseName="bottle" inverseEntity="PurchaseLot" syncable="YES"/>
+        <relationship name="lots" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="PurchaseLot" inverseName="bottle" inverseEntity="PurchaseLot" syncable="YES"/>
     </entity>
     <entity name="Country" representedClassName=".Country" syncable="YES">
         <attribute name="country" attributeType="String" defaultValueString="None" syncable="YES"/>
         <attribute name="inUse" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
-        <relationship name="regions" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Region" inverseName="country" inverseEntity="Region" syncable="YES"/>
+        <relationship name="regions" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="Region" inverseName="country" inverseEntity="Region" syncable="YES"/>
     </entity>
     <entity name="Location" representedClassName=".Location" syncable="YES">
         <attribute name="inUse" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
@@ -33,7 +33,7 @@
         <attribute name="purchaseDate" attributeType="Date" defaultDateTimeInterval="473328000" syncable="YES"/>
         <attribute name="quantity" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <relationship name="bottle" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Bottle" inverseName="lots" inverseEntity="Bottle" syncable="YES"/>
-        <relationship name="statuses" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Status" inverseName="lot" inverseEntity="Status" syncable="YES"/>
+        <relationship name="statuses" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="Status" inverseName="lot" inverseEntity="Status" syncable="YES"/>
     </entity>
     <entity name="Region" representedClassName=".Region" syncable="YES">
         <attribute name="inUse" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
@@ -49,11 +49,11 @@
         <relationship name="lot" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="PurchaseLot" inverseName="statuses" inverseEntity="PurchaseLot" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Country" positionX="664" positionY="3302" width="128" height="88"/>
+        <element name="Bottle" positionX="682" positionY="2901" width="128" height="270"/>
+        <element name="Country" positionX="664" positionY="3302" width="128" height="90"/>
         <element name="Location" positionX="844" positionY="3302" width="128" height="73"/>
-        <element name="PurchaseLot" positionX="457" positionY="2970" width="128" height="148"/>
-        <element name="Status" positionX="277" positionY="3026" width="128" height="133"/>
-        <element name="Bottle" positionX="682" positionY="2901" width="128" height="268"/>
+        <element name="PurchaseLot" positionX="457" positionY="2970" width="128" height="150"/>
         <element name="Region" positionX="484" positionY="3240" width="128" height="88"/>
+        <element name="Status" positionX="277" positionY="3026" width="128" height="133"/>
     </elements>
 </model>

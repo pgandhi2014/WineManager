@@ -131,6 +131,9 @@ class AddLotController: UITableViewController, UIPickerViewDelegate, UIPickerVie
                 txtBottles[loopIndex].text = String(lot.1)
                 loopIndex += 1
             }
+            txtPurchaseDate.enabled = false
+            txtQuantity.enabled = false
+            txtPrice.enabled = false
             
         }
     }

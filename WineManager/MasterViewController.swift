@@ -26,6 +26,8 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
     var sorter = NSSortDescriptor()
     var searchFilter = NSPredicate()    //Filter for the searchbar
     var viewFilter = NSPredicate()      //Filter for the filtersview
+    var filtersApplied = false
+    var searchApplied = false
     
     var parser = NSXMLParser()
     var bottles = NSMutableArray()
@@ -41,6 +43,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
     let dateFormatter = NSDateFormatter()
     
     @IBAction func onClearFilters(sender: UIBarButtonItem) {
+        filtersApplied = false
         clearFiltersButton.enabled = false
         viewFilter = availableFilter
         sorter = defaultSorter
@@ -219,6 +222,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
     
     //MARK: - SearchBar
     func searchBarTextDidBeginEditing(searchBar: UISearchBar) {
+        searchApplied = true
         searchBar.showsCancelButton = true
     }
     
@@ -228,6 +232,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
     
     
     func searchBarCancelButtonClicked(searchBar: UISearchBar) {
+        searchApplied = false
         searchBar.showsCancelButton = false
         searchBar.text = ""
         setPredicateAndFilterResults("")
@@ -343,8 +348,11 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         if segue.identifier == "showDetail" {
             if let indexPath = self.tableView.indexPathForSelectedRow {
             let object = self.fetchedResultsController.objectAtIndexPath(indexPath)
+                let bottle = object as! Bottle
                 let controller = (segue.destinationViewController as! UINavigationController).topViewController as! DetailViewController
                 controller.detailItem = object
+                controller.bottleName = bottle.name!
+                controller.bottleVintage = (bottle.vintage?.integerValue)!
                 controller.navigationItem.leftBarButtonItem = self.splitViewController?.displayModeButtonItem()
                 controller.navigationItem.leftItemsSupplementBackButton = true
                 controller.managedObjectContext = self.managedObjectContext
@@ -354,6 +362,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
             let controller = (segue.destinationViewController as! UINavigationController).topViewController as! StatsViewController
             controller.managedObjectContext = self.managedObjectContext
             controller.fetchPredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [viewFilter, searchFilter])
+            controller.showFilteredStats = searchApplied || filtersApplied
         }
         if segue.identifier == "showFilters" {
             let controller = (segue.destinationViewController as! UINavigationController).topViewController as! FiltersViewController
@@ -366,6 +375,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
     }
     
     func applyFilters(filter: NSPredicate, sort: NSSortDescriptor) {
+        filtersApplied = true
         clearFiltersButton.enabled = true
         viewFilter = filter
         fetchRequest.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [viewFilter, searchFilter])
@@ -378,7 +388,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
     // MARK: - Table View
 
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        let height = CGFloat(55.0)
+        let height = CGFloat(80.0)
         return height
     }
     
@@ -399,7 +409,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
     }
 
     override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        return false
+        return true
     }
 
     override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
@@ -419,27 +429,29 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
     }
 
     func configureCell(cell: UITableViewCell, withObject object: NSManagedObject) {
+        let customCell = cell as! CustomPrototypeCell
         let currentBottle = object as! Bottle
         let formatter = NSNumberFormatter()
+        let pointsFormatter = NSNumberFormatter()
         formatter.maximumFractionDigits = 1
         formatter.minimumFractionDigits = 1
+        pointsFormatter.maximumFractionDigits = 0
+        pointsFormatter.minimumFractionDigits = 0
         
         if (currentBottle.vintage! == 0) {
-            cell.textLabel!.text = "NV " + currentBottle.name!
+            customCell.lblName.text = "NV " + currentBottle.name!
         } else {
-            cell.textLabel!.text = String(currentBottle.vintage!) + " " + currentBottle.name!
+            customCell.lblName.text = String(currentBottle.vintage!) + " " + currentBottle.name!
         }
-        cell.detailTextLabel!.text = "$" + formatter.stringFromNumber(currentBottle.maxPrice!)! + "  " + currentBottle.varietal!
-        
-        let imageName = UIImage(named: "download.jpeg")
-        cell.imageView?.image = imageName
-        
+        customCell.lblDetails.text = "$" + formatter.stringFromNumber(currentBottle.maxPrice!)! + "  " + currentBottle.varietal!
+        customCell.lblSecondary.text = pointsFormatter.stringFromNumber(currentBottle.points!)! + " points by " + currentBottle.reviewSource!
+//        let imageName = UIImage(named: "IconSmall-40.png")
+//        cell.imageView?.image = imageName
+//        
         if (currentBottle.availableBottles?.integerValue == 0) {
-            cell.textLabel?.textColor = UIColor.redColor()
-            cell.detailTextLabel?.textColor = UIColor.redColor()
+            customCell.colorCell(UIColor.redColor())
         } else {
-            cell.textLabel?.textColor = UIColor.blackColor()
-            cell.detailTextLabel?.textColor = UIColor.blackColor()
+            customCell.colorCell(UIColor.blackColor())
         }        
     }
 

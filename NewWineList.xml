@@ -5868,10 +5868,10 @@
             <Quantity>1</Quantity>
             <Locations>
                <Loc>
-                  <Status>Available</Status>
-                  <Location>Rack12</Location>
-                  <DrunkDate />
-                  <Rating />
+                  <Status>Drunk</Status>
+                  <Location />
+                  <DrunkDate>2016-07-05</DrunkDate>
+                  <Rating>4.5</Rating>
                   <Notes />
                </Loc>
             </Locations>

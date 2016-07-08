@@ -38,91 +38,23 @@ class FiltersViewController: UITableViewController, UIPickerViewDelegate, UIPick
     @IBOutlet weak var txtRegion: UITextField!
     @IBOutlet weak var txtLocation: UITextField!
     @IBOutlet weak var txtPrice: UITextField!
-    
-    @IBOutlet weak var sortName: UISwitch!
-    @IBOutlet weak var sortVintage: UISwitch!
-    @IBOutlet weak var sortPrice: UISwitch!
-    @IBOutlet weak var sortPoints: UISwitch!
-    @IBOutlet weak var sortDate: UISwitch!
-    @IBOutlet weak var lblSortDate: UILabel!
+    @IBOutlet weak var txtSortOrder: UITextField!
     
     @IBOutlet weak var viewOptions: UISegmentedControl!
-    var currentSortOrder = "Price"
     
-    @IBAction func onViewOptionChange(sender: UISegmentedControl) {
-        if (viewOptions.selectedSegmentIndex == 1) {
-            lblSortDate.text = "Drunk Date"
-        } else {
-            lblSortDate.text = "Purchase Date"
-        }
-    }
+    var selectedRowIndex = 0
+    var selectedSortOrderIndex = 4
+    var varietalsArray: [String] = []
+    var countriesArray: [String] = []
+    var regionsArray: [String] = []
+    var locationsArray: [String] = []
+    let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+    let pickerView = UIPickerView()
+    let pricesArray = ["Any", "50", "100", "150", "200", "250", "300", "400", "500", "750", "1000", "2000"]
+    let sorterArray = ["Name: A to Z", "Name: Z to A", "Vintage: Young to Mature", "Vintage: Mature to Young", "Price: High to Low", "Price: Low to High", "Points: High to Low", "Points: Low to High", "Purchase Date: Oldest to Newest", "Purchase Date: Newest to Oldest", "Drunk Date: Oldest to Newest", "Drunk Date: Newest to Oldest"]
     
-    
-    @IBAction func onNameToggle(sender: UISwitch) {
-        if sender.on {
-            sortVintage.setOn(false, animated: true)
-            sortPrice.setOn(false, animated: true)
-            sortPoints.setOn(false, animated: true)
-            sortDate.setOn(false, animated: true)
-            currentSortOrder = "Name"
-        } else {
-            sortPrice.setOn(true, animated: true)
-            currentSortOrder = "Price"
-        }
-    }
-    
-    @IBAction func onVintageToggle(sender: UISwitch) {
-        if sender.on {
-            sortName.setOn(false, animated: true)
-            sortPrice.setOn(false, animated: true)
-            sortPoints.setOn(false, animated: true)
-            sortDate.setOn(false, animated: true)
-            currentSortOrder = "Vintage"
-        } else {
-            sortPrice.setOn(true, animated: true)
-            currentSortOrder = "Price"
-        }
-    }
-    
-    @IBAction func onPriceToggle(sender: UISwitch) {
-        if sender.on {
-            sortVintage.setOn(false, animated: true)
-            sortName.setOn(false, animated: true)
-            sortPoints.setOn(false, animated: true)
-            sortDate.setOn(false, animated: true)
-            currentSortOrder = "Price"
-        } else {
-            sortPrice.setOn(true, animated: true)
-            currentSortOrder = "Price"
-        }
-    }
-    
-    @IBAction func onPointsToggle(sender: UISwitch) {
-        if sender.on {
-            sortVintage.setOn(false, animated: true)
-            sortPrice.setOn(false, animated: true)
-            sortName.setOn(false, animated: true)
-            sortDate.setOn(false, animated: true)
-            currentSortOrder = "Points"
-        } else {
-            sortPrice.setOn(true, animated: true)
-            currentSortOrder = "Price"
-        }
-    }
-    
-    @IBAction func onDateToggle(sender: UISwitch) {
-        if sender.on {
-            sortVintage.setOn(false, animated: true)
-            sortPrice.setOn(false, animated: true)
-            sortPoints.setOn(false, animated: true)
-            sortName.setOn(false, animated: true)
-            currentSortOrder = "Date"
-        } else {
-            sortPrice.setOn(true, animated: true)
-            currentSortOrder = "Price"
-        }
-    }
-    
+    var priceMin = 0
+    var priceMax = 100000
     
     
     @IBOutlet weak var btnApply: UIBarButtonItem!
@@ -167,47 +99,45 @@ class FiltersViewController: UITableViewController, UIPickerViewDelegate, UIPick
         let predicate = NSCompoundPredicate(type: NSCompoundPredicateType.AndPredicateType, subpredicates: subANDPredicates)
         
         var sortDescriptor = NSSortDescriptor(key: "maxPrice", ascending: false)
-        if (currentSortOrder == "Name") {
+        switch selectedSortOrderIndex {
+        case 0:
             sortDescriptor = NSSortDescriptor(key: "name", ascending: true)
-        } else if (currentSortOrder == "Vintage") {
+        case 1:
+            sortDescriptor = NSSortDescriptor(key: "name", ascending: false)
+        case 2:
+            sortDescriptor = NSSortDescriptor(key: "vintage", ascending: false)
+        case 3:
             sortDescriptor = NSSortDescriptor(key: "vintage", ascending: true)
-        } else if (currentSortOrder == "Points") {
+        case 4:
+            sortDescriptor = NSSortDescriptor(key: "maxPrice", ascending: false)
+        case 5:
+            sortDescriptor = NSSortDescriptor(key: "maxPrice", ascending: true)
+        case 6:
             sortDescriptor = NSSortDescriptor(key: "points", ascending: false)
-        } else if (currentSortOrder == "Date") {
-            if (viewOptions.selectedSegmentIndex == 1) {
-                sortDescriptor = NSSortDescriptor(key: "lastDrunkDate", ascending: false)
-            } else {
-                sortDescriptor = NSSortDescriptor(key: "lastPurchaseDate", ascending: false)
-            }
+        case 7:
+            sortDescriptor = NSSortDescriptor(key: "points", ascending: true)
+        case 8:
+            sortDescriptor = NSSortDescriptor(key: "lastPurchaseDate", ascending: true)
+        case 9:
+            sortDescriptor = NSSortDescriptor(key: "lastPurchaseDate", ascending: false)
+        case 10:
+            sortDescriptor = NSSortDescriptor(key: "lastDrunkDate", ascending: true)
+        case 11:
+            sortDescriptor = NSSortDescriptor(key: "lastDrunkDate", ascending: false)
+        default:
+            sortDescriptor = NSSortDescriptor(key: "maxPrice", ascending: false)
         }
+        
         if((self.delegate) != nil)
         {
             delegate?.applyFilters(predicate, sort: sortDescriptor)
         }
     }
     
-    var selectedRowIndex = 0
-    var varietalsArray: [String] = []
-    var countriesArray: [String] = []
-    var regionsArray: [String] = []
-    var locationsArray: [String] = []
-    let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
-    let pickerView = UIPickerView()
-    let pricesArray = ["Any", "50", "100", "150", "200", "250", "300", "400", "500", "750", "1000", "2000"]
-    
-    var priceMin = 0
-    var priceMax = 100000
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         self.tableView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(FiltersViewController.handleTap(_:))))
-        
-        sortName.setOn(false, animated: false)
-        sortVintage.setOn(false, animated: false)
-        sortPrice.setOn(true, animated: false)
-        sortPoints.setOn(false, animated: false)
-        sortDate.setOn(false, animated: false)
         
         getDistinctVarietals()
         getDistinctLocatons()
@@ -227,12 +157,16 @@ class FiltersViewController: UITableViewController, UIPickerViewDelegate, UIPick
         txtRegion.inputView = pickerView
         txtLocation.inputView = pickerView
         txtPrice.inputView = pickerView
+        txtSortOrder.inputView = pickerView
         
         txtVarietal.delegate = self
         txtCountry.delegate = self
         txtRegion.delegate = self
         txtLocation.delegate = self
         txtPrice.delegate = self
+        txtSortOrder.delegate = self
+        
+        txtSortOrder.text = sorterArray[selectedSortOrderIndex]
         
         
     }
@@ -309,18 +243,15 @@ class FiltersViewController: UITableViewController, UIPickerViewDelegate, UIPick
         selectedRowIndex = textField.tag
         pickerView.reloadAllComponents()
         pickerView.selectRow(0, inComponent: 0, animated: false)
-        
     }
 
     func textFieldDidEndEditing(textField: UITextField) {
         textField.resignFirstResponder()
         selectedRowIndex = 0
-        
     }
     
-    
-    
 
+    
     // MARK: - Table View
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
     }
@@ -330,26 +261,18 @@ class FiltersViewController: UITableViewController, UIPickerViewDelegate, UIPick
     }
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if (section == 2) {
-            return 1
-        } else {
+        if (section == 0) {
             return 5
+        } else {
+            return 1
         }
     }
     
-//    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-//        let cell = tableView.dequeueReusableCellWithIdentifier("CellStats", forIndexPath: indexPath)
-//        cell.textLabel?.text = keys[indexPath.row]
-//        if (indexPath.section == 0) {
-//            cell.detailTextLabel?.text = valsAvailable[indexPath.row]
-//        } else if (indexPath.section == 1) {
-//            cell.detailTextLabel?.text = valsDrunk[indexPath.row]
-//        } else if (indexPath.section == 2) {
-//            cell.detailTextLabel?.text = valsTotal[indexPath.row]
-//        } else if (indexPath.section == 3) {
-//            cell.detailTextLabel?.text = valsFilter[indexPath.row]
+//    override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+//        if (section == 0) {
+//            return 0.0
 //        }
-//        return cell
+//        return super.tableView(tableView, heightForHeaderInSection: section)
 //    }
     
     override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
@@ -381,6 +304,8 @@ class FiltersViewController: UITableViewController, UIPickerViewDelegate, UIPick
                 return locationsArray.count
             } else if (selectedRowIndex == 14) {
                 return pricesArray.count
+            } else if (selectedRowIndex == 15) {
+                return sorterArray.count
             } else {
                 return 0
             }
@@ -402,6 +327,8 @@ class FiltersViewController: UITableViewController, UIPickerViewDelegate, UIPick
             return locationsArray[row]
         } else if (selectedRowIndex == 14) {
             return "$" + pricesArray[row]
+        } else if (selectedRowIndex == 15) {
+            return sorterArray[row]
         } else {
             return ""
         }
@@ -416,18 +343,38 @@ class FiltersViewController: UITableViewController, UIPickerViewDelegate, UIPick
             txtRegion.text = regionsArray[row]
         } else if (selectedRowIndex == 13) {
             txtLocation.text = locationsArray[row]
+        } else if (selectedRowIndex == 15) {
+            selectedSortOrderIndex = row
+            txtSortOrder.text = sorterArray[row]
         } else if (selectedRowIndex == 14) {
             if (component == 0) {
                 if (row == 0) {
                     priceMin = 0
                 } else {
                     priceMin = Int(pricesArray[row])!
+                    if (priceMin >= priceMax) {
+                        if (row < pricesArray.count-1) {
+                            pickerView.selectRow(row+1, inComponent: 2, animated: true)
+                            priceMax = Int(pricesArray[row+1])!
+                        } else {
+                            pickerView.selectRow(0, inComponent: 2, animated: true)
+                            priceMax = 100000
+                        }
+                    }
                 }
             } else if (component == 2) {
                 if (row == 0) {
                     priceMax = 100000
                 } else {
                     priceMax = Int(pricesArray[row])!
+                    if (priceMax <= priceMin) {
+                        pickerView.selectRow(row-1, inComponent: 0, animated: true)
+                        if (row > 1) {
+                            priceMin = Int(pricesArray[row-1])!
+                        } else if (row == 1) {
+                            priceMin = 0
+                        }
+                    }
                 }
             }
             txtPrice.text = "$" + String(priceMin) + " to $" + String(priceMax)

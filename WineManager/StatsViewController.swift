@@ -12,8 +12,8 @@ import CoreData
 class StatsViewController: UITableViewController {
     var managedObjectContext: NSManagedObjectContext? = nil
     var fetchPredicate: NSPredicate? = nil
-    
-    let keys : [String] = ["Available inventory", "Number of bottles", "Average bottle price", "Max bottle price", "Min bottle price", "Average points", "Max points", "Min points"]
+    var showFilteredStats = false
+    let keys : [String] = ["Inventory Cost", "Number of bottles", "Average bottle price", "Max bottle price", "Min bottle price", "Average points", "Max points", "Min points"]
     var valsAvailable = [String]()
     var valsDrunk = [String]()
     var valsTotal = [String]()
@@ -23,10 +23,12 @@ class StatsViewController: UITableViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
-        calculateStats("Filter")
         calculateStats("Available")
         calculateStats("Drunk")
         calculateStats("Total")
+        if (showFilteredStats) {
+            calculateStats("Filter")
+        }
         
     }
     
@@ -153,8 +155,11 @@ class StatsViewController: UITableViewController {
     }
     
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        //return self.fetchedResultsController.sections?.count ?? 0
-        return 4
+        if (showFilteredStats) {
+            return 4
+        } else {
+            return 3
+        }
     }
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
