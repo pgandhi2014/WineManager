@@ -82,8 +82,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         searchBar.delegate = self
         parser.delegate = self
         //parser.parse()
-        
-        
+         
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -388,7 +387,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
     // MARK: - Table View
 
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        let height = CGFloat(80.0)
+        let height = CGFloat(60.0)
         return height
     }
     
@@ -444,10 +443,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
             customCell.lblName.text = String(currentBottle.vintage!) + " " + currentBottle.name!
         }
         customCell.lblDetails.text = "$" + formatter.stringFromNumber(currentBottle.maxPrice!)! + "  " + currentBottle.varietal!
-        customCell.lblSecondary.text = pointsFormatter.stringFromNumber(currentBottle.points!)! + " points by " + currentBottle.reviewSource!
-//        let imageName = UIImage(named: "IconSmall-40.png")
-//        cell.imageView?.image = imageName
-//        
+        customCell.lblRating.text = pointsFormatter.stringFromNumber(currentBottle.points!)!
         if (currentBottle.availableBottles?.integerValue == 0) {
             customCell.colorCell(UIColor.redColor())
         } else {

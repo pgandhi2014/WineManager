@@ -30,6 +30,7 @@
 		756C7AFE1D28D236004B8DF7 /* ToastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 756C7AFD1D28D236004B8DF7 /* ToastView.swift */; };
 		756C7B0C1D2EC2A6004B8DF7 /* CustomPrototypeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 756C7B0B1D2EC2A6004B8DF7 /* CustomPrototypeCell.swift */; };
 		756C7B101D2F77BC004B8DF7 /* IconLaunch.png in Resources */ = {isa = PBXBuildFile; fileRef = 756C7B0F1D2F77BC004B8DF7 /* IconLaunch.png */; };
+		756C7B121D302B65004B8DF7 /* Picture1.png in Resources */ = {isa = PBXBuildFile; fileRef = 756C7B111D302B65004B8DF7 /* Picture1.png */; };
 		75F9DBC11CFC191500272A75 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75F9DBC01CFC191500272A75 /* AppDelegate.swift */; };
 		75F9DBC41CFC191500272A75 /* WineManager.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 75F9DBC21CFC191500272A75 /* WineManager.xcdatamodeld */; };
 		75F9DBC61CFC191500272A75 /* MasterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75F9DBC51CFC191500272A75 /* MasterViewController.swift */; };
@@ -64,6 +65,7 @@
 		756C7AFD1D28D236004B8DF7 /* ToastView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToastView.swift; sourceTree = "<group>"; };
 		756C7B0B1D2EC2A6004B8DF7 /* CustomPrototypeCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomPrototypeCell.swift; sourceTree = "<group>"; };
 		756C7B0F1D2F77BC004B8DF7 /* IconLaunch.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IconLaunch.png; sourceTree = "<group>"; };
+		756C7B111D302B65004B8DF7 /* Picture1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Picture1.png; sourceTree = "<group>"; };
 		75F9DBBD1CFC191400272A75 /* WineManager.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WineManager.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		75F9DBC01CFC191500272A75 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		75F9DBC31CFC191500272A75 /* WineManager.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = WineManager.xcdatamodel; sourceTree = "<group>"; };
@@ -136,6 +138,7 @@
 				75F9DBC91CFC191500272A75 /* Main.storyboard */,
 				75F9DBCC1CFC191500272A75 /* Assets.xcassets */,
 				75F9DBCE1CFC191500272A75 /* LaunchScreen.storyboard */,
+				756C7B111D302B65004B8DF7 /* Picture1.png */,
 				75F9DBD11CFC191500272A75 /* Info.plist */,
 				75F9DBC21CFC191500272A75 /* WineManager.xcdatamodeld */,
 			);
@@ -207,6 +210,7 @@
 				75F9DBD81CFC19D500272A75 /* WineList.xml in Resources */,
 				75F9DBCB1CFC191500272A75 /* Main.storyboard in Resources */,
 				756C7B101D2F77BC004B8DF7 /* IconLaunch.png in Resources */,
+				756C7B121D302B65004B8DF7 /* Picture1.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
