@@ -261,6 +261,7 @@
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="l8L-uu-ucf"/>
                     </toolbarItems>
                     <navigationItem key="navigationItem" title="Bottle" id="mOI-FS-AaM">
+                        <barButtonItem key="backBarButtonItem" title="Cancel" id="iUu-ky-rg2"/>
                         <barButtonItem key="rightBarButtonItem" systemItem="edit" id="BpL-6I-gqe">
                             <connections>
                                 <segue destination="7wL-nA-WGK" kind="show" identifier="showEditDetails" id="4sO-At-QLW"/>
@@ -445,14 +446,14 @@
                                             <rect key="frame" x="8" y="23" width="60" height="50"/>
                                             <color key="tintColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <constraints>
-                                                <constraint firstAttribute="width" constant="50" id="E45-rj-j8L"/>
-                                                <constraint firstAttribute="height" constant="50" id="mJq-OG-CTt"/>
+                                                <constraint firstAttribute="width" constant="40" id="E45-rj-j8L"/>
+                                                <constraint firstAttribute="height" constant="40" id="mJq-OG-CTt"/>
                                             </constraints>
                                             <attributedString key="attributedText">
                                                 <fragment content="100">
                                                     <attributes>
                                                         <color key="NSColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                                        <font key="NSFont" size="18" name="Helvetica"/>
+                                                        <font key="NSFont" size="18" name="Helvetica-Bold"/>
                                                         <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
                                                     </attributes>
                                                 </fragment>
@@ -1655,6 +1656,6 @@
     </scenes>
     <inferredMetricsTieBreakers>
         <segue reference="6S0-TO-JiA"/>
-        <segue reference="UlH-PW-8MS"/>
+        <segue reference="4sO-At-QLW"/>
     </inferredMetricsTieBreakers>
 </document>

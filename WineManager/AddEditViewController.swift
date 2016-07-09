@@ -447,6 +447,8 @@ class AddEditViewController: UITableViewController, UIPickerViewDelegate, UIPick
         if segue.identifier == "showAddLot" {
             let controller = (segue.destinationViewController as! UINavigationController).topViewController as! AddLotController
             controller.delegate = self
+            controller.navigationItem.leftItemsSupplementBackButton = true
+            controller.navigationItem.leftBarButtonItem = self.splitViewController?.displayModeButtonItem()
             if (selectedLotIndex >= 0 && selectedLotIndex < allLots.count) {
                 controller.lotInfo = allLots[selectedLotIndex]
                 controller.viewMode = "Edit"

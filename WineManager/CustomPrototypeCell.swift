@@ -22,7 +22,7 @@ class CustomPrototypeCell: UITableViewCell {
         lblRating.textColor = color
         lblRating.layer.borderColor = color.CGColor
         lblRating.layer.borderWidth = 2.0
-        lblRating.layer.cornerRadius = 25
+        lblRating.layer.cornerRadius = 20
     }
     
     

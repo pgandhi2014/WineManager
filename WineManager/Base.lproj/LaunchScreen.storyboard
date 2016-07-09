@@ -18,32 +18,32 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Wine Manager" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lyY-fY-yxl">
-                                <rect key="frame" x="20" y="270" width="560" height="59"/>
-                                <fontDescription key="fontDescription" style="UICTFontTextStyleTitle1"/>
-                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="by Prashant Gandhi" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Dvk-Nr-YOm">
                                 <rect key="frame" x="20" y="337" width="560" height="59"/>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleTitle2"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="IconLaunch.png" translatesAutoresizingMaskIntoConstraints="NO" id="Tfq-Eg-KyN">
+                            <imageView clearsContextBeforeDrawing="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="IconLaunch.png" translatesAutoresizingMaskIntoConstraints="NO" id="Tfq-Eg-KyN">
                                 <rect key="frame" x="20" y="50" width="560" height="180"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="180" id="w8l-kA-PH5"/>
                                 </constraints>
                             </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Wine Manager" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lyY-fY-yxl">
+                                <rect key="frame" x="20" y="251" width="560" height="50"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleTitle1"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="Tfq-Eg-KyN" firstAttribute="top" secondItem="Llm-lL-Icb" secondAttribute="bottom" constant="30" id="556-EP-fB3"/>
-                            <constraint firstItem="lyY-fY-yxl" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="CnX-cX-Tdn"/>
                             <constraint firstAttribute="leadingMargin" secondItem="lyY-fY-yxl" secondAttribute="leading" id="SyX-vu-1Z3"/>
                             <constraint firstAttribute="trailingMargin" secondItem="lyY-fY-yxl" secondAttribute="trailing" id="ZnY-15-rBz"/>
                             <constraint firstItem="Dvk-Nr-YOm" firstAttribute="top" secondItem="lyY-fY-yxl" secondAttribute="bottom" id="bFK-QI-a65"/>
+                            <constraint firstItem="lyY-fY-yxl" firstAttribute="top" secondItem="Tfq-Eg-KyN" secondAttribute="bottom" constant="10" id="jM8-k2-tA4"/>
                             <constraint firstAttribute="leadingMargin" secondItem="Dvk-Nr-YOm" secondAttribute="leading" id="rWx-t8-9tk"/>
                             <constraint firstAttribute="leadingMargin" secondItem="Tfq-Eg-KyN" secondAttribute="leading" id="sZa-hL-kAa"/>
                             <constraint firstAttribute="trailingMargin" secondItem="Tfq-Eg-KyN" secondAttribute="trailing" id="u19-o8-RgA"/>

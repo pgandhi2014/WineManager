@@ -64,7 +64,7 @@
 		756C7AFB1D273727004B8DF7 /* LotEntity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LotEntity.swift; sourceTree = "<group>"; };
 		756C7AFD1D28D236004B8DF7 /* ToastView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToastView.swift; sourceTree = "<group>"; };
 		756C7B0B1D2EC2A6004B8DF7 /* CustomPrototypeCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomPrototypeCell.swift; sourceTree = "<group>"; };
-		756C7B0F1D2F77BC004B8DF7 /* IconLaunch.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IconLaunch.png; sourceTree = "<group>"; };
+		756C7B0F1D2F77BC004B8DF7 /* IconLaunch.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IconLaunch.png; path = ../IconLaunch.png; sourceTree = "<group>"; };
 		756C7B111D302B65004B8DF7 /* Picture1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Picture1.png; sourceTree = "<group>"; };
 		75F9DBBD1CFC191400272A75 /* WineManager.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WineManager.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		75F9DBC01CFC191500272A75 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -92,7 +92,6 @@
 		75F9DBB41CFC191400272A75 = {
 			isa = PBXGroup;
 			children = (
-				756C7B0F1D2F77BC004B8DF7 /* IconLaunch.png */,
 				756C7AF11D209636004B8DF7 /* Region+CoreDataProperties.swift */,
 				756C7AF21D209636004B8DF7 /* Region.swift */,
 				7507B4081CFD01390072A92D /* WineBottle.swift */,
@@ -122,6 +121,7 @@
 		75F9DBBF1CFC191500272A75 /* WineManager */ = {
 			isa = PBXGroup;
 			children = (
+				756C7B0F1D2F77BC004B8DF7 /* IconLaunch.png */,
 				756C7AF91D24AC6E004B8DF7 /* AddLotViewController.swift */,
 				756C7AFB1D273727004B8DF7 /* LotEntity.swift */,
 				756C7AED1D172BB4004B8DF7 /* NewWineList.xml */,

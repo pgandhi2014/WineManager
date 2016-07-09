@@ -23,6 +23,8 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
     var defaultFilter = NSPredicate(value: true)
     let defaultSorter = NSSortDescriptor(key: "maxPrice", ascending: false)
     
+    var collapseDetailsView = true
+    
     var sorter = NSSortDescriptor()
     var searchFilter = NSPredicate()    //Filter for the searchbar
     var viewFilter = NSPredicate()      //Filter for the filtersview
@@ -58,7 +60,8 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         //self.navigationItem.leftBarButtonItem = self.editButtonItem()
-
+        //splitViewController?.delegate = self
+        
         if let split = self.splitViewController {
             let controllers = split.viewControllers
             self.detailViewController = (controllers[controllers.count-1] as! UINavigationController).topViewController as? DetailViewController
@@ -82,7 +85,23 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         searchBar.delegate = self
         parser.delegate = self
         //parser.parse()
-         
+        
+        if (splitViewController?.displayMode == .AllVisible) {
+            setupDefaultView()
+        }
+        
+    }
+    
+    func setupDefaultView() {
+        let indexPath = NSIndexPath(forRow: 0, inSection: 0)
+        let object = self.fetchedResultsController.objectAtIndexPath(indexPath)
+        let bottle = object as! Bottle
+        self.detailViewController?.detailItem = object
+        self.detailViewController?.bottleName = bottle.name!
+        self.detailViewController?.bottleVintage = (bottle.vintage?.integerValue)!
+        self.detailViewController?.navigationItem.leftBarButtonItem = self.splitViewController?.displayModeButtonItem()
+        self.detailViewController?.navigationItem.leftItemsSupplementBackButton = true
+        self.detailViewController?.managedObjectContext = self.managedObjectContext
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -359,16 +378,22 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         }
         if segue.identifier == "showStats" {
             let controller = (segue.destinationViewController as! UINavigationController).topViewController as! StatsViewController
+            controller.navigationItem.leftBarButtonItem = self.splitViewController?.displayModeButtonItem()
+            controller.navigationItem.leftItemsSupplementBackButton = true
             controller.managedObjectContext = self.managedObjectContext
             controller.fetchPredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [viewFilter, searchFilter])
             controller.showFilteredStats = searchApplied || filtersApplied
         }
         if segue.identifier == "showFilters" {
             let controller = (segue.destinationViewController as! UINavigationController).topViewController as! FiltersViewController
+            controller.navigationItem.leftBarButtonItem = self.splitViewController?.displayModeButtonItem()
+            controller.navigationItem.leftItemsSupplementBackButton = true
             controller.delegate = self
         }
         if segue.identifier == "showAddWine" {
             let controller = (segue.destinationViewController as! UINavigationController).topViewController as! AddEditViewController
+            controller.navigationItem.leftBarButtonItem = self.splitViewController?.displayModeButtonItem()
+            controller.navigationItem.leftItemsSupplementBackButton = true
             controller.managedObjectContext = self.managedObjectContext
         }
     }
