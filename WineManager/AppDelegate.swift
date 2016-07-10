@@ -63,6 +63,80 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
         }
         return true
     }
+    
+    // MARK: - iCloud
+    func observeCloudActions(persistentStoreCoordinator psc: NSPersistentStoreCoordinator?) {
+        // iCloud notification subscriptions
+        let nc = NSNotificationCenter.defaultCenter();
+        nc.addObserver(
+            self,
+            selector: #selector(AppDelegate.storesWillChange(_:)),
+            name: NSPersistentStoreCoordinatorStoresWillChangeNotification,
+            object: psc);
+        
+        nc.addObserver(
+            self,
+            selector: #selector(AppDelegate.storesDidChange(_:)),
+            name: NSPersistentStoreCoordinatorStoresDidChangeNotification,
+            object: psc);
+        
+        nc.addObserver(
+            self,
+            selector: #selector(AppDelegate.persistentStoreDidImportUbiquitousContentChanges(_:)),
+            name: NSPersistentStoreDidImportUbiquitousContentChangesNotification,
+            object: psc);
+        
+        nc.addObserver(
+            self,
+            selector: #selector(AppDelegate.mergeChanges(_:)),
+            name: NSManagedObjectContextDidSaveNotification,
+            object: psc);
+    }
+
+    func mergeChanges(notification: NSNotification) {
+        NSLog("mergeChanges notif:\(notification)")
+        let moc = self.managedObjectContext
+            moc.performBlock {
+                self
+                moc.mergeChangesFromContextDidSaveNotification(notification)
+                //self.postRefetchDatabaseNotification()
+            }
+    }
+    
+    func persistentStoreDidImportUbiquitousContentChanges(notification: NSNotification) {
+        NSLog("mergeChanges notif:\(notification)")
+        self.mergeChanges(notification);
+    }
+    
+    func storesWillChange(notification: NSNotification) {
+        NSLog("storesWillChange notif:\(notification)");
+        let moc = self.managedObjectContext
+            moc.performBlockAndWait {
+                if (moc.hasChanges) {
+                    do {
+                        try moc.save()
+                    } catch {
+                        NSLog("Saving error in stores will change")
+                        //abort()
+                    }
+                }
+                moc.reset();
+            }
+    }
+    
+    func storesDidChange(notification: NSNotification) {
+        NSLog("storesDidChange posting notif");
+        self.postRefetchDatabaseNotification();
+    }
+    
+    func postRefetchDatabaseNotification() {
+        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            NSNotificationCenter.defaultCenter().postNotificationName(
+                "kRefetchDatabaseNotification", // Replace with your constant of the refetch name, and add observer in the proper place - e.g. RootViewController
+                object: nil);
+        })
+    }
+    
     // MARK: - Core Data stack
 
     lazy var applicationDocumentsDirectory: NSURL = {
@@ -83,8 +157,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
         let coordinator = NSPersistentStoreCoordinator(managedObjectModel: self.managedObjectModel)
         let url = self.applicationDocumentsDirectory.URLByAppendingPathComponent("SingleViewCoreData.sqlite")
         var failureReason = "There was an error creating or loading the application's saved data."
+        let storeOptions = [NSPersistentStoreUbiquitousContentNameKey: "WineManager"]
+        self.observeCloudActions(persistentStoreCoordinator: coordinator)
         do {
-            try coordinator.addPersistentStoreWithType(NSSQLiteStoreType, configuration: nil, URL: url, options: nil)
+            try coordinator.addPersistentStoreWithType(NSSQLiteStoreType, configuration: nil, URL: url, options: storeOptions)
         } catch {
             // Report any error we got.
             var dict = [String: AnyObject]()
@@ -106,6 +182,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
         // Returns the managed object context for the application (which is already bound to the persistent store coordinator for the application.) This property is optional since there are legitimate error conditions that could cause the creation of the context to fail.
         let coordinator = self.persistentStoreCoordinator
         var managedObjectContext = NSManagedObjectContext(concurrencyType: .MainQueueConcurrencyType)
+        let mergePolicy = NSMergePolicy(mergeType: .OverwriteMergePolicyType)
+        managedObjectContext.mergePolicy = mergePolicy
         managedObjectContext.persistentStoreCoordinator = coordinator
         return managedObjectContext
     }()

@@ -87,7 +87,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         //parser.parse()
         
         if (splitViewController?.displayMode == .AllVisible) {
-            setupDefaultView()
+            //setupDefaultView()
         }
         
     }

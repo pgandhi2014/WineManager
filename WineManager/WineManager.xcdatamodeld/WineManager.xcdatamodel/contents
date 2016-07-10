@@ -15,12 +15,12 @@
         <attribute name="uniqueID" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="varietal" attributeType="String" defaultValueString="None" syncable="YES"/>
         <attribute name="vintage" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
-        <relationship name="lots" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="PurchaseLot" inverseName="bottle" inverseEntity="PurchaseLot" syncable="YES"/>
+        <relationship name="lots" toMany="YES" deletionRule="Cascade" destinationEntity="PurchaseLot" inverseName="bottle" inverseEntity="PurchaseLot" syncable="YES"/>
     </entity>
     <entity name="Country" representedClassName=".Country" syncable="YES">
         <attribute name="country" attributeType="String" defaultValueString="None" syncable="YES"/>
         <attribute name="inUse" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
-        <relationship name="regions" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="Region" inverseName="country" inverseEntity="Region" syncable="YES"/>
+        <relationship name="regions" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Region" inverseName="country" inverseEntity="Region" syncable="YES"/>
     </entity>
     <entity name="Location" representedClassName=".Location" syncable="YES">
         <attribute name="inUse" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
@@ -33,7 +33,7 @@
         <attribute name="purchaseDate" attributeType="Date" defaultDateTimeInterval="473328000" syncable="YES"/>
         <attribute name="quantity" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <relationship name="bottle" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Bottle" inverseName="lots" inverseEntity="Bottle" syncable="YES"/>
-        <relationship name="statuses" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="Status" inverseName="lot" inverseEntity="Status" syncable="YES"/>
+        <relationship name="statuses" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Status" inverseName="lot" inverseEntity="Status" syncable="YES"/>
     </entity>
     <entity name="Region" representedClassName=".Region" syncable="YES">
         <attribute name="inUse" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>

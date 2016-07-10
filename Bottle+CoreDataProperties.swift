@@ -2,7 +2,7 @@
 //  Bottle+CoreDataProperties.swift
 //  WineManager
 //
-//  Created by Prashant Gandhi (Intel) on 6/27/16.
+//  Created by Prashant Gandhi (Intel) on 7/9/16.
 //  Copyright © 2016 Prashant Gandhi. All rights reserved.
 //
 //  Choose "Create NSManagedObject Subclass…" from the Core Data editor menu
@@ -16,6 +16,9 @@ extension Bottle {
 
     @NSManaged var availableBottles: NSNumber?
     @NSManaged var country: String?
+    @NSManaged var drunkBottles: NSNumber?
+    @NSManaged var lastDrunkDate: NSDate?
+    @NSManaged var lastPurchaseDate: NSDate?
     @NSManaged var maxPrice: NSDecimalNumber?
     @NSManaged var name: String?
     @NSManaged var points: NSNumber?
@@ -25,9 +28,6 @@ extension Bottle {
     @NSManaged var uniqueID: NSNumber?
     @NSManaged var varietal: String?
     @NSManaged var vintage: NSNumber?
-    @NSManaged var drunkBottles: NSNumber?
-    @NSManaged var lastPurchaseDate: NSDate?
-    @NSManaged var lastDrunkDate: NSDate?
-    @NSManaged var lots: NSOrderedSet?
+    @NSManaged var lots: NSSet?
 
 }
