@@ -3292,10 +3292,10 @@
             <Quantity>1</Quantity>
             <Locations>
                <Loc>
-                  <Status>Available</Status>
-                  <Location>Bar</Location>
-                  <DrunkDate />
-                  <Rating />
+                  <Status>Drunk</Status>
+                  <Location />
+                  <DrunkDate>2016-07-17</DrunkDate>
+                  <Rating>4.5</Rating>
                   <Notes />
                </Loc>
             </Locations>

@@ -26,11 +26,12 @@
 		756C7AF41D209636004B8DF7 /* Region.swift in Sources */ = {isa = PBXBuildFile; fileRef = 756C7AF21D209636004B8DF7 /* Region.swift */; };
 		756C7AF61D225024004B8DF7 /* AddEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 756C7AF51D225024004B8DF7 /* AddEditViewController.swift */; };
 		756C7AFA1D24AC6E004B8DF7 /* AddLotViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 756C7AF91D24AC6E004B8DF7 /* AddLotViewController.swift */; };
-		756C7AFC1D273727004B8DF7 /* LotEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 756C7AFB1D273727004B8DF7 /* LotEntity.swift */; };
 		756C7AFE1D28D236004B8DF7 /* ToastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 756C7AFD1D28D236004B8DF7 /* ToastView.swift */; };
 		756C7B0C1D2EC2A6004B8DF7 /* CustomPrototypeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 756C7B0B1D2EC2A6004B8DF7 /* CustomPrototypeCell.swift */; };
 		756C7B101D2F77BC004B8DF7 /* IconLaunch.png in Resources */ = {isa = PBXBuildFile; fileRef = 756C7B0F1D2F77BC004B8DF7 /* IconLaunch.png */; };
 		756C7B121D302B65004B8DF7 /* Picture1.png in Resources */ = {isa = PBXBuildFile; fileRef = 756C7B111D302B65004B8DF7 /* Picture1.png */; };
+		756C7B181D3999D5004B8DF7 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 756C7B171D3999D5004B8DF7 /* CloudKit.framework */; };
+		756C7B1A1D399F1B004B8DF7 /* XMLHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 756C7B191D399F1B004B8DF7 /* XMLHelper.swift */; };
 		75F9DBC11CFC191500272A75 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75F9DBC01CFC191500272A75 /* AppDelegate.swift */; };
 		75F9DBC41CFC191500272A75 /* WineManager.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 75F9DBC21CFC191500272A75 /* WineManager.xcdatamodeld */; };
 		75F9DBC61CFC191500272A75 /* MasterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75F9DBC51CFC191500272A75 /* MasterViewController.swift */; };
@@ -38,7 +39,6 @@
 		75F9DBCB1CFC191500272A75 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 75F9DBC91CFC191500272A75 /* Main.storyboard */; };
 		75F9DBCD1CFC191500272A75 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 75F9DBCC1CFC191500272A75 /* Assets.xcassets */; };
 		75F9DBD01CFC191500272A75 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 75F9DBCE1CFC191500272A75 /* LaunchScreen.storyboard */; };
-		75F9DBD81CFC19D500272A75 /* WineList.xml in Resources */ = {isa = PBXBuildFile; fileRef = 75F9DBD71CFC19D500272A75 /* WineList.xml */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -61,11 +61,13 @@
 		756C7AF21D209636004B8DF7 /* Region.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Region.swift; sourceTree = "<group>"; };
 		756C7AF51D225024004B8DF7 /* AddEditViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddEditViewController.swift; sourceTree = "<group>"; };
 		756C7AF91D24AC6E004B8DF7 /* AddLotViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AddLotViewController.swift; path = ../AddLotViewController.swift; sourceTree = "<group>"; };
-		756C7AFB1D273727004B8DF7 /* LotEntity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LotEntity.swift; sourceTree = "<group>"; };
 		756C7AFD1D28D236004B8DF7 /* ToastView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToastView.swift; sourceTree = "<group>"; };
 		756C7B0B1D2EC2A6004B8DF7 /* CustomPrototypeCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomPrototypeCell.swift; sourceTree = "<group>"; };
 		756C7B0F1D2F77BC004B8DF7 /* IconLaunch.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IconLaunch.png; path = ../IconLaunch.png; sourceTree = "<group>"; };
 		756C7B111D302B65004B8DF7 /* Picture1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Picture1.png; sourceTree = "<group>"; };
+		756C7B161D3999AE004B8DF7 /* WineManager.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = WineManager.entitlements; sourceTree = "<group>"; };
+		756C7B171D3999D5004B8DF7 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
+		756C7B191D399F1B004B8DF7 /* XMLHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XMLHelper.swift; sourceTree = "<group>"; };
 		75F9DBBD1CFC191400272A75 /* WineManager.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WineManager.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		75F9DBC01CFC191500272A75 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		75F9DBC31CFC191500272A75 /* WineManager.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = WineManager.xcdatamodel; sourceTree = "<group>"; };
@@ -75,7 +77,6 @@
 		75F9DBCC1CFC191500272A75 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		75F9DBCF1CFC191500272A75 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		75F9DBD11CFC191500272A75 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		75F9DBD71CFC19D500272A75 /* WineList.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = WineList.xml; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -83,6 +84,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				756C7B181D3999D5004B8DF7 /* CloudKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -92,6 +94,7 @@
 		75F9DBB41CFC191400272A75 = {
 			isa = PBXGroup;
 			children = (
+				756C7B171D3999D5004B8DF7 /* CloudKit.framework */,
 				756C7AF11D209636004B8DF7 /* Region+CoreDataProperties.swift */,
 				756C7AF21D209636004B8DF7 /* Region.swift */,
 				7507B4081CFD01390072A92D /* WineBottle.swift */,
@@ -121,11 +124,10 @@
 		75F9DBBF1CFC191500272A75 /* WineManager */ = {
 			isa = PBXGroup;
 			children = (
+				756C7B161D3999AE004B8DF7 /* WineManager.entitlements */,
 				756C7B0F1D2F77BC004B8DF7 /* IconLaunch.png */,
 				756C7AF91D24AC6E004B8DF7 /* AddLotViewController.swift */,
-				756C7AFB1D273727004B8DF7 /* LotEntity.swift */,
 				756C7AED1D172BB4004B8DF7 /* NewWineList.xml */,
-				75F9DBD71CFC19D500272A75 /* WineList.xml */,
 				75F9DBC01CFC191500272A75 /* AppDelegate.swift */,
 				75F9DBC51CFC191500272A75 /* MasterViewController.swift */,
 				756C7B0B1D2EC2A6004B8DF7 /* CustomPrototypeCell.swift */,
@@ -141,6 +143,7 @@
 				756C7B111D302B65004B8DF7 /* Picture1.png */,
 				75F9DBD11CFC191500272A75 /* Info.plist */,
 				75F9DBC21CFC191500272A75 /* WineManager.xcdatamodeld */,
+				756C7B191D399F1B004B8DF7 /* XMLHelper.swift */,
 			);
 			path = WineManager;
 			sourceTree = "<group>";
@@ -178,6 +181,11 @@
 					75F9DBBC1CFC191400272A75 = {
 						CreatedOnToolsVersion = 7.3.1;
 						DevelopmentTeam = 2BQ23J56GY;
+						SystemCapabilities = {
+							com.apple.iCloud = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};
@@ -207,7 +215,6 @@
 				756C7AEE1D172BB4004B8DF7 /* NewWineList.xml in Resources */,
 				75F9DBD01CFC191500272A75 /* LaunchScreen.storyboard in Resources */,
 				75F9DBCD1CFC191500272A75 /* Assets.xcassets in Resources */,
-				75F9DBD81CFC19D500272A75 /* WineList.xml in Resources */,
 				75F9DBCB1CFC191500272A75 /* Main.storyboard in Resources */,
 				756C7B101D2F77BC004B8DF7 /* IconLaunch.png in Resources */,
 				756C7B121D302B65004B8DF7 /* Picture1.png in Resources */,
@@ -226,6 +233,7 @@
 				7507B4031CFCC0DD0072A92D /* PurchaseLot.swift in Sources */,
 				756C7AF41D209636004B8DF7 /* Region.swift in Sources */,
 				7507B4011CFCC0DD0072A92D /* Location.swift in Sources */,
+				756C7B1A1D399F1B004B8DF7 /* XMLHelper.swift in Sources */,
 				756C7AF31D209636004B8DF7 /* Region+CoreDataProperties.swift in Sources */,
 				75F9DBC41CFC191500272A75 /* WineManager.xcdatamodeld in Sources */,
 				75F9DBC11CFC191500272A75 /* AppDelegate.swift in Sources */,
@@ -245,7 +253,6 @@
 				7507B4051CFCC0DD0072A92D /* Status.swift in Sources */,
 				756C7AF01D1A2CA9004B8DF7 /* FiltersViewController.swift in Sources */,
 				7507B4071CFCC0DD0072A92D /* Bottle.swift in Sources */,
-				756C7AFC1D273727004B8DF7 /* LotEntity.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -358,6 +365,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = WineManager/WineManager.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = WineManager/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -370,6 +378,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = WineManager/WineManager.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = WineManager/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

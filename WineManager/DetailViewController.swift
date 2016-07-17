@@ -33,130 +33,99 @@ class DetailViewController: UIViewController, SavingDrunkViewControllerDelegate,
 
     @IBOutlet weak var markDrunkButton: UIBarButtonItem!
     
-    var managedObjectContext: NSManagedObjectContext? = nil
-    var bottleName = ""
-    var bottleVintage = 0
+    var drunkArray : [(date: NSDate, rating: Double)] = []
+    var locationArray = Set<String>()
     
     var detailItem: AnyObject? {
         didSet {
-            //Update the view.
-            //self.configureView()
+            if (self.isViewLoaded()) {
+                self.configureView()
+            }
         }
     }
 
     func configureView() {
-        // Update the user interface for the detail item.
         let dateFormatter = NSDateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd"
+        dateFormatter.dateFormat = "MM/dd/yyyy"
         var lotDescription = ""
         var drunkDescription = ""
         var locDescription = ""
-        var drunkBottles = 0
-        var availBottles = 0
+        locationArray.removeAll()
+        drunkArray.removeAll()
         
-        var drunkArray : [(date: NSDate, rating: Double)] = []
-        
-        let fetchRequest = NSFetchRequest(entityName: "Bottle")
-        let predicateVintage = NSPredicate(format: "vintage == %d", bottleVintage)
-        let predicateName = NSPredicate(format: "name == %@", bottleName)
-        let predicateCompound = NSCompoundPredicate(andPredicateWithSubpredicates: [predicateName, predicateVintage])
-        fetchRequest.predicate = predicateCompound
-        
-        do {
-            if let context = self.managedObjectContext {
-                let fetchedEntities = try self.managedObjectContext!.executeFetchRequest(fetchRequest) as! [Bottle]
-                NSLog("Found bottles " + String(fetchedEntities.count))
+        let sorter = NSSortDescriptor(key: "purchaseDate", ascending: false)
+
+        if let bottle = detailItem {
+            let bottleDetails = bottle as! Bottle
+            ratingLabel!.text = bottleDetails.points!.stringValue + " pts by " + bottleDetails.reviewSource!
+            reviewView!.text = bottleDetails.review!
+    
+            if (bottleDetails.vintage! == 0) {
+                nameLabel.text = "NV " + bottleDetails.name!
+            } else {
+                nameLabel!.text = String(bottleDetails.vintage!) + " " + bottleDetails.name!
+            }
+            regionLabel!.text = bottleDetails.varietal! + " from " + bottleDetails.region! + ", " + bottleDetails.country!
             
-        
-                if let bottle = fetchedEntities.first {
-                    let bottleDetails = bottle //as! Bottle
-                    if (bottleDetails.vintage! == 0) {
-                        nameLabel.text = "NV " + bottleDetails.name!
+            let sortedLots = bottleDetails.lots!.sortedArrayUsingDescriptors([sorter])
+            for (index, value) in sortedLots.enumerate() {
+                let lot = value as! PurchaseLot
+                if (index > 0) {
+                    lotDescription = lotDescription + "\n"
+                }
+                if (lot.quantity == 1) {
+                    lotDescription = lotDescription + lot.quantity!.stringValue + " bottle on " + dateFormatter.stringFromDate(lot.purchaseDate!) + " for $" + lot.price!.stringValue
+                } else {
+                    lotDescription = lotDescription + lot.quantity!.stringValue + " bottles on " + dateFormatter.stringFromDate(lot.purchaseDate!) + " for $" + lot.price!.stringValue + " each"
+                }
+                
+                for (_, value) in lot.statuses!.enumerate() {
+                    let loc = value as! Status
+                    if (loc.available == 0) {
+                        drunkArray.append((date: loc.drunkDate!, rating: loc.rating!.doubleValue))
                     } else {
-                        nameLabel!.text = String(bottleDetails.vintage!) + " " + bottleDetails.name!
+                        locationArray.insert(loc.location!)
                     }
-                    regionLabel!.text = bottleDetails.varietal! + " from " + bottleDetails.region! + ", " + bottleDetails.country!
-                    let totalLots = bottleDetails.lots!.count
-                    lotsLabel.numberOfLines = totalLots
-                    
-                    let sorter = NSSortDescriptor(key: "purchaseDate", ascending: false)
-                    let sorted = bottleDetails.lots!.sortedArrayUsingDescriptors([sorter])
-                    for (index, value) in sorted.enumerate() {//    for (index, value) in bottleDetails.lots!.enumerate() {
-                        let lot = value as! PurchaseLot
-                        if (lot.quantity == 1) {
-                            lotDescription = lotDescription + lot.quantity!.stringValue + " bottle on " + dateFormatter.stringFromDate(lot.purchaseDate!) + " for $" + lot.price!.stringValue + "\n"
-                        } else {
-                            lotDescription = lotDescription + lot.quantity!.stringValue + " bottles on " + dateFormatter.stringFromDate(lot.purchaseDate!) + " for $" + lot.price!.stringValue + " each\n"
-                        }
-                        if (index == totalLots - 1) {
-                            lotDescription = lotDescription.stringByTrimmingCharactersInSet(NSCharacterSet.newlineCharacterSet())
-                        }
-                    
-                        for (_, value) in lot.statuses!.enumerate() {
-                            let loc = value as! Status
-                            if (loc.available == 0) {
-                                drunkBottles += 1
-                                drunkArray.append((date: loc.drunkDate!, rating: loc.rating!.doubleValue))
-                                if (drunkDescription.isEmpty) {
-                                    drunkDescription = loc.rating!.stringValue + " stars on " + dateFormatter.stringFromDate(loc.drunkDate!)
-                                } else {
-                                    drunkDescription = drunkDescription + "\n" + loc.rating!.stringValue + " stars on " + dateFormatter.stringFromDate(loc.drunkDate!)
-                                }
-                            } else {
-                                availBottles += 1
-                                if (locDescription.isEmpty) {
-                                    locDescription = loc.location!
-                                } else {
-                                    locDescription = locDescription + ", " + loc.location!
-                                }
-                            }
-                        }
-                    }
-                    lotsLabel!.text = lotDescription
-
-                    drunkArray.sortInPlace {
-                        return $0.date.compare($1.date) == NSComparisonResult.OrderedDescending
-                    }
-                    drunkDescription = ""
-                    for (_, value) in drunkArray.enumerate() {
-                        if (drunkDescription.isEmpty) {
-                            drunkDescription = String(value.rating) + " stars on " + dateFormatter.stringFromDate(value.date)
-                        } else {
-                            drunkDescription = drunkDescription + "\n" + String(value.rating) + " stars on " + dateFormatter.stringFromDate(value.date)
-                        }
-                    }
-                    
-                    if (drunkDescription.isEmpty) {
-                        drunkLabelWidthConstraint.constant = 0.0
-                        drunkHistoryWidthConstraint.constant = 0.0
-                        drunkHistorySpacingConstraint.constant = 0.0
-                    } else {
-                        drunkLabelWidthConstraint.constant = 21.0 * CGFloat(drunkBottles)
-                        drunkHistoryWidthConstraint.constant = 21.0
-                        drunkHistorySpacingConstraint.constant = 10.0
-                        drunkLabel.numberOfLines = drunkBottles
-                        drunkLabel!.text = drunkDescription
-                    }
-                    
-                    if (locDescription.isEmpty) {
-                        locationLabelWidthContraint.constant = 0.0
-                        locationHistoryWidthContraint.constant = 0.0
-                        locationHistorySpacingConstraint.constant = 0.0
-                        markDrunkButton.enabled = false
-                    } else {
-                        locationLabel.numberOfLines = availBottles
-                        locationLabel!.text = locDescription
-                    }
-
-                    ratingLabel!.text = bottleDetails.points!.stringValue + " pts by " + bottleDetails.reviewSource!
-                    reviewView!.text = bottleDetails.review!
                 }
             }
         }
-        catch {
-            abort()
+        lotsLabel!.text = lotDescription
+        drunkArray.sortInPlace {
+            return $0.date.compare($1.date) == NSComparisonResult.OrderedDescending
         }
-        
+        for (_, value) in drunkArray.enumerate() {
+            if (drunkDescription.isEmpty) {
+                drunkDescription = String(value.rating) + " stars on " + dateFormatter.stringFromDate(value.date)
+            } else {
+                drunkDescription = drunkDescription + "\n" + String(value.rating) + " stars on " + dateFormatter.stringFromDate(value.date)
+            }
+        }
+        if (drunkDescription.isEmpty) {
+            drunkLabelWidthConstraint.constant = 0.0
+            drunkHistoryWidthConstraint.constant = 0.0
+            drunkHistorySpacingConstraint.constant = 0.0
+        } else {
+            drunkLabelWidthConstraint.constant = 21.0 * CGFloat(drunkArray.count)
+            drunkHistoryWidthConstraint.constant = 21.0
+            drunkHistorySpacingConstraint.constant = 10.0
+            drunkLabel!.text = drunkDescription
+        }
+            
+        for (_, value) in locationArray.enumerate() {
+            if (locDescription.isEmpty) {
+                locDescription = value
+            } else {
+                locDescription = locDescription + ", " + value
+            }
+        }
+        if (locDescription.isEmpty) {
+            locationLabelWidthContraint.constant = 0.0
+            locationHistoryWidthContraint.constant = 0.0
+            locationHistorySpacingConstraint.constant = 0.0
+            markDrunkButton.enabled = false
+        } else {
+            locationLabel!.text = locDescription
+        }
     }
 
     override func viewDidLoad() {
@@ -182,32 +151,21 @@ class DetailViewController: UIViewController, SavingDrunkViewControllerDelegate,
     // MARK: - Segues
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        let bottle = detailItem as! Bottle
         if segue.identifier == "showMarkDrunk" {
             let controller = segue.destinationViewController as! MarkDrunkViewController
-            let bottle = detailItem as! Bottle
             controller.bottleName = bottle.name!
-            //var locations: [String] = []
-            var locations = Set<String>()
-            for (_, value) in bottle.lots!.enumerate() {
-                let lot = value as! PurchaseLot
-                for (_, value) in lot.statuses!.enumerate() {
-                    let loc = value as! Status
-                    if (loc.available == 1) {
-                        locations.insert(loc.location!)
-                    }
-                }
-            }
-            controller.bottleLocations = locations
+            controller.bottleLocations = locationArray
             controller.delegate = self
         }
         if segue.identifier == "showEditDetails" {
             let controller = (segue.destinationViewController as! UINavigationController).topViewController as! AddEditViewController
             controller.bottleInfo = self.detailItem
             controller.viewMode = "Edit"
-            controller.managedObjectContext = self.managedObjectContext
             controller.navigationItem.leftItemsSupplementBackButton = true
             controller.navigationItem.leftBarButtonItem = self.splitViewController?.displayModeButtonItem()
             controller.delegate = self
+            controller.title = bottle.vintage!.stringValue + " " + bottle.name!
         }
     }
     
@@ -219,9 +177,6 @@ class DetailViewController: UIViewController, SavingDrunkViewControllerDelegate,
     
     func saveDrunkInfo(rating: Float, date: NSDate, location: String) {
         var flagDone = false
-        let dateFormatter = NSDateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd"
-        
         let bottle = detailItem as! Bottle
         for (_, value) in bottle.lots!.enumerate() {
             let lot = value as! PurchaseLot

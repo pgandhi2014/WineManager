@@ -18,6 +18,7 @@ protocol EditLocationsViewControllerDelegate
 class AddEditViewController: UITableViewController, UIPickerViewDelegate, UIPickerViewDataSource, UITextFieldDelegate, UITextViewDelegate, SaveALotViewControllerDelegate {
 
     var delegate : EditLocationsViewControllerDelegate?
+    let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
     
     @IBOutlet weak var txtVintage: UITextField!
     @IBOutlet weak var txtName: UITextField!
@@ -31,13 +32,10 @@ class AddEditViewController: UITableViewController, UIPickerViewDelegate, UIPick
     @IBOutlet weak var txtQuantity: UITextField!
     @IBOutlet weak var txtPrice: UITextField!
     
-    var bottleName = ""
-    var bottleVintage = ""
     var selectedLotIndex = -1
     var selectedRowIndex = 0
     
     
-    var managedObjectContext: NSManagedObjectContext? = nil
     var viewMode = "Add"
     var bottleInfo: AnyObject?
     
@@ -51,91 +49,52 @@ class AddEditViewController: UITableViewController, UIPickerViewDelegate, UIPick
     var varietalsArray: [String] = []
     var countriesArray: [String] = []
     var regionsArray: [String] = []
+    let keyWindow = UIApplication.sharedApplication().keyWindow
     
     
     @IBAction func onSave(sender: AnyObject) {
-        let keyWindow = UIApplication.sharedApplication().keyWindow
         if (viewMode == "Edit") {
-            let fetchRequest = NSFetchRequest(entityName: "Bottle")
-            var predicateVintage = NSPredicate()
-            if let myNumber = NSNumberFormatter().numberFromString(bottleVintage) {
-                predicateVintage = NSPredicate(format: "vintage == %d", myNumber.integerValue)
-            } else {
-                predicateVintage = NSPredicate(format: "vintage == 0")
-            }
-            let predicateName = NSPredicate(format: "name == %@", bottleName)
-            let predicateCompound = NSCompoundPredicate(andPredicateWithSubpredicates: [predicateName, predicateVintage])
-            fetchRequest.predicate = predicateCompound
-            
-            do {
-                let fetchedEntities = try self.managedObjectContext!.executeFetchRequest(fetchRequest) as! [Bottle]
-                NSLog("Found bottles " + String(fetchedEntities.count))
-                let oldBottle = fetchedEntities.first!
-                oldBottle.availableBottles = 0
-                for lot in allLots {
-                    let fetchRequestLot = NSFetchRequest(entityName: "PurchaseLot")
-                    let predicateDate = predicateForDayFromDate(lot.purchaseDate)
-                    let predicateBottleName = NSPredicate(format: "bottle.name == %@", bottleName)
-                    fetchRequestLot.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [predicateBottleName, predicateDate])
-                    
-                    do {
-                        let fetchedLots = try self.managedObjectContext!.executeFetchRequest(fetchRequestLot) as! [PurchaseLot]
-                        NSLog("Found lots " + String(fetchedLots.count))
-                        if (fetchedLots.count > 0) {
-                            let oldLot = fetchedLots.first!
-                            oldLot.availableBottles = 0
-                            for value in oldLot.statuses! {
-                                let status = value as! Status
-                                if (status.available == 1) {
-                                    self.managedObjectContext?.deleteObject(status)
-                                }
-                            }
-                            for (loc, count) in lot.locations {
-                                var loopIndex = 0
-                                while (loopIndex < count) {
-                                    let newLoc = NSEntityDescription.insertNewObjectForEntityForName("Status", inManagedObjectContext: self.managedObjectContext!) as! Status
-                                    newLoc.lot = oldLot
-                                    newLoc.available = 1
-                                    oldLot.availableBottles = (oldLot.availableBottles?.integerValue)! + 1
-                                    newLoc.location = loc
-                                    loopIndex += 1
-                                }
-                            }
-
-                        oldBottle.availableBottles = (oldBottle.availableBottles?.integerValue)! + (oldLot.availableBottles?.integerValue)!
-                        }
-                        else {
-                            let newLot = NSEntityDescription.insertNewObjectForEntityForName("PurchaseLot", inManagedObjectContext: self.managedObjectContext!) as! PurchaseLot
-                            newLot.bottle = oldBottle
-                            newLot.purchaseDate = lot.purchaseDate
-                            if (newLot.purchaseDate!.compare(oldBottle.lastPurchaseDate!) == NSComparisonResult.OrderedDescending) {
-                                oldBottle.lastPurchaseDate = newLot.purchaseDate
-                            }
-                            newLot.price = NSDecimalNumber(float: lot.bottlePrice)
-                            if (newLot.price!.compare(oldBottle.maxPrice!) == NSComparisonResult.OrderedDescending) {
-                                oldBottle.maxPrice = newLot.price
-                            }
-                            newLot.quantity = lot.totalBottles
-                            
-                            for (loc, count) in lot.locations {
-                                var loopIndex = 0
-                                while (loopIndex < count) {
-                                    let newLoc = NSEntityDescription.insertNewObjectForEntityForName("Status", inManagedObjectContext: self.managedObjectContext!) as! Status
-                                    newLoc.lot = newLot
-                                    newLoc.available = 1
-                                    newLot.availableBottles = (newLot.availableBottles?.integerValue)! + 1
-                                    newLoc.location = loc
-                                    loopIndex += 1
-                                }
-                            }
-                            oldBottle.availableBottles = (oldBottle.availableBottles?.integerValue)! + (newLot.availableBottles?.integerValue)!
+            var oldLot: PurchaseLot
+            let oldBottle = self.bottleInfo as! Bottle
+            oldBottle.availableBottles = 0
+            for lot in allLots {
+                let datePredicate = predicateForDayFromDate(lot.purchaseDate)
+                let matchingLots = oldBottle.lots?.filteredOrderedSetUsingPredicate(datePredicate)
+                if (matchingLots?.count > 0) {  // We are editing an existing lot so remove all available entries
+                    oldLot = matchingLots?.firstObject as! PurchaseLot
+                    oldLot.availableBottles = 0
+                    for tempValue in oldLot.statuses! {
+                        let status = tempValue as! Status
+                        if (status.available == 1) {
+                            appDelegate.managedObjectContext.deleteObject(status)
                         }
                     }
+                } else {    // User added a new lot to an existing bottle
+                    oldLot = NSEntityDescription.insertNewObjectForEntityForName("PurchaseLot", inManagedObjectContext: appDelegate.managedObjectContext) as! PurchaseLot
+                    oldLot.bottle = oldBottle
+                    oldLot.purchaseDate = lot.purchaseDate
+                    if (oldLot.purchaseDate!.compare(oldBottle.lastPurchaseDate!) == NSComparisonResult.OrderedDescending) {
+                        oldBottle.lastPurchaseDate = oldLot.purchaseDate
+                    }
+                    oldLot.price = NSDecimalNumber(float: lot.bottlePrice)
+                    if (oldLot.price!.compare(oldBottle.maxPrice!) == NSComparisonResult.OrderedDescending) {
+                        oldBottle.maxPrice = oldLot.price
+                    }
+                    oldLot.quantity = lot.totalBottles
                 }
                 
-                
-            } catch {
-                // Do something in response to error condition
+                for (loc, count) in lot.locations {
+                    var loopIndex = 0
+                    while (loopIndex < count) {
+                        let newLoc = NSEntityDescription.insertNewObjectForEntityForName("Status", inManagedObjectContext: appDelegate.managedObjectContext) as! Status
+                        newLoc.lot = oldLot
+                        newLoc.available = 1
+                        oldLot.availableBottles = (oldLot.availableBottles?.integerValue)! + 1
+                        newLoc.location = loc
+                        loopIndex += 1
+                    }
+                }
+                oldBottle.availableBottles = (oldBottle.availableBottles?.integerValue)! + (oldLot.availableBottles?.integerValue)!
             }
         } else if (viewMode == "Add") {
             if ((txtName.text!).isEmpty) {
@@ -169,9 +128,8 @@ class AddEditViewController: UITableViewController, UIPickerViewDelegate, UIPick
             let predicateName = NSPredicate(format: "name == %@", txtName.text!)
             let predicateCompound = NSCompoundPredicate(andPredicateWithSubpredicates: [predicateName, predicateVintage])
             fetchRequest.predicate = predicateCompound
-            
             do {
-                let fetchedEntities = try self.managedObjectContext!.executeFetchRequest(fetchRequest) as! [Bottle]
+                let fetchedEntities = try appDelegate.managedObjectContext.executeFetchRequest(fetchRequest) as! [Bottle]
                 NSLog("Found bottles " + String(fetchedEntities.count))
                 if (fetchedEntities.count > 0) {
                     keyWindow?.makeToast(message: "Duplicate entry", duration: 2.0, position: HRToastPositionCenter)
@@ -179,9 +137,10 @@ class AddEditViewController: UITableViewController, UIPickerViewDelegate, UIPick
                 }
             }
             catch {
-                // Something
+                abort()
             }
-            let newBottle = NSEntityDescription.insertNewObjectForEntityForName("Bottle", inManagedObjectContext: self.managedObjectContext!) as! Bottle
+
+            let newBottle = NSEntityDescription.insertNewObjectForEntityForName("Bottle", inManagedObjectContext: appDelegate.managedObjectContext) as! Bottle
             newBottle.name = txtName.text
             if let myNumber = NSNumberFormatter().numberFromString(txtVintage.text!) {
                 newBottle.vintage = myNumber
@@ -197,7 +156,7 @@ class AddEditViewController: UITableViewController, UIPickerViewDelegate, UIPick
             newBottle.review = txtReview.text
             
             for (_, value) in allLots.enumerate() {
-                let newLot = NSEntityDescription.insertNewObjectForEntityForName("PurchaseLot", inManagedObjectContext: self.managedObjectContext!) as! PurchaseLot
+                let newLot = NSEntityDescription.insertNewObjectForEntityForName("PurchaseLot", inManagedObjectContext: appDelegate.managedObjectContext) as! PurchaseLot
                 let lot = value
                 newLot.bottle = newBottle
                 newLot.purchaseDate = lot.purchaseDate
@@ -213,7 +172,7 @@ class AddEditViewController: UITableViewController, UIPickerViewDelegate, UIPick
                 for (loc, count) in lot.locations {
                     var loopIndex = 0
                     while (loopIndex < count) {
-                        let newLoc = NSEntityDescription.insertNewObjectForEntityForName("Status", inManagedObjectContext: self.managedObjectContext!) as! Status
+                        let newLoc = NSEntityDescription.insertNewObjectForEntityForName("Status", inManagedObjectContext: appDelegate.managedObjectContext) as! Status
                         newLoc.lot = newLot
                         newLoc.available = 1
                         newLot.availableBottles = (newLot.availableBottles?.integerValue)! + 1
@@ -228,36 +187,18 @@ class AddEditViewController: UITableViewController, UIPickerViewDelegate, UIPick
         
         // Save the context.
         do {
-            try self.managedObjectContext!.save()
+            try appDelegate.managedObjectContext.save()
             keyWindow!.makeToast(message: "Saved", duration: 2.0, position: HRToastPositionCenter)
             if((self.delegate) != nil)
             {
                 delegate?.applyLocationChanges(true)
             }
-
         } catch {
-            // Replace this implementation with code to handle the error appropriately.
-            // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-            
             abort()
         }
             
     }
     
-    func predicateForDayFromDate(date: NSDate) -> NSPredicate {
-        let calendar = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)
-        let components = calendar!.components([.Year, .Month, .Day, .Hour, .Minute, .Second], fromDate: date)
-        components.hour = 00
-        components.minute = 00
-        components.second = 00
-        let startDate = calendar!.dateFromComponents(components)
-        components.hour = 23
-        components.minute = 59
-        components.second = 59
-        let endDate = calendar!.dateFromComponents(components)
-        
-        return NSPredicate(format: "purchaseDate >= %@ AND purchaseDate =< %@", argumentArray: [startDate!, endDate!])
-    }
 
     
     @IBAction func onAddVarietal(sender: UIButton) {
@@ -305,20 +246,11 @@ class AddEditViewController: UITableViewController, UIPickerViewDelegate, UIPick
         // Do any additional setup after loading the view, typically from a nib.
         self.tableView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(FiltersViewController.handleTap(_:))))
         
-        getDistinctVarietals()
-        
-        
-        
-        varietalsArray = varietalsArray.removeDuplicates()
-        varietalsArray.sortInPlace()
-        countriesArray = countriesArray.removeDuplicates()
-        countriesArray.sortInPlace()
-        regionsArray = regionsArray.removeDuplicates()
-        regionsArray.sortInPlace()
+        getDistinctVarietalsCountriesRegions()
         
         datePicker.datePickerMode = .Date
         datePicker.addTarget(self, action: #selector(self.datePickerValueChanged), forControlEvents: UIControlEvents.ValueChanged)
-        dateFormatter.dateFormat = "yyyy-MM-dd"
+        dateFormatter.dateFormat = "MM/dd/yyyy"
         
         pickerView.delegate = self
         txtVarietal.inputView = pickerView
@@ -335,19 +267,11 @@ class AddEditViewController: UITableViewController, UIPickerViewDelegate, UIPick
         }
     }
     
+    
+    
     func configureView() {
-        // Update the user interface for the detail item.
-        let dateFormatter = NSDateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd"
-        
-        
-        if let bottle = self.bottleInfo {
-            let bottleDetails = bottle as! Bottle
-            if (bottleDetails.vintage! != 0) {
-                bottleVintage = String(bottleDetails.vintage!)
-            }
-            bottleName = bottleDetails.name!
-            
+       if let bottle = self.bottleInfo {
+            let bottleDetails = bottle as! Bottle            
             let sorter = NSSortDescriptor(key: "purchaseDate", ascending: false)
             let sorted = bottleDetails.lots!.sortedArrayUsingDescriptors([sorter])
             for (_, value) in sorted.enumerate() {
@@ -367,19 +291,34 @@ class AddEditViewController: UITableViewController, UIPickerViewDelegate, UIPick
                         }
                     }
                 }
-            saveLot(newLot)
+            saveALot(newLot)
             }
         }
 
     }
+    
+    func predicateForDayFromDate(date: NSDate) -> NSPredicate {
+        let calendar = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)
+        let components = calendar!.components([.Year, .Month, .Day, .Hour, .Minute, .Second], fromDate: date)
+        components.hour = 00
+        components.minute = 00
+        components.second = 00
+        let startDate = calendar!.dateFromComponents(components)
+        components.hour = 23
+        components.minute = 59
+        components.second = 59
+        let endDate = calendar!.dateFromComponents(components)
+        return NSPredicate(format: "purchaseDate >= %@ AND purchaseDate =< %@", argumentArray: [startDate!, endDate!])
+    }
+
     
     func datePickerValueChanged(sender:UIDatePicker) {
         txtPurchaseDate.text = dateFormatter.stringFromDate(sender.date)
     }
     
     
-    func getDistinctVarietals() {
-        //let managedContext = appDelegate.managedObjectContext
+    func getDistinctVarietalsCountriesRegions() {
+        let managedContext = appDelegate.managedObjectContext
         //FetchRequest
         let fetchRequest = NSFetchRequest(entityName: "Bottle")
         fetchRequest.propertiesToFetch = ["varietal", "country", "region"]
@@ -387,7 +326,7 @@ class AddEditViewController: UITableViewController, UIPickerViewDelegate, UIPick
         fetchRequest.returnsDistinctResults = true
         //Fetch
         do {
-            let results = try self.managedObjectContext!.executeFetchRequest(fetchRequest)
+            let results = try managedContext.executeFetchRequest(fetchRequest)
             for i in 0 ..< results.count {
                 if let dic = (results[i] as? [String : String]){
                     if let varietal = dic["varietal"]{
@@ -401,6 +340,12 @@ class AddEditViewController: UITableViewController, UIPickerViewDelegate, UIPick
                     }
                 }
             }
+            varietalsArray = varietalsArray.removeDuplicates()
+            varietalsArray.sortInPlace()
+            countriesArray = countriesArray.removeDuplicates()
+            countriesArray.sortInPlace()
+            regionsArray = regionsArray.removeDuplicates()
+            regionsArray.sortInPlace()
         } catch {
             print("fetch failed:")
         }
@@ -457,6 +402,18 @@ class AddEditViewController: UITableViewController, UIPickerViewDelegate, UIPick
     }
     
     func saveLot(lot: SimpleLot) {
+        let oldBottle = self.bottleInfo as! Bottle
+        let datePredicate = predicateForDayFromDate(lot.purchaseDate)
+        let matchingLots = oldBottle.lots?.filteredOrderedSetUsingPredicate(datePredicate)
+        if (matchingLots?.count > 0) {  // We already have a lot from this date. Do not save
+            keyWindow!.makeToast(message: "A lot from this date already exists", duration: 2.0, position: HRToastPositionCenter)
+            return
+        }
+        saveALot(lot)
+        keyWindow!.makeToast(message: "Saved", duration: 2.0, position: HRToastPositionCenter)
+    }
+    
+    func saveALot(lot: SimpleLot) {
         var aLotEntity = ""
         if (lot.totalBottles > 1) {
             aLotEntity = String(lot.totalBottles) + " bottles for $" + String(lot.bottlePrice) + " each on " + dateFormatter.stringFromDate(lot.purchaseDate)

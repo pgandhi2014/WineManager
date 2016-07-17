@@ -12,13 +12,11 @@ import CoreData
 extension Array where Element:Equatable {
     func removeDuplicates() -> [Element] {
         var result = [Element]()
-        
         for value in self {
             if result.contains(value) == false {
                 result.append(value)
             }
         }
-        
         return result
     }
 }
@@ -60,7 +58,6 @@ class FiltersViewController: UITableViewController, UIPickerViewDelegate, UIPick
     @IBOutlet weak var btnApply: UIBarButtonItem!
     
     @IBAction func onBtnApplyPress(sender: UIBarButtonItem) {
-        NSLog("Btn pressed")
         var subANDPredicates = [NSPredicate]()
         
         if (!(txtVarietal.text!.isEmpty)) {
@@ -85,16 +82,15 @@ class FiltersViewController: UITableViewController, UIPickerViewDelegate, UIPick
             subANDPredicates.append(predicatePriceMin)
             subANDPredicates.append(predicatePriceMax)
         }
+        var predicateView = NSPredicate()
         if (viewOptions.selectedSegmentIndex == 0) {
-            let predicateView = NSPredicate(format: "availableBottles > 0")
-            subANDPredicates.append(predicateView)
+            predicateView = NSPredicate(format: "availableBottles > 0")
         } else if (viewOptions.selectedSegmentIndex == 1) {
-            let predicateView = NSPredicate(format: "drunkBottles > 0")
-            subANDPredicates.append(predicateView)
+            predicateView = NSPredicate(format: "drunkBottles > 0")
         } else if (viewOptions.selectedSegmentIndex == 2) {
-            let predicateView = NSPredicate(value: true)
-            subANDPredicates.append(predicateView)
+            predicateView = NSPredicate(value: true)
         }
+        subANDPredicates.append(predicateView)
         
         let predicate = NSCompoundPredicate(type: NSCompoundPredicateType.AndPredicateType, subpredicates: subANDPredicates)
         
@@ -139,18 +135,9 @@ class FiltersViewController: UITableViewController, UIPickerViewDelegate, UIPick
         // Do any additional setup after loading the view, typically from a nib.
         self.tableView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(FiltersViewController.handleTap(_:))))
         
-        getDistinctVarietals()
+        getDistinctVarietalsCountriesRegions()
         getDistinctLocatons()
 
-        varietalsArray = varietalsArray.removeDuplicates()
-        varietalsArray.sortInPlace()
-        countriesArray = countriesArray.removeDuplicates()
-        countriesArray.sortInPlace()
-        regionsArray = regionsArray.removeDuplicates()
-        regionsArray.sortInPlace()
-        locationsArray.removeDuplicates()
-        locationsArray.sortInPlace()
-        
         pickerView.delegate = self
         txtVarietal.inputView = pickerView
         txtCountry.inputView = pickerView
@@ -167,11 +154,9 @@ class FiltersViewController: UITableViewController, UIPickerViewDelegate, UIPick
         txtSortOrder.delegate = self
         
         txtSortOrder.text = sorterArray[selectedSortOrderIndex]
-        
-        
     }
     
-    func getDistinctVarietals() {
+    func getDistinctVarietalsCountriesRegions() {
         let managedContext = appDelegate.managedObjectContext
         //FetchRequest
         let fetchRequest = NSFetchRequest(entityName: "Bottle")
@@ -194,6 +179,12 @@ class FiltersViewController: UITableViewController, UIPickerViewDelegate, UIPick
                     }
                 }
             }
+            varietalsArray = varietalsArray.removeDuplicates()
+            varietalsArray.sortInPlace()
+            countriesArray = countriesArray.removeDuplicates()
+            countriesArray.sortInPlace()
+            regionsArray = regionsArray.removeDuplicates()
+            regionsArray.sortInPlace()
         } catch {
             print("fetch failed:")
         }
@@ -218,6 +209,8 @@ class FiltersViewController: UITableViewController, UIPickerViewDelegate, UIPick
                     }
                 }
             }
+            locationsArray.removeDuplicates()
+            locationsArray.sortInPlace()
         } catch {
             print("fetch failed:")
         }
@@ -253,9 +246,6 @@ class FiltersViewController: UITableViewController, UIPickerViewDelegate, UIPick
 
     
     // MARK: - Table View
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-    }
-    
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 3
     }
@@ -267,13 +257,6 @@ class FiltersViewController: UITableViewController, UIPickerViewDelegate, UIPick
             return 1
         }
     }
-    
-//    override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-//        if (section == 0) {
-//            return 0.0
-//        }
-//        return super.tableView(tableView, heightForHeaderInSection: section)
-//    }
     
     override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
         return false

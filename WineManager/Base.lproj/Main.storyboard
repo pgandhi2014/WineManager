@@ -82,7 +82,7 @@
                                                 </attributedString>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="5" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sKm-LK-yjS">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sKm-LK-yjS">
                                                 <rect key="frame" x="20" y="20" width="560" height="30"/>
                                                 <attributedString key="attributedText">
                                                     <fragment content=" ">
@@ -111,7 +111,7 @@
                                                 </attributedString>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="5" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZCN-5b-LUe" userLabel="Drunk Label">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZCN-5b-LUe" userLabel="Drunk Label">
                                                 <rect key="frame" x="20" y="87" width="560" height="21"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="21" id="elc-7M-F4r"/>
@@ -143,7 +143,7 @@
                                                 </attributedString>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KAr-gD-Fqg">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KAr-gD-Fqg">
                                                 <rect key="frame" x="20" y="145" width="560" height="21"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="21" id="yOU-o0-deL"/>
@@ -261,7 +261,7 @@
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="l8L-uu-ucf"/>
                     </toolbarItems>
                     <navigationItem key="navigationItem" title="Bottle" id="mOI-FS-AaM">
-                        <barButtonItem key="backBarButtonItem" title="Cancel" id="iUu-ky-rg2"/>
+                        <barButtonItem key="backBarButtonItem" title="Back" id="iUu-ky-rg2"/>
                         <barButtonItem key="rightBarButtonItem" systemItem="edit" id="BpL-6I-gqe">
                             <connections>
                                 <segue destination="7wL-nA-WGK" kind="show" identifier="showEditDetails" id="4sO-At-QLW"/>
@@ -881,7 +881,7 @@
                             </connections>
                         </barButtonItem>
                     </toolbarItems>
-                    <navigationItem key="navigationItem" title="Add a Wine" id="hdy-0x-S6D">
+                    <navigationItem key="navigationItem" id="hdy-0x-S6D">
                         <barButtonItem key="rightBarButtonItem" systemItem="save" id="mDE-Hg-Dqq">
                             <connections>
                                 <action selector="onSave:" destination="OLI-Tj-Jvd" id="RXG-rF-ogJ"/>

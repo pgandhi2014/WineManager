@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreData
+import CloudKit
 
 class MasterViewController: UITableViewController, NSFetchedResultsControllerDelegate, NSXMLParserDelegate, UISearchBarDelegate, SavingFilterViewControllerDelegate {
 
@@ -23,26 +24,17 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
     var defaultFilter = NSPredicate(value: true)
     let defaultSorter = NSSortDescriptor(key: "maxPrice", ascending: false)
     
-    var collapseDetailsView = true
-    
     var sorter = NSSortDescriptor()
     var searchFilter = NSPredicate()    //Filter for the searchbar
     var viewFilter = NSPredicate()      //Filter for the filtersview
     var filtersApplied = false
     var searchApplied = false
-    
-    var parser = NSXMLParser()
-    var bottles = NSMutableArray()
-    var elements = NSMutableDictionary()
-    var element = NSString()
-    var name = String()
-    var vintage = String()
-    var parsedBottle = ParsedWineBottle()
-    var parsedLot = ParsedLot(purchaseDate: "", price: "", quantity: "", locations: [ParsedLoc]())
-    var parsedLoc = ParsedLoc(status: "", location: "", drunkDate: "", rating: "", notes: "")
     var fetchRequest = NSFetchRequest()
     
+    var arrBottles: Array<CKRecord> = []
+    
     let dateFormatter = NSDateFormatter()
+    var xmlHelper: XMLHelper? = nil
     
     @IBAction func onClearFilters(sender: UIBarButtonItem) {
         filtersApplied = false
@@ -53,8 +45,6 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         fetchRequest.sortDescriptors = [sorter]
         performFetchAndRefresh()
     }
-    
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -73,35 +63,17 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         
         dateFormatter.dateFormat = "yyyy-MM-dd"
         
-        let path = NSBundle.mainBundle().pathForResource("NewWineList", ofType: "xml")
-        if path != nil {
-            parser = NSXMLParser(contentsOfURL: NSURL(fileURLWithPath: path!))!
-        } else {
-            NSLog("Failed to find xml")
-        }
         let bottles = self.fetchedResultsController.sections![0].numberOfObjects
         self.title = "Wine Manager (" + String(bottles) + ")"
         
         searchBar.delegate = self
-        parser.delegate = self
-        //parser.parse()
         
         if (splitViewController?.displayMode == .AllVisible) {
-            //setupDefaultView()
+            setupFirstView()
         }
         
-    }
-    
-    func setupDefaultView() {
-        let indexPath = NSIndexPath(forRow: 0, inSection: 0)
-        let object = self.fetchedResultsController.objectAtIndexPath(indexPath)
-        let bottle = object as! Bottle
-        self.detailViewController?.detailItem = object
-        self.detailViewController?.bottleName = bottle.name!
-        self.detailViewController?.bottleVintage = (bottle.vintage?.integerValue)!
-        self.detailViewController?.navigationItem.leftBarButtonItem = self.splitViewController?.displayModeButtonItem()
-        self.detailViewController?.navigationItem.leftItemsSupplementBackButton = true
-        self.detailViewController?.managedObjectContext = self.managedObjectContext
+        xmlHelper = XMLHelper(moc: self.managedObjectContext!)
+        //parseXML()
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -115,82 +87,50 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         // Dispose of any resources that can be recreated.
     }
     
-    func insertNewBottle() {
-        let newBottle = NSEntityDescription.insertNewObjectForEntityForName("Bottle", inManagedObjectContext: self.managedObjectContext!) as! Bottle
-        
-        newBottle.name = parsedBottle.name
-        if let myNumber = NSNumberFormatter().numberFromString(parsedBottle.vintage) {
-            newBottle.vintage = myNumber
-        }
-        newBottle.varietal = parsedBottle.varietal
-        newBottle.region = parsedBottle.region
-        newBottle.country = parsedBottle.country
-        
-        newBottle.reviewSource = parsedBottle.reviewSource
-        if let myNumber = NSNumberFormatter().numberFromString(parsedBottle.points) {
-            newBottle.points = myNumber
-        }
-        newBottle.review = parsedBottle.review
-        
-        for (_, value) in parsedBottle.purchaseLots.enumerate() {
-            let newLot = NSEntityDescription.insertNewObjectForEntityForName("PurchaseLot", inManagedObjectContext: self.managedObjectContext!) as! PurchaseLot
-            let lot = value as! ParsedLot
-            newLot.bottle = newBottle
-            newLot.purchaseDate = self.dateFormatter.dateFromString(lot.purchaseDate)
-            if (newLot.purchaseDate!.compare(newBottle.lastPurchaseDate!) == NSComparisonResult.OrderedDescending) {
-                newBottle.lastPurchaseDate = newLot.purchaseDate
+    func parseXML() {
+        dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0), {
+            self.xmlHelper!.startParsing()
+            dispatch_async(dispatch_get_main_queue()) {
+                self.performFetchAndRefresh()
             }
-            if let myNumber = NSNumberFormatter().numberFromString(lot.price) {
-                newLot.price = NSDecimalNumber(decimal: myNumber.decimalValue)
-                if (newLot.price!.compare(newBottle.maxPrice!) == NSComparisonResult.OrderedDescending) {
-                    newBottle.maxPrice = newLot.price
+        })
+    }
+    
+    func setupFirstView() {
+        let indexPath = NSIndexPath(forRow: 0, inSection: 0)
+        if self.fetchedResultsController.fetchedObjects?.count == 0 {
+            return
+        }
+        let object = self.fetchedResultsController.objectAtIndexPath(indexPath)
+        let bottle = object as! Bottle
+        self.detailViewController?.detailItem = object
+        self.detailViewController?.navigationItem.leftBarButtonItem = self.splitViewController?.displayModeButtonItem()
+        self.detailViewController?.navigationItem.leftItemsSupplementBackButton = true
+    }
+    
+
+    //MARK: - Cloudkit
+    func fetchNotes() {
+        let container = CKContainer.defaultContainer()
+        let privateDatabase = container.privateCloudDatabase
+        let predicate = NSPredicate(value: true)
+        
+        let query = CKQuery(recordType: "Bottles", predicate: predicate)
+        privateDatabase.performQuery(query, inZoneWithID: nil) { (results, error) -> Void in
+            if error != nil {
+                print(error)
+            }
+            else {
+                print(results)
+                
+                for result in results! {
+                    self.arrBottles.append(result)
                 }
             }
-            if let myNumber = NSNumberFormatter().numberFromString(lot.quantity) {
-                newLot.quantity = myNumber
-            }
-        
-            for (_, value) in lot.locations.enumerate() {
-                let newLoc = NSEntityDescription.insertNewObjectForEntityForName("Status", inManagedObjectContext: self.managedObjectContext!) as! Status
-                let loc = value
-                newLoc.lot = newLot
-                if let myDate = self.dateFormatter.dateFromString(loc.drunkDate) {
-                    newLoc.drunkDate = myDate
-                    if (newLoc.drunkDate!.compare(newBottle.lastDrunkDate!) == NSComparisonResult.OrderedDescending) {
-                        newBottle.lastDrunkDate = newLoc.drunkDate
-                    }
-                }
-                if (loc.status == "Drunk") {
-                    newLoc.available = 0
-                    newLot.drunkBottles = (newLot.drunkBottles?.integerValue)! + 1
-                } else {
-                    newLoc.available = 1
-                    newLot.availableBottles = (newLot.availableBottles?.integerValue)! + 1
-                }
-                newLoc.location = loc.location
-                newLoc.notes = loc.notes
-                if let myNumber = NSNumberFormatter().numberFromString(loc.rating) {
-                    newLoc.rating = NSDecimalNumber(decimal: myNumber.decimalValue)
-                }
-            }
-            newBottle.availableBottles = (newBottle.availableBottles?.integerValue)! + (newLot.availableBottles?.integerValue)!
-            newBottle.drunkBottles = (newBottle.drunkBottles?.integerValue)! + (newLot.drunkBottles?.integerValue)!
         }
-        
-        // Save the context.
-        do {
-            try self.managedObjectContext!.save()
-        } catch {
-            // Replace this implementation with code to handle the error appropriately.
-            // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-            
-            abort()
-        }
-        
-        let dateFormatter = NSDateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd"
         
     }
+    
     
     func setPredicateAndFilterResults(searchText: String) {
         var subANDPredicates = [NSPredicate]()
@@ -226,9 +166,6 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         do {
             try self.fetchedResultsController.performFetch()
         } catch {
-            // Replace this implementation with code to handle the error appropriately.
-            // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-            //print("Unresolved error \(error), \(error.userInfo)")
             abort()
         }
         self.tableView.reloadData()
@@ -262,125 +199,22 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
     }
 
     
-    // MARK: - Parser
-    func parser(parser: NSXMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String])
-    {
-        element = elementName as String
-        
-        if elementName == "bottle" {
-            parsedBottle.Erase()
-        } else if elementName == "Lot" {
-            parsedLot.Erase()
-        } else if elementName == "Loc" {
-            parsedLoc.Erase()
-        }
-        
-    }
-    
-    func parser(parser: NSXMLParser, foundCharacters string: String)
-    {
-        if element.isEqualToString("Name") {
-            if (parsedBottle.name.isEmpty) {
-                parsedBottle.name = parsedBottle.name + string
-                NSLog (string)
-            }
-        } else if element.isEqualToString("Vintage") {
-            if (parsedBottle.vintage.isEmpty) {
-                parsedBottle.vintage = parsedBottle.vintage + string
-            }
-        } else if element.isEqualToString("Varietal") {
-            if (parsedBottle.varietal.isEmpty) {
-                parsedBottle.varietal = parsedBottle.varietal + string
-            }
-        } else if element.isEqualToString("Region") {
-            if (parsedBottle.region.isEmpty) {
-                parsedBottle.region = parsedBottle.region + string
-            }
-        } else if element.isEqualToString("Country") {
-            if (parsedBottle.country.isEmpty) {
-                parsedBottle.country = parsedBottle.country + string
-            }
-        } else if element.isEqualToString("ReviewSource") {
-            if (parsedBottle.reviewSource.isEmpty) {
-                parsedBottle.reviewSource = parsedBottle.reviewSource + string
-            }
-        } else if element.isEqualToString("Points") {
-            if (parsedBottle.points.isEmpty) {
-                parsedBottle.points = parsedBottle.points + string
-            }
-        } else if element.isEqualToString("Review") {
-            if (parsedBottle.review.isEmpty) {
-                parsedBottle.review = parsedBottle.review + string
-            }
-        } else if element.isEqualToString("PurchaseDate") {
-            if (parsedLot.purchaseDate.isEmpty) {
-                parsedLot.purchaseDate = parsedLot.purchaseDate + string
-            }
-        } else if element.isEqualToString("Price") {
-            if (parsedLot.price.isEmpty) {
-                parsedLot.price = parsedLot.price + string
-            }
-        } else if element.isEqualToString("Quantity") {
-            if (parsedLot.quantity.isEmpty) {
-                parsedLot.quantity = parsedLot.quantity + string
-            }
-        } else if element.isEqualToString("Status") {
-            if (parsedLoc.status.isEmpty) {
-                parsedLoc.status = parsedLoc.status + string
-            }
-        } else if element.isEqualToString("Location") {
-            if (parsedLoc.location.isEmpty && !(string.containsString("\n") || string.isEmpty)) {
-                parsedLoc.location = parsedLoc.location + string
-                NSLog (string)
-            }
-        } else if element.isEqualToString("DrunkDate") {
-            if (parsedLoc.drunkDate.isEmpty && !string.containsString("\n")) {
-                parsedLoc.drunkDate = parsedLoc.drunkDate + string
-            }
-        } else if element.isEqualToString("Rating") {
-            if (parsedLoc.rating.isEmpty && !string.containsString("\n")) {
-                parsedLoc.rating = parsedLoc.rating + string
-            }
-        } else if element.isEqualToString("Notes") {
-            if (parsedLoc.notes.isEmpty && !string.containsString("\n")) {
-                parsedLoc.notes = parsedLoc.notes + string
-            }
-        }
-        
-    }
-    
- func parser(parser: NSXMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?)
-    {
-        if (elementName == "bottle") {
-            insertNewBottle()
-        } else if (elementName == "Lot") {
-            parsedBottle.purchaseLots.addObject(parsedLot.copy())
-        } else if (elementName == "Loc") {
-            parsedLot.locations.append(parsedLoc.copy() as! ParsedLoc)
-        }
-        
-    }
     // MARK: - Segues
 
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "showDetail" {
             if let indexPath = self.tableView.indexPathForSelectedRow {
             let object = self.fetchedResultsController.objectAtIndexPath(indexPath)
-                let bottle = object as! Bottle
                 let controller = (segue.destinationViewController as! UINavigationController).topViewController as! DetailViewController
                 controller.detailItem = object
-                controller.bottleName = bottle.name!
-                controller.bottleVintage = (bottle.vintage?.integerValue)!
                 controller.navigationItem.leftBarButtonItem = self.splitViewController?.displayModeButtonItem()
                 controller.navigationItem.leftItemsSupplementBackButton = true
-                controller.managedObjectContext = self.managedObjectContext
             }
         }
         if segue.identifier == "showStats" {
             let controller = (segue.destinationViewController as! UINavigationController).topViewController as! StatsViewController
             controller.navigationItem.leftBarButtonItem = self.splitViewController?.displayModeButtonItem()
             controller.navigationItem.leftItemsSupplementBackButton = true
-            controller.managedObjectContext = self.managedObjectContext
             controller.fetchPredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [viewFilter, searchFilter])
             controller.showFilteredStats = searchApplied || filtersApplied
         }
@@ -394,7 +228,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
             let controller = (segue.destinationViewController as! UINavigationController).topViewController as! AddEditViewController
             controller.navigationItem.leftBarButtonItem = self.splitViewController?.displayModeButtonItem()
             controller.navigationItem.leftItemsSupplementBackButton = true
-            controller.managedObjectContext = self.managedObjectContext
+            controller.title = "Add a new bottle"
         }
     }
     
@@ -404,7 +238,6 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         viewFilter = filter
         fetchRequest.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [viewFilter, searchFilter])
         fetchRequest.sortDescriptors = [sort]
-        
         self.navigationController?.popViewControllerAnimated(true)
         performFetchAndRefresh()
     }
@@ -440,15 +273,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         if editingStyle == .Delete {
             let context = self.fetchedResultsController.managedObjectContext
             context.deleteObject(self.fetchedResultsController.objectAtIndexPath(indexPath) as! NSManagedObject)
-                
-            do {
-                try context.save()
-            } catch {
-                // Replace this implementation with code to handle the error appropriately.
-                // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                //print("Unresolved error \(error), \(error.userInfo)")
-                abort()
-            }
+            saveContext()
         }
     }
 
@@ -483,7 +308,6 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
             return _fetchedResultsController!
         }
         
-        //let fetchRequest = NSFetchRequest()
         // Edit the entity name as appropriate.
         let entity = NSEntityDescription.entityForName("Bottle", inManagedObjectContext: self.managedObjectContext!)
         fetchRequest.entity = entity
@@ -505,9 +329,6 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         do {
             try _fetchedResultsController!.performFetch()
         } catch {
-             // Replace this implementation with code to handle the error appropriately.
-             // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development. 
-             //print("Unresolved error \(error), \(error.userInfo)")
              abort()
         }
         
@@ -545,6 +366,14 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
 
     func controllerDidChangeContent(controller: NSFetchedResultsController) {
         self.tableView.endUpdates()
+    }
+    
+    func saveContext() {
+        do {
+            try self.managedObjectContext!.save()
+        } catch {
+            abort()
+        }
     }
 
     /*
