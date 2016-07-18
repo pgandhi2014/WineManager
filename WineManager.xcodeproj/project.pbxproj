@@ -29,7 +29,6 @@
 		756C7AFE1D28D236004B8DF7 /* ToastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 756C7AFD1D28D236004B8DF7 /* ToastView.swift */; };
 		756C7B0C1D2EC2A6004B8DF7 /* CustomPrototypeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 756C7B0B1D2EC2A6004B8DF7 /* CustomPrototypeCell.swift */; };
 		756C7B101D2F77BC004B8DF7 /* IconLaunch.png in Resources */ = {isa = PBXBuildFile; fileRef = 756C7B0F1D2F77BC004B8DF7 /* IconLaunch.png */; };
-		756C7B121D302B65004B8DF7 /* Picture1.png in Resources */ = {isa = PBXBuildFile; fileRef = 756C7B111D302B65004B8DF7 /* Picture1.png */; };
 		756C7B181D3999D5004B8DF7 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 756C7B171D3999D5004B8DF7 /* CloudKit.framework */; };
 		756C7B1A1D399F1B004B8DF7 /* XMLHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 756C7B191D399F1B004B8DF7 /* XMLHelper.swift */; };
 		75F9DBC11CFC191500272A75 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75F9DBC01CFC191500272A75 /* AppDelegate.swift */; };
@@ -64,7 +63,6 @@
 		756C7AFD1D28D236004B8DF7 /* ToastView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToastView.swift; sourceTree = "<group>"; };
 		756C7B0B1D2EC2A6004B8DF7 /* CustomPrototypeCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomPrototypeCell.swift; sourceTree = "<group>"; };
 		756C7B0F1D2F77BC004B8DF7 /* IconLaunch.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IconLaunch.png; path = ../IconLaunch.png; sourceTree = "<group>"; };
-		756C7B111D302B65004B8DF7 /* Picture1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Picture1.png; sourceTree = "<group>"; };
 		756C7B161D3999AE004B8DF7 /* WineManager.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = WineManager.entitlements; sourceTree = "<group>"; };
 		756C7B171D3999D5004B8DF7 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		756C7B191D399F1B004B8DF7 /* XMLHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XMLHelper.swift; sourceTree = "<group>"; };
@@ -140,7 +138,6 @@
 				75F9DBC91CFC191500272A75 /* Main.storyboard */,
 				75F9DBCC1CFC191500272A75 /* Assets.xcassets */,
 				75F9DBCE1CFC191500272A75 /* LaunchScreen.storyboard */,
-				756C7B111D302B65004B8DF7 /* Picture1.png */,
 				75F9DBD11CFC191500272A75 /* Info.plist */,
 				75F9DBC21CFC191500272A75 /* WineManager.xcdatamodeld */,
 				756C7B191D399F1B004B8DF7 /* XMLHelper.swift */,
@@ -217,7 +214,6 @@
 				75F9DBCD1CFC191500272A75 /* Assets.xcassets in Resources */,
 				75F9DBCB1CFC191500272A75 /* Main.storyboard in Resources */,
 				756C7B101D2F77BC004B8DF7 /* IconLaunch.png in Resources */,
-				756C7B121D302B65004B8DF7 /* Picture1.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
