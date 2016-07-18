@@ -27,8 +27,9 @@ class AddLotController: UITableViewController, UIPickerViewDelegate, UIPickerVie
     let pickerView = UIPickerView()
     let datePicker = UIDatePicker()
     let dateFormatter = NSDateFormatter()
-    var selectedRowIndex = 0
-    var totalLotQuantity = 0
+    
+    var selectedRowIndex = -1
+    
     var locationsArray: [String] = []
     let quantitiesArray = [Int](0...100)
     
@@ -40,6 +41,9 @@ class AddLotController: UITableViewController, UIPickerViewDelegate, UIPickerVie
     @IBAction func onSaveLot(sender: AnyObject) {
         let keyWindow = UIApplication.sharedApplication().keyWindow
         var newLot = SimpleLot()
+        
+        var sumOfBottles = 0
+        
         if ((txtPurchaseDate.text!).isEmpty) {
             keyWindow!.makeToast(message: "Must provide a valid date", duration: 2.0, position: HRToastPositionCenter)
             return
@@ -58,29 +62,39 @@ class AddLotController: UITableViewController, UIPickerViewDelegate, UIPickerVie
         }
         newLot.totalBottles = Int(txtQuantity.text!)!
         
-        var tag = 0
-        for location in txtLocations {
+        for (index, location) in txtLocations.enumerate() {
             if (!(location.text?.isEmpty)!) {
-                newLot.locations[location.text!] = Int(txtBottles[tag].text!)!
+                let numberOfBottles = Int(txtBottles[index].text!)!
+                if (numberOfBottles > 0) {
+                    sumOfBottles += numberOfBottles
+                    newLot.locations[location.text!] = numberOfBottles
+                }
             }
-            tag += 1
         }
         if (newLot.locations.count == 0) {
             keyWindow!.makeToast(message: "Must provide atleast 1 location", duration: 2.0, position: HRToastPositionCenter)
             return
         }
         
+        if (viewMode == "Add") {
+            if (sumOfBottles != newLot.totalBottles) {
+                keyWindow!.makeToast(message: "All bottles not accounted for", duration: 2.0, position: HRToastPositionCenter)
+                return
+            }
+        }
+        
         if((self.delegate) != nil)
         {
             delegate?.saveLot(newLot)
-            keyWindow!.makeToast(message: "Saved", duration: 2.0, position: HRToastPositionCenter)
         }
     }
     
     @IBAction func onAddLocation(sender: AnyObject) {
         let alert = UIAlertController(title: "Add a new location", message: "provide a location name", preferredStyle: .Alert)
         
-        alert.addTextFieldWithConfigurationHandler(nil);
+        alert.addTextFieldWithConfigurationHandler({(textField: UITextField!) in
+            textField.autocapitalizationType = .Words
+        })
         alert.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil));
         alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: {(action:UIAlertAction) in
             let entry = alert.textFields![0].text!
@@ -99,37 +113,33 @@ class AddLotController: UITableViewController, UIPickerViewDelegate, UIPickerVie
         
         getDistinctLocatons()
         
-        locationsArray.removeDuplicates()
-        locationsArray.sortInPlace()
-        
         datePicker.datePickerMode = .Date
         datePicker.addTarget(self, action: #selector(self.datePickerValueChanged), forControlEvents: UIControlEvents.ValueChanged)
-        dateFormatter.dateFormat = "yyyy-MM-dd"
+        dateFormatter.dateFormat = "MM/dd/yyyy"
         
         pickerView.delegate = self
         txtPurchaseDate.inputView = datePicker
         txtPurchaseDate.delegate = self
         txtPurchaseDate.text = dateFormatter.stringFromDate(NSDate())
-        var tag = 0
-        for location in txtLocations {
+        
+        for (index, location) in txtLocations.enumerate() {
             location.delegate = self
-            self.txtBottles[tag].delegate = self
             location.inputView = pickerView
-            self.txtBottles[tag].inputView = pickerView
-            location.tag = tag
-            self.txtBottles[tag].tag = tag
-            tag += 1
+            location.tag = index
+        }
+        for (index, bottle) in txtBottles.enumerate() {
+            bottle.delegate = self
+            bottle.inputView = pickerView
+            bottle.tag = index
         }
         
         if (viewMode == "Edit") {
             txtPurchaseDate.text = dateFormatter.stringFromDate(lotInfo.purchaseDate)
             txtPrice.text = String(lotInfo.bottlePrice)
             txtQuantity.text = String(lotInfo.totalBottles)
-            var loopIndex = 0
-            for lot in lotInfo.locations {
-                txtLocations[loopIndex].text = lot.0
-                txtBottles[loopIndex].text = String(lot.1)
-                loopIndex += 1
+            for (index, lot) in lotInfo.locations.enumerate() {
+                txtLocations[index].text = lot.0
+                txtBottles[index].text = String(lot.1)
             }
             txtPurchaseDate.enabled = false
             txtQuantity.enabled = false
@@ -145,12 +155,10 @@ class AddLotController: UITableViewController, UIPickerViewDelegate, UIPickerVie
     
     func getDistinctLocatons() {
         let managedContext = appDelegate.managedObjectContext
-        //FetchRequest
         let fetchRequest = NSFetchRequest(entityName: "Status")
         fetchRequest.propertiesToFetch = ["location"]
         fetchRequest.resultType = NSFetchRequestResultType.DictionaryResultType
         fetchRequest.returnsDistinctResults = true
-        //Fetch
         do {
             let results = try managedContext.executeFetchRequest(fetchRequest)
             for i in 0 ..< results.count {
@@ -162,6 +170,8 @@ class AddLotController: UITableViewController, UIPickerViewDelegate, UIPickerVie
                     }
                 }
             }
+            locationsArray.removeDuplicates()
+            locationsArray.sortInPlace()
         } catch {
             print("fetch failed:")
         }
@@ -180,15 +190,12 @@ class AddLotController: UITableViewController, UIPickerViewDelegate, UIPickerVie
     
     func textFieldDidEndEditing(textField: UITextField) {
         textField.resignFirstResponder()
-        selectedRowIndex = 0
+        selectedRowIndex = -1
     }
     
     
     
     // MARK: - Table View
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-    }
-    
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
     }
@@ -231,15 +238,14 @@ class AddLotController: UITableViewController, UIPickerViewDelegate, UIPickerVie
     }
     
     func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        if (selectedRowIndex == -1) {
+            return
+        }
         if (component == 0) {
             txtLocations[selectedRowIndex].text = locationsArray[row]
         } else if (component == 1) {
             txtBottles[selectedRowIndex].text = String(quantitiesArray[row])
         }
-        
-        
     }
-    
-    
 }
 

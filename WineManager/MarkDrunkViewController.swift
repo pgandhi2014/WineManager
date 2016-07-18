@@ -35,8 +35,7 @@ class MarkDrunkViewController: UIViewController {
     }
     
     @IBAction func saveButtonPress(sender: AnyObject) {
-        if((self.delegate) != nil)
-        {
+        if((self.delegate) != nil) {
             var location = ""
             if (bottleLocations.count == 1) {
                 location = bottleLocations.first! as String
