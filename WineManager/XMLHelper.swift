@@ -142,7 +142,7 @@ class XMLHelper: NSObject, NSXMLParserDelegate {
     }
 
     internal func insertNewBottle() {
-        let newBottle = NSEntityDescription.insertNewObjectForEntityForName("Bottle", inManagedObjectContext: self.managedObjectContext!) as! Bottle
+        let newBottle = NSEntityDescription.insertNewObjectForEntityForName("Wine", inManagedObjectContext: self.managedObjectContext!) as! Wine
         
         newBottle.name = parsedBottle.name
         if let myNumber = NSNumberFormatter().numberFromString(parsedBottle.vintage) {
@@ -161,7 +161,7 @@ class XMLHelper: NSObject, NSXMLParserDelegate {
         for (_, value) in parsedBottle.purchaseLots.enumerate() {
             let newLot = NSEntityDescription.insertNewObjectForEntityForName("PurchaseLot", inManagedObjectContext: self.managedObjectContext!) as! PurchaseLot
             let lot = value as! ParsedLot
-            newLot.bottle = newBottle
+            newLot.wine = newBottle
             newLot.purchaseDate = self.dateFormatter.dateFromString(lot.purchaseDate)
             if (newLot.purchaseDate!.compare(newBottle.lastPurchaseDate!) == NSComparisonResult.OrderedDescending) {
                 newBottle.lastPurchaseDate = newLot.purchaseDate
@@ -177,7 +177,7 @@ class XMLHelper: NSObject, NSXMLParserDelegate {
             }
             
             for (_, value) in lot.locations.enumerate() {
-                let newLoc = NSEntityDescription.insertNewObjectForEntityForName("Status", inManagedObjectContext: self.managedObjectContext!) as! Status
+                let newLoc = NSEntityDescription.insertNewObjectForEntityForName("Bottle", inManagedObjectContext: self.managedObjectContext!) as! Bottle
                 let loc = value
                 newLoc.lot = newLot
                 if let myDate = self.dateFormatter.dateFromString(loc.drunkDate) {

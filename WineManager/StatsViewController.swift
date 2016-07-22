@@ -9,6 +9,30 @@
 import UIKit
 import CoreData
 
+extension NSDate
+{
+    convenience
+    init(dateString:String) {
+        let dateStringFormatter = NSDateFormatter()
+        dateStringFormatter.dateFormat = "yyyy/MM/dd"
+        dateStringFormatter.locale = NSLocale(localeIdentifier: "en_US_POSIX")
+        let d = dateStringFormatter.dateFromString(dateString)!
+        self.init(timeInterval:0, sinceDate:d)
+    }
+}
+
+struct MonthlyStats {
+    var totalCost = 0.0
+    var quantity = 0
+    var avgCost = 0.0
+    
+    mutating func resetValues() {
+        totalCost = 0.0
+        avgCost = 0.0
+        quantity = 0
+    }
+}
+
 class StatsViewController: UITableViewController {
     var fetchPredicate: NSPredicate? = nil
     var showFilteredStats = false
@@ -17,11 +41,19 @@ class StatsViewController: UITableViewController {
     var valsDrunk = [String]()
     var valsTotal = [String]()
     var valsFilter = [String]()
-
+    var monthlyPurchaseStats = [String: MonthlyStats]()
+    var monthlyDrunkStats = [String: MonthlyStats]()
+    var monthlyTotalStats = [String: MonthlyStats]()
+    var monthlyAvailableStats = [String: MonthlyStats]()
+    var monthlyCumulativeDrunkStats = [String: MonthlyStats]()
+    
     let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        calculateMonthlyNumbers()
+        calculateMonthyDrunkStats()
+        calculateMonthlyAvailableStats()
         
         calculateStats("Available", valsArray: &valsAvailable)
         calculateStats("Drunk", valsArray: &valsDrunk)
@@ -41,7 +73,7 @@ class StatsViewController: UITableViewController {
 
     func calculateStats(statsMode: String, inout valsArray: [String]) {
         let fetchRequest = NSFetchRequest()
-        let entityDescription = NSEntityDescription.entityForName("Bottle", inManagedObjectContext:  appDelegate.managedObjectContext)
+        let entityDescription = NSEntityDescription.entityForName("Wine", inManagedObjectContext:  appDelegate.managedObjectContext)
         fetchRequest.entity = entityDescription
         if (statsMode == "Available") {
             fetchRequest.predicate = NSPredicate(format: "availableBottles > 0")
@@ -70,7 +102,7 @@ class StatsViewController: UITableViewController {
             let result = try appDelegate.managedObjectContext.executeFetchRequest(fetchRequest)
             if (result.count > 0) {
                 for (_, value) in result.enumerate() {
-                    let bottle = value as! Bottle
+                    let bottle = value as! Wine
                     if (bottle.points!.integerValue < minPoints) {
                         minPoints = bottle.points!.integerValue
                     }
@@ -115,7 +147,148 @@ class StatsViewController: UITableViewController {
         valsArray.append(String(minPoints) + " pts")
     }
     
+    func calculateMonthlyNumbers() {
+        let dateFormatter = NSDateFormatter()
+        dateFormatter.dateFormat = "yyyy/MM"
+        var date = NSDate(dateString: "2013/01/01")
+        var monthlyStat = MonthlyStats()
+        var monthlyTotalStat = MonthlyStats()
+        
+        let fetchRequest = NSFetchRequest()
+        let entityDescription = NSEntityDescription.entityForName("PurchaseLot", inManagedObjectContext:  appDelegate.managedObjectContext)
+        fetchRequest.entity = entityDescription
+        while (date.compare(NSDate()) == .OrderedAscending) {
+            monthlyStat.resetValues()
+            monthlyTotalStat.resetValues()
+            fetchRequest.predicate = predicateForMonth(date, type: "purchaseDate")
+            do {
+                let result = try appDelegate.managedObjectContext.executeFetchRequest(fetchRequest)
+                if (result.count > 0) {
+                    for (_, value) in result.enumerate() {
+                        let lot = value as! PurchaseLot
+                        monthlyStat.totalCost += lot.price!.doubleValue * lot.quantity!.doubleValue
+                        monthlyStat.quantity += lot.quantity!.integerValue
+                    }
+                    monthlyStat.avgCost = monthlyStat.totalCost / Double(monthlyStat.quantity)
+                }
+                monthlyPurchaseStats[dateFormatter.stringFromDate(date)] = monthlyStat
+            }
+            catch {
+                abort()
+            }
+            date = NSCalendar.currentCalendar().dateByAddingUnit(.Month, value: 1, toDate: date, options: [])!
+        }
+        let sortedKeys = Array(monthlyPurchaseStats.keys).sort(<)
+        for (index, key) in sortedKeys.enumerate() {
+            if (index == 0) {
+                monthlyTotalStats[key] = monthlyPurchaseStats[key]
+            } else {
+                monthlyTotalStat.totalCost = (monthlyTotalStats[sortedKeys[index-1]]?.totalCost)! + (monthlyPurchaseStats[key]?.totalCost)!
+                monthlyTotalStat.quantity = (monthlyTotalStats[sortedKeys[index-1]]?.quantity)! + (monthlyPurchaseStats[key]?.quantity)!
+                monthlyTotalStat.avgCost = monthlyTotalStat.totalCost / Double(monthlyTotalStat.quantity)
+                monthlyTotalStats[key] = monthlyTotalStat
+            }
+            
+            print (key, monthlyPurchaseStats[key]?.totalCost)
+            print (key, monthlyTotalStats[key]?.totalCost)
+        }
+    }
     
+    func calculateMonthyDrunkStats() {
+        let dateFormatter = NSDateFormatter()
+        dateFormatter.dateFormat = "yyyy/MM"
+        var date = NSDate(dateString: "2013/01/01")
+        var monthlyStat = MonthlyStats()
+        var monthlyTotalStat = MonthlyStats()
+        
+        let fetchRequest = NSFetchRequest()
+        let entityDescription = NSEntityDescription.entityForName("Bottle", inManagedObjectContext:  appDelegate.managedObjectContext)
+        fetchRequest.entity = entityDescription
+        while (date.compare(NSDate()) == .OrderedAscending) {
+            if (dateFormatter.stringFromDate(date) == "2016/01") {
+                print ("now in Jan")
+            }
+            monthlyStat.resetValues()
+            monthlyTotalStat.resetValues()
+            fetchRequest.predicate = predicateForMonth(date, type: "drunkDate")
+            do {
+                let result = try appDelegate.managedObjectContext.executeFetchRequest(fetchRequest)
+                if (result.count > 0) {
+                    for (_, value) in result.enumerate() {
+                        let bottle = value as! Bottle
+                        if (bottle.available == 0) {
+                            let lot = bottle.lot!
+                            monthlyStat.totalCost += lot.price!.doubleValue
+                            monthlyStat.quantity += 1
+                        }
+                    }
+                    monthlyStat.avgCost = monthlyStat.totalCost / Double(monthlyStat.quantity)
+                }
+                monthlyDrunkStats[dateFormatter.stringFromDate(date)] = monthlyStat
+            }
+            catch {
+                abort()
+            }
+            date = NSCalendar.currentCalendar().dateByAddingUnit(.Month, value: 1, toDate: date, options: [])!
+        }
+        let sortedKeys = Array(monthlyDrunkStats.keys).sort(<)
+        for (index, key) in sortedKeys.enumerate() {
+            if (index == 0) {
+                monthlyCumulativeDrunkStats[key] = monthlyDrunkStats[key]
+            } else {
+                monthlyTotalStat.totalCost = (monthlyCumulativeDrunkStats[sortedKeys[index-1]]?.totalCost)! + (monthlyDrunkStats[key]?.totalCost)!
+                monthlyTotalStat.quantity = (monthlyCumulativeDrunkStats[sortedKeys[index-1]]?.quantity)! + (monthlyDrunkStats[key]?.quantity)!
+                monthlyTotalStat.avgCost = monthlyTotalStat.totalCost / Double(monthlyTotalStat.quantity)
+                monthlyCumulativeDrunkStats[key] = monthlyTotalStat
+            }
+            
+            print (key, monthlyDrunkStats[key]?.totalCost)
+            print (key, monthlyCumulativeDrunkStats[key]?.totalCost)
+        }
+    }
+    
+    func calculateMonthlyAvailableStats() {
+        var monthlyStat = MonthlyStats()
+        let sortedKeys = Array(monthlyTotalStats.keys).sort(<)
+        for key in sortedKeys {
+            monthlyStat.resetValues()
+            monthlyStat.totalCost = (monthlyTotalStats[key]?.totalCost)! - (monthlyCumulativeDrunkStats[key]?.totalCost)!
+            monthlyStat.quantity = (monthlyTotalStats[key]?.quantity)! - (monthlyCumulativeDrunkStats[key]?.quantity)!
+            monthlyStat.avgCost = monthlyStat.totalCost / Double(monthlyStat.quantity)
+            monthlyAvailableStats[key] = monthlyStat
+            print (key, monthlyAvailableStats[key]?.totalCost)
+        }
+    }
+    
+    func predicateForMonth(date: NSDate, type: String) -> NSPredicate {
+        let calendar = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)
+        let components = calendar!.components([.Year, .Month, .Day, .Hour, .Minute, .Second], fromDate: date)
+        components.day = 1
+        components.hour = 00
+        components.minute = 00
+        components.second = 00
+        let startDate = calendar!.dateFromComponents(components)
+        
+        let dayRange = calendar!.rangeOfUnit(.Day, inUnit: .Month, forDate: date)
+        let numberOfDaysInCurrentMonth = dayRange.length
+        components.day = numberOfDaysInCurrentMonth
+        components.hour = 23
+        components.minute = 59
+        components.second = 59
+        let endDate = calendar!.dateFromComponents(components)
+        return NSPredicate(format: type + " >= %@ AND " + type + " =< %@", argumentArray: [startDate!, endDate!])
+    }
+    
+    
+    // MARK: - Segues
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "showCharts" {
+            let controller = (segue.destinationViewController as! UINavigationController).topViewController as! ChartsListController
+            //controller.monthlyPurchaseStats = self.monthlyPurchaseStats
+        }
+    }
+
     
     // MARK: - Table View
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {

@@ -123,7 +123,7 @@ class AddEditViewController: UITableViewController, UIPickerViewDelegate, UIPick
  
     func configureView() {
        if let bottle = self.bottleInfo {
-            let bottleDetails = bottle as! Bottle            
+            let bottleDetails = bottle as! Wine
             let sorter = NSSortDescriptor(key: "purchaseDate", ascending: false)
             let sorted = bottleDetails.lots!.sortedArrayUsingDescriptors([sorter])
             for (_, value) in sorted.enumerate() {
@@ -133,8 +133,8 @@ class AddEditViewController: UITableViewController, UIPickerViewDelegate, UIPick
                 newLot.purchaseDate = lot.purchaseDate!
                 newLot.totalBottles = (lot.quantity!.integerValue)
                 
-                for (_, value) in lot.statuses!.enumerate() {
-                    let loc = value as! Status
+                for (_, value) in lot.bottles!.enumerate() {
+                    let loc = value as! Bottle
                     if (loc.available == 1) {
                         if (newLot.locations.indexForKey(loc.location!) != nil) {
                             newLot.locations[loc.location!] = newLot.locations[loc.location!]! + 1
@@ -150,23 +150,23 @@ class AddEditViewController: UITableViewController, UIPickerViewDelegate, UIPick
     
     func saveExistingBottle() {
         var oldLot: PurchaseLot
-        let oldBottle = self.bottleInfo as! Bottle
+        let oldBottle = self.bottleInfo as! Wine
         oldBottle.availableBottles = 0
         for lot in allLots {
             let datePredicate = predicateForDayFromDate(lot.purchaseDate)
-            let matchingLots = oldBottle.lots?.filteredOrderedSetUsingPredicate(datePredicate)
+            let matchingLots = oldBottle.lots?.filteredSetUsingPredicate(datePredicate)
             if (matchingLots?.count > 0) {  // We are editing an existing lot so remove all available entries
-                oldLot = matchingLots?.firstObject as! PurchaseLot
+                oldLot = matchingLots?.first as! PurchaseLot
                 oldLot.availableBottles = 0
-                for tempValue in oldLot.statuses! {
-                    let status = tempValue as! Status
+                for tempValue in oldLot.bottles! {
+                    let status = tempValue as! Bottle
                     if (status.available == 1) {
                         appDelegate.managedObjectContext.deleteObject(status)
                     }
                 }
             } else {    // User added a new lot to an existing bottle
                 oldLot = NSEntityDescription.insertNewObjectForEntityForName("PurchaseLot", inManagedObjectContext: appDelegate.managedObjectContext) as! PurchaseLot
-                oldLot.bottle = oldBottle
+                oldLot.wine = oldBottle
                 oldLot.purchaseDate = lot.purchaseDate
                 if (oldLot.purchaseDate!.compare(oldBottle.lastPurchaseDate!) == NSComparisonResult.OrderedDescending) {
                     oldBottle.lastPurchaseDate = oldLot.purchaseDate
@@ -181,7 +181,7 @@ class AddEditViewController: UITableViewController, UIPickerViewDelegate, UIPick
             for (loc, count) in lot.locations {
                 var loopIndex = 0
                 while (loopIndex < count) {
-                    let newLoc = NSEntityDescription.insertNewObjectForEntityForName("Status", inManagedObjectContext: appDelegate.managedObjectContext) as! Status
+                    let newLoc = NSEntityDescription.insertNewObjectForEntityForName("Bottle", inManagedObjectContext: appDelegate.managedObjectContext) as! Bottle
                     newLoc.lot = oldLot
                     newLoc.available = 1
                     oldLot.availableBottles = (oldLot.availableBottles?.integerValue)! + 1
@@ -223,13 +223,13 @@ class AddEditViewController: UITableViewController, UIPickerViewDelegate, UIPick
         } else {
             vintage = "0"
         }
-        let fetchRequest = NSFetchRequest(entityName: "Bottle")
+        let fetchRequest = NSFetchRequest(entityName: "Wine")
         let predicateName = NSPredicate(format: "name == %@", txtName.text!)
         let predicateVintage = NSPredicate(format: "vintage == %@", vintage)
         let predicateCompound = NSCompoundPredicate(andPredicateWithSubpredicates: [predicateName, predicateVintage])
         fetchRequest.predicate = predicateCompound
         do {
-            let fetchedEntities = try appDelegate.managedObjectContext.executeFetchRequest(fetchRequest) as! [Bottle]
+            let fetchedEntities = try appDelegate.managedObjectContext.executeFetchRequest(fetchRequest) as! [Wine]
             if (fetchedEntities.count > 0) {
                 keyWindow?.makeToast(message: "Duplicate entry", duration: 2.0, position: HRToastPositionCenter)
                 return retVal
@@ -247,7 +247,7 @@ class AddEditViewController: UITableViewController, UIPickerViewDelegate, UIPick
             return
         }
         
-        let newBottle = NSEntityDescription.insertNewObjectForEntityForName("Bottle", inManagedObjectContext: appDelegate.managedObjectContext) as! Bottle
+        let newBottle = NSEntityDescription.insertNewObjectForEntityForName("Wine", inManagedObjectContext: appDelegate.managedObjectContext) as! Wine
         newBottle.name = txtName.text
         if let myNumber = NSNumberFormatter().numberFromString(txtVintage.text!) {
             newBottle.vintage = myNumber
@@ -264,7 +264,7 @@ class AddEditViewController: UITableViewController, UIPickerViewDelegate, UIPick
         for (_, value) in allLots.enumerate() {
             let newLot = NSEntityDescription.insertNewObjectForEntityForName("PurchaseLot", inManagedObjectContext: appDelegate.managedObjectContext) as! PurchaseLot
             let lot = value
-            newLot.bottle = newBottle
+            newLot.wine = newBottle
             newLot.purchaseDate = lot.purchaseDate
             if (newLot.purchaseDate!.compare(newBottle.lastPurchaseDate!) == NSComparisonResult.OrderedDescending) {
                 newBottle.lastPurchaseDate = newLot.purchaseDate
@@ -278,7 +278,7 @@ class AddEditViewController: UITableViewController, UIPickerViewDelegate, UIPick
             for (loc, count) in lot.locations {
                 var loopIndex = 0
                 while (loopIndex < count) {
-                    let newLoc = NSEntityDescription.insertNewObjectForEntityForName("Status", inManagedObjectContext: appDelegate.managedObjectContext) as! Status
+                    let newLoc = NSEntityDescription.insertNewObjectForEntityForName("Bottle", inManagedObjectContext: appDelegate.managedObjectContext) as! Bottle
                     newLoc.lot = newLot
                     newLoc.available = 1
                     newLot.availableBottles = (newLot.availableBottles?.integerValue)! + 1
@@ -314,7 +314,7 @@ class AddEditViewController: UITableViewController, UIPickerViewDelegate, UIPick
     
     func getDistinctVarietalsCountriesRegions() {
         let managedContext = appDelegate.managedObjectContext
-        let fetchRequest = NSFetchRequest(entityName: "Bottle")
+        let fetchRequest = NSFetchRequest(entityName: "Wine")
         fetchRequest.propertiesToFetch = ["varietal", "country", "region"]
         fetchRequest.resultType = NSFetchRequestResultType.DictionaryResultType
         fetchRequest.returnsDistinctResults = true
@@ -394,12 +394,14 @@ class AddEditViewController: UITableViewController, UIPickerViewDelegate, UIPick
     
     func saveLot(lot: SimpleLot) {
         if !(selectedLotIndex >= 0 && selectedLotIndex < allLots.count) {
-            let oldBottle = self.bottleInfo as! Bottle
-            let datePredicate = predicateForDayFromDate(lot.purchaseDate)
-            let matchingLots = oldBottle.lots?.filteredOrderedSetUsingPredicate(datePredicate)
-            if (matchingLots?.count > 0) {  // We already have a lot from this date. Do not save
-                keyWindow!.makeToast(message: "A lot from this date already exists", duration: 2.0, position: HRToastPositionCenter)
-                return
+            if let providedBottleInfo = self.bottleInfo {
+                let oldBottle = providedBottleInfo as! Wine
+                let datePredicate = predicateForDayFromDate(lot.purchaseDate)
+                let matchingLots = oldBottle.lots?.filteredSetUsingPredicate(datePredicate)
+                if (matchingLots?.count > 0) {  // We already have a lot from this date. Do not save
+                    keyWindow!.makeToast(message: "A lot from this date already exists", duration: 2.0, position: HRToastPositionCenter)
+                    return
+                }
             }
         }
         saveALot(lot)

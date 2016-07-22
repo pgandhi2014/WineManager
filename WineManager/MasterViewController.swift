@@ -10,7 +10,7 @@ import UIKit
 import CoreData
 import CloudKit
 
-class MasterViewController: UITableViewController, NSFetchedResultsControllerDelegate, NSXMLParserDelegate, UISearchBarDelegate, SavingFilterViewControllerDelegate {
+class MasterViewController: UITableViewController, NSFetchedResultsControllerDelegate, NSXMLParserDelegate, UISearchBarDelegate, SavingFilterViewControllerDelegate, DetailViewControllerDelegate {
 
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var filtersButton: UIBarButtonItem!
@@ -45,6 +45,21 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         fetchRequest.sortDescriptors = [sorter]
         performFetchAndRefresh()
     }
+    
+    @IBAction func onSyncCloud(sender: AnyObject) {
+        showAlert("Sync with iCloud", message: "Would you like to sync with iCloud now?")
+    }
+    
+    func showAlert(title: String, message: String) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .Alert)
+        
+        alert.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil));
+        alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: {(action:UIAlertAction) in
+            self.fetchNotes()
+        }))
+        presentViewController(alert, animated: true, completion: nil);
+    }
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -102,7 +117,6 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
             return
         }
         let object = self.fetchedResultsController.objectAtIndexPath(indexPath)
-        let bottle = object as! Bottle
         self.detailViewController?.detailItem = object
         self.detailViewController?.navigationItem.leftBarButtonItem = self.splitViewController?.displayModeButtonItem()
         self.detailViewController?.navigationItem.leftItemsSupplementBackButton = true
@@ -122,13 +136,11 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
             }
             else {
                 print(results)
-                
                 for result in results! {
                     self.arrBottles.append(result)
                 }
             }
         }
-        
     }
     
     
@@ -209,6 +221,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
                 controller.detailItem = object
                 controller.navigationItem.leftBarButtonItem = self.splitViewController?.displayModeButtonItem()
                 controller.navigationItem.leftItemsSupplementBackButton = true
+                controller.delegate = self
             }
         }
         if segue.identifier == "showStats" {
@@ -240,6 +253,12 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         fetchRequest.sortDescriptors = [sort]
         self.navigationController?.popViewControllerAnimated(true)
         performFetchAndRefresh()
+    }
+    
+    func BottleDetailsDidChange(dataChanged: Bool) {
+        if dataChanged {
+            self.tableView.reloadData()
+        }
     }
 
     // MARK: - Table View
@@ -279,7 +298,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
 
     func configureCell(cell: UITableViewCell, withObject object: NSManagedObject) {
         let customCell = cell as! CustomPrototypeCell
-        let currentBottle = object as! Bottle
+        let currentBottle = object as! Wine
         let formatter = NSNumberFormatter()
         let pointsFormatter = NSNumberFormatter()
         formatter.maximumFractionDigits = 1
@@ -309,7 +328,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         }
         
         // Edit the entity name as appropriate.
-        let entity = NSEntityDescription.entityForName("Bottle", inManagedObjectContext: self.managedObjectContext!)
+        let entity = NSEntityDescription.entityForName("Wine", inManagedObjectContext: self.managedObjectContext!)
         fetchRequest.entity = entity
         
         // Set the batch size to a suitable number.

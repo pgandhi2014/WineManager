@@ -13,10 +13,6 @@
 		7507B4011CFCC0DD0072A92D /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7507B3F71CFCC0DD0072A92D /* Location.swift */; };
 		7507B4021CFCC0DD0072A92D /* PurchaseLot+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7507B3F81CFCC0DD0072A92D /* PurchaseLot+CoreDataProperties.swift */; };
 		7507B4031CFCC0DD0072A92D /* PurchaseLot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7507B3F91CFCC0DD0072A92D /* PurchaseLot.swift */; };
-		7507B4041CFCC0DD0072A92D /* Status+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7507B3FA1CFCC0DD0072A92D /* Status+CoreDataProperties.swift */; };
-		7507B4051CFCC0DD0072A92D /* Status.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7507B3FB1CFCC0DD0072A92D /* Status.swift */; };
-		7507B4061CFCC0DD0072A92D /* Bottle+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7507B3FC1CFCC0DD0072A92D /* Bottle+CoreDataProperties.swift */; };
-		7507B4071CFCC0DD0072A92D /* Bottle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7507B3FD1CFCC0DD0072A92D /* Bottle.swift */; };
 		7507B4091CFD01390072A92D /* WineBottle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7507B4081CFD01390072A92D /* WineBottle.swift */; };
 		751AB0B81D04AD3D00A16375 /* MarkDrunkViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 751AB0B71D04AD3D00A16375 /* MarkDrunkViewController.swift */; };
 		751AB0BA1D05359100A16375 /* StatsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 751AB0B91D05359100A16375 /* StatsViewController.swift */; };
@@ -31,6 +27,14 @@
 		756C7B101D2F77BC004B8DF7 /* IconLaunch.png in Resources */ = {isa = PBXBuildFile; fileRef = 756C7B0F1D2F77BC004B8DF7 /* IconLaunch.png */; };
 		756C7B181D3999D5004B8DF7 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 756C7B171D3999D5004B8DF7 /* CloudKit.framework */; };
 		756C7B1A1D399F1B004B8DF7 /* XMLHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 756C7B191D399F1B004B8DF7 /* XMLHelper.swift */; };
+		75D8C5C41D415DBB00CB571E /* Charts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 75D8C5BD1D415D5D00CB571E /* Charts.framework */; };
+		75D8C5C51D415DBB00CB571E /* Charts.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 75D8C5BD1D415D5D00CB571E /* Charts.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		75D8C5CA1D41625500CB571E /* BarChartsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D8C5C91D41625500CB571E /* BarChartsViewController.swift */; };
+		75D8C5CC1D41BBB900CB571E /* ChartsListController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D8C5CB1D41BBB900CB571E /* ChartsListController.swift */; };
+		75DDA8B61D3D9A7200326452 /* Wine+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75DDA8B41D3D9A7200326452 /* Wine+CoreDataProperties.swift */; };
+		75DDA8B71D3D9A7200326452 /* Wine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75DDA8B51D3D9A7200326452 /* Wine.swift */; };
+		75DDA8BA1D3D9D4A00326452 /* Bottle+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75DDA8B81D3D9D4A00326452 /* Bottle+CoreDataProperties.swift */; };
+		75DDA8BB1D3D9D4A00326452 /* Bottle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75DDA8B91D3D9D4A00326452 /* Bottle.swift */; };
 		75F9DBC11CFC191500272A75 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75F9DBC01CFC191500272A75 /* AppDelegate.swift */; };
 		75F9DBC41CFC191500272A75 /* WineManager.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 75F9DBC21CFC191500272A75 /* WineManager.xcdatamodeld */; };
 		75F9DBC61CFC191500272A75 /* MasterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75F9DBC51CFC191500272A75 /* MasterViewController.swift */; };
@@ -40,6 +44,58 @@
 		75F9DBD01CFC191500272A75 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 75F9DBCE1CFC191500272A75 /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		75D8C5BC1D415D5D00CB571E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 75D8C5B51D415D5D00CB571E /* Charts.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 5BA8EC401A9D14DC00CE82E1;
+			remoteInfo = "Charts-iOS";
+		};
+		75D8C5BE1D415D5D00CB571E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 75D8C5B51D415D5D00CB571E /* Charts.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = A52C5C371BAC5CA400594CDD;
+			remoteInfo = "Charts-TV";
+		};
+		75D8C5C01D415D5D00CB571E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 75D8C5B51D415D5D00CB571E /* Charts.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 65B3F5BF1C7370BE000983D0;
+			remoteInfo = "Charts-OSX";
+		};
+		75D8C5C21D415D5D00CB571E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 75D8C5B51D415D5D00CB571E /* Charts.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 06AEE7A21BDC3F8B009875AE;
+			remoteInfo = ChartsTests;
+		};
+		75D8C5C61D415DBB00CB571E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 75D8C5B51D415D5D00CB571E /* Charts.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 5BA8EC3F1A9D14DC00CE82E1;
+			remoteInfo = "Charts-iOS";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		75D8C5C81D415DBC00CB571E /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				75D8C5C51D415DBB00CB571E /* Charts.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		7507B3F41CFCC0DD0072A92D /* Country+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Country+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		7507B3F51CFCC0DD0072A92D /* Country.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Country.swift; sourceTree = "<group>"; };
@@ -47,10 +103,6 @@
 		7507B3F71CFCC0DD0072A92D /* Location.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
 		7507B3F81CFCC0DD0072A92D /* PurchaseLot+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "PurchaseLot+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		7507B3F91CFCC0DD0072A92D /* PurchaseLot.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PurchaseLot.swift; sourceTree = "<group>"; };
-		7507B3FA1CFCC0DD0072A92D /* Status+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Status+CoreDataProperties.swift"; sourceTree = "<group>"; };
-		7507B3FB1CFCC0DD0072A92D /* Status.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Status.swift; sourceTree = "<group>"; };
-		7507B3FC1CFCC0DD0072A92D /* Bottle+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Bottle+CoreDataProperties.swift"; sourceTree = "<group>"; };
-		7507B3FD1CFCC0DD0072A92D /* Bottle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Bottle.swift; sourceTree = "<group>"; };
 		7507B4081CFD01390072A92D /* WineBottle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WineBottle.swift; sourceTree = "<group>"; };
 		751AB0B71D04AD3D00A16375 /* MarkDrunkViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MarkDrunkViewController.swift; sourceTree = "<group>"; };
 		751AB0B91D05359100A16375 /* StatsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatsViewController.swift; sourceTree = "<group>"; };
@@ -66,6 +118,13 @@
 		756C7B161D3999AE004B8DF7 /* WineManager.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = WineManager.entitlements; sourceTree = "<group>"; };
 		756C7B171D3999D5004B8DF7 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		756C7B191D399F1B004B8DF7 /* XMLHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XMLHelper.swift; sourceTree = "<group>"; };
+		75D8C5B51D415D5D00CB571E /* Charts.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Charts.xcodeproj; path = Charts/Charts.xcodeproj; sourceTree = "<group>"; };
+		75D8C5C91D41625500CB571E /* BarChartsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BarChartsViewController.swift; sourceTree = "<group>"; };
+		75D8C5CB1D41BBB900CB571E /* ChartsListController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChartsListController.swift; sourceTree = "<group>"; };
+		75DDA8B41D3D9A7200326452 /* Wine+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Wine+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		75DDA8B51D3D9A7200326452 /* Wine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Wine.swift; sourceTree = "<group>"; };
+		75DDA8B81D3D9D4A00326452 /* Bottle+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Bottle+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		75DDA8B91D3D9D4A00326452 /* Bottle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Bottle.swift; sourceTree = "<group>"; };
 		75F9DBBD1CFC191400272A75 /* WineManager.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WineManager.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		75F9DBC01CFC191500272A75 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		75F9DBC31CFC191500272A75 /* WineManager.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = WineManager.xcdatamodel; sourceTree = "<group>"; };
@@ -83,16 +142,33 @@
 			buildActionMask = 2147483647;
 			files = (
 				756C7B181D3999D5004B8DF7 /* CloudKit.framework in Frameworks */,
+				75D8C5C41D415DBB00CB571E /* Charts.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		75D8C5B61D415D5D00CB571E /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				75D8C5BD1D415D5D00CB571E /* Charts.framework */,
+				75D8C5BF1D415D5D00CB571E /* Charts.framework */,
+				75D8C5C11D415D5D00CB571E /* Charts.framework */,
+				75D8C5C31D415D5D00CB571E /* ChartsTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		75F9DBB41CFC191400272A75 = {
 			isa = PBXGroup;
 			children = (
+				75D8C5B51D415D5D00CB571E /* Charts.xcodeproj */,
+				75DDA8B81D3D9D4A00326452 /* Bottle+CoreDataProperties.swift */,
+				75DDA8B91D3D9D4A00326452 /* Bottle.swift */,
 				756C7B171D3999D5004B8DF7 /* CloudKit.framework */,
+				75DDA8B41D3D9A7200326452 /* Wine+CoreDataProperties.swift */,
+				75DDA8B51D3D9A7200326452 /* Wine.swift */,
 				756C7AF11D209636004B8DF7 /* Region+CoreDataProperties.swift */,
 				756C7AF21D209636004B8DF7 /* Region.swift */,
 				7507B4081CFD01390072A92D /* WineBottle.swift */,
@@ -102,10 +178,6 @@
 				7507B3F71CFCC0DD0072A92D /* Location.swift */,
 				7507B3F81CFCC0DD0072A92D /* PurchaseLot+CoreDataProperties.swift */,
 				7507B3F91CFCC0DD0072A92D /* PurchaseLot.swift */,
-				7507B3FA1CFCC0DD0072A92D /* Status+CoreDataProperties.swift */,
-				7507B3FB1CFCC0DD0072A92D /* Status.swift */,
-				7507B3FC1CFCC0DD0072A92D /* Bottle+CoreDataProperties.swift */,
-				7507B3FD1CFCC0DD0072A92D /* Bottle.swift */,
 				75F9DBBF1CFC191500272A75 /* WineManager */,
 				75F9DBBE1CFC191400272A75 /* Products */,
 			);
@@ -136,6 +208,8 @@
 				756C7AF51D225024004B8DF7 /* AddEditViewController.swift */,
 				756C7AFD1D28D236004B8DF7 /* ToastView.swift */,
 				75F9DBC91CFC191500272A75 /* Main.storyboard */,
+				75D8C5CB1D41BBB900CB571E /* ChartsListController.swift */,
+				75D8C5C91D41625500CB571E /* BarChartsViewController.swift */,
 				75F9DBCC1CFC191500272A75 /* Assets.xcassets */,
 				75F9DBCE1CFC191500272A75 /* LaunchScreen.storyboard */,
 				75F9DBD11CFC191500272A75 /* Info.plist */,
@@ -155,10 +229,12 @@
 				75F9DBB91CFC191400272A75 /* Sources */,
 				75F9DBBA1CFC191400272A75 /* Frameworks */,
 				75F9DBBB1CFC191400272A75 /* Resources */,
+				75D8C5C81D415DBC00CB571E /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				75D8C5C71D415DBB00CB571E /* PBXTargetDependency */,
 			);
 			name = WineManager;
 			productName = WineManager;
@@ -197,12 +273,49 @@
 			mainGroup = 75F9DBB41CFC191400272A75;
 			productRefGroup = 75F9DBBE1CFC191400272A75 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 75D8C5B61D415D5D00CB571E /* Products */;
+					ProjectRef = 75D8C5B51D415D5D00CB571E /* Charts.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				75F9DBBC1CFC191400272A75 /* WineManager */,
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		75D8C5BD1D415D5D00CB571E /* Charts.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Charts.framework;
+			remoteRef = 75D8C5BC1D415D5D00CB571E /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		75D8C5BF1D415D5D00CB571E /* Charts.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Charts.framework;
+			remoteRef = 75D8C5BE1D415D5D00CB571E /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		75D8C5C11D415D5D00CB571E /* Charts.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Charts.framework;
+			remoteRef = 75D8C5C01D415D5D00CB571E /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		75D8C5C31D415D5D00CB571E /* ChartsTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = ChartsTests.xctest;
+			remoteRef = 75D8C5C21D415D5D00CB571E /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		75F9DBBB1CFC191400272A75 /* Resources */ = {
@@ -226,33 +339,43 @@
 			files = (
 				7507B3FE1CFCC0DD0072A92D /* Country+CoreDataProperties.swift in Sources */,
 				7507B4001CFCC0DD0072A92D /* Location+CoreDataProperties.swift in Sources */,
+				75DDA8B71D3D9A7200326452 /* Wine.swift in Sources */,
 				7507B4031CFCC0DD0072A92D /* PurchaseLot.swift in Sources */,
 				756C7AF41D209636004B8DF7 /* Region.swift in Sources */,
 				7507B4011CFCC0DD0072A92D /* Location.swift in Sources */,
+				75DDA8BB1D3D9D4A00326452 /* Bottle.swift in Sources */,
 				756C7B1A1D399F1B004B8DF7 /* XMLHelper.swift in Sources */,
 				756C7AF31D209636004B8DF7 /* Region+CoreDataProperties.swift in Sources */,
 				75F9DBC41CFC191500272A75 /* WineManager.xcdatamodeld in Sources */,
 				75F9DBC11CFC191500272A75 /* AppDelegate.swift in Sources */,
 				756C7AFA1D24AC6E004B8DF7 /* AddLotViewController.swift in Sources */,
 				756C7AF61D225024004B8DF7 /* AddEditViewController.swift in Sources */,
+				75D8C5CA1D41625500CB571E /* BarChartsViewController.swift in Sources */,
 				751AB0B81D04AD3D00A16375 /* MarkDrunkViewController.swift in Sources */,
 				7507B4091CFD01390072A92D /* WineBottle.swift in Sources */,
 				75F9DBC61CFC191500272A75 /* MasterViewController.swift in Sources */,
+				75DDA8B61D3D9A7200326452 /* Wine+CoreDataProperties.swift in Sources */,
 				7507B4021CFCC0DD0072A92D /* PurchaseLot+CoreDataProperties.swift in Sources */,
 				7507B3FF1CFCC0DD0072A92D /* Country.swift in Sources */,
 				751AB0BA1D05359100A16375 /* StatsViewController.swift in Sources */,
 				756C7AFE1D28D236004B8DF7 /* ToastView.swift in Sources */,
 				756C7B0C1D2EC2A6004B8DF7 /* CustomPrototypeCell.swift in Sources */,
-				7507B4041CFCC0DD0072A92D /* Status+CoreDataProperties.swift in Sources */,
-				7507B4061CFCC0DD0072A92D /* Bottle+CoreDataProperties.swift in Sources */,
+				75D8C5CC1D41BBB900CB571E /* ChartsListController.swift in Sources */,
 				75F9DBC81CFC191500272A75 /* DetailViewController.swift in Sources */,
-				7507B4051CFCC0DD0072A92D /* Status.swift in Sources */,
+				75DDA8BA1D3D9D4A00326452 /* Bottle+CoreDataProperties.swift in Sources */,
 				756C7AF01D1A2CA9004B8DF7 /* FiltersViewController.swift in Sources */,
-				7507B4071CFCC0DD0072A92D /* Bottle.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		75D8C5C71D415DBB00CB571E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "Charts-iOS";
+			targetProxy = 75D8C5C61D415DBB00CB571E /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		75F9DBC91CFC191500272A75 /* Main.storyboard */ = {
@@ -363,6 +486,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = WineManager/WineManager.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				INFOPLIST_FILE = WineManager/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = PGandhi.WineManager;
@@ -376,6 +500,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = WineManager/WineManager.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				INFOPLIST_FILE = WineManager/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = PGandhi.WineManager;

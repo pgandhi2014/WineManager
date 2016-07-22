@@ -159,7 +159,7 @@ class FiltersViewController: UITableViewController, UIPickerViewDelegate, UIPick
     func getDistinctVarietalsCountriesRegions() {
         let managedContext = appDelegate.managedObjectContext
         //FetchRequest
-        let fetchRequest = NSFetchRequest(entityName: "Bottle")
+        let fetchRequest = NSFetchRequest(entityName: "Wine")
         fetchRequest.propertiesToFetch = ["varietal", "country", "region"]
         fetchRequest.resultType = NSFetchRequestResultType.DictionaryResultType
         fetchRequest.returnsDistinctResults = true
@@ -193,7 +193,7 @@ class FiltersViewController: UITableViewController, UIPickerViewDelegate, UIPick
     func getDistinctLocatons() {
         let managedContext = appDelegate.managedObjectContext
         //FetchRequest
-        let fetchRequest = NSFetchRequest(entityName: "Status")
+        let fetchRequest = NSFetchRequest(entityName: "Bottle")
         fetchRequest.propertiesToFetch = ["location"]
         fetchRequest.resultType = NSFetchRequestResultType.DictionaryResultType
         fetchRequest.returnsDistinctResults = true
