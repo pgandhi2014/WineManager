@@ -12,104 +12,69 @@ import CoreData
 class ChartsListController: UITableViewController {
     let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
     
-    let keys : [String] = ["Purchased Value by Month", "Purchased Bottles by Month", "Average Value by Month", "Drunk Value by Month", "Drunk Bottles by Month", "Available Value by Month", "Available Bottles by Month"]
+    let sections : [String] = ["Monthly Comparisons", "Cumulative Totals", "Varietals", "Countries"]
+    let rowsMonthly : [String] = ["Purchased value", "Purchased bottles", "Drunk value", "Drunk bottles", "Added value", "Added bottles"]
+    let rowsCumulative : [String] = ["Total value", "Total bottles", "Average bottle cost"]
+    let rowsVarietals : [String] = ["Purchased by varietal", "Drunk by varietal", "Available by varietal"]
+    let rowsCountries : [String] = ["Purchased by country", "Drunk by country", "Available by country"]
     
-    var selectedRow = -1
-    var monthlyPurchaseStats = [String: MonthlyStats]()
-    var monthlyDrunkStats = [String: MonthlyStats]()
-    var monthlyTotalStats = [String: MonthlyStats]()
-    var monthlyAvailableStats = [String: MonthlyStats]()
-    var monthlyCumulativeDrunkStats = [String: MonthlyStats]()
+    
+    var selectedRow: Int? = nil
+    var selectedSection: Int? = nil
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
-        calculateMonthlyPurchasedStats()
     }
     
-    func calculateMonthlyPurchasedStats() {
-        let dateFormatter = NSDateFormatter()
-        dateFormatter.dateFormat = "yyyy/MM"
-        var date = NSDate(dateString: "2013/01/01")
-        var monthlyStat = MonthlyStats()
-        var monthlyTotalStat = MonthlyStats()
-        
-        let fetchRequest = NSFetchRequest()
-        let entityDescription = NSEntityDescription.entityForName("PurchaseLot", inManagedObjectContext:  appDelegate.managedObjectContext)
-        fetchRequest.entity = entityDescription
-        while (date.compare(NSDate()) == .OrderedAscending) {
-            monthlyStat.resetValues()
-            monthlyTotalStat.resetValues()
-            fetchRequest.predicate = predicateForMonth(date, type: "purchaseDate")
-            do {
-                let result = try appDelegate.managedObjectContext.executeFetchRequest(fetchRequest)
-                if (result.count > 0) {
-                    for (_, value) in result.enumerate() {
-                        let lot = value as! PurchaseLot
-                        monthlyStat.totalCost += lot.price!.doubleValue * lot.quantity!.doubleValue
-                        monthlyStat.quantity += lot.quantity!.integerValue
-                    }
-                    monthlyStat.avgCost = monthlyStat.totalCost / Double(monthlyStat.quantity)
-                }
-                monthlyPurchaseStats[dateFormatter.stringFromDate(date)] = monthlyStat
-            }
-            catch {
-                abort()
-            }
-            date = NSCalendar.currentCalendar().dateByAddingUnit(.Month, value: 1, toDate: date, options: [])!
-        }
-        let sortedKeys = Array(monthlyPurchaseStats.keys).sort(<)
-        for (index, key) in sortedKeys.enumerate() {
-            if (index == 0) {
-                monthlyTotalStats[key] = monthlyPurchaseStats[key]
-            } else {
-                monthlyTotalStat.totalCost = (monthlyTotalStats[sortedKeys[index-1]]?.totalCost)! + (monthlyPurchaseStats[key]?.totalCost)!
-                monthlyTotalStat.quantity = (monthlyTotalStats[sortedKeys[index-1]]?.quantity)! + (monthlyPurchaseStats[key]?.quantity)!
-                monthlyTotalStat.avgCost = monthlyTotalStat.totalCost / Double(monthlyTotalStat.quantity)
-                monthlyTotalStats[key] = monthlyTotalStat
-            }
-            
-            print (key, monthlyPurchaseStats[key]?.totalCost)
-            print (key, monthlyTotalStats[key]?.totalCost)
-        }
-    }
     
-    func predicateForMonth(date: NSDate, type: String) -> NSPredicate {
-        let calendar = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)
-        let components = calendar!.components([.Year, .Month, .Day, .Hour, .Minute, .Second], fromDate: date)
-        components.day = 1
-        components.hour = 00
-        components.minute = 00
-        components.second = 00
-        let startDate = calendar!.dateFromComponents(components)
-        
-        let dayRange = calendar!.rangeOfUnit(.Day, inUnit: .Month, forDate: date)
-        let numberOfDaysInCurrentMonth = dayRange.length
-        components.day = numberOfDaysInCurrentMonth
-        components.hour = 23
-        components.minute = 59
-        components.second = 59
-        let endDate = calendar!.dateFromComponents(components)
-        return NSPredicate(format: type + " >= %@ AND " + type + " =< %@", argumentArray: [startDate!, endDate!])
-    }
 
-
-    
     // MARK: - Segues
-    
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if segue.identifier == "showBarChartView" {
-            if (selectedRow >= 0 && selectedRow < 5) {
+        if let row = selectedRow {
+            if segue.identifier == "showPieCharts" {
+                let controller = (segue.destinationViewController as! UINavigationController).topViewController as! PieChartsViewController
+                if (selectedSection == 2) {
+                    if (row == 0) {
+                        controller.statType = StatsType.VarietalsPurchased
+                    } else if (row == 1) {
+                        controller.statType = StatsType.VarietalsDrunk
+                    } else if (row == 2) {
+                        controller.statType = StatsType.VarietalsAvailable
+                    }
+                } else if (selectedSection == 3) {
+                    if (row == 0) {
+                        controller.statType = StatsType.CountriesPurchased
+                    } else if (row == 1) {
+                        controller.statType = StatsType.CountriesDrunk
+                    } else if (row == 2) {
+                        controller.statType = StatsType.CountriesAvailable
+                    }
+                }
+            }
+            if segue.identifier == "showBarCharts" {
                 let controller = (segue.destinationViewController as! UINavigationController).topViewController as! BarChartsViewController
-                if (selectedRow == 0) {
-                    controller.monthlyPurchaseStats = self.monthlyPurchaseStats
-                    controller.chartType = "TotalCost"
-                } else if (selectedRow == 1) {
-                    controller.monthlyPurchaseStats = self.monthlyPurchaseStats
-                    controller.chartType = "TotalBottles"
-                } else if (selectedRow == 2) {
-                    controller.monthlyPurchaseStats = self.monthlyPurchaseStats
-                    controller.chartType = "AvgCost"
+                if (row == 0) {
+                    controller.statType = StatsType.MonthlyPurchasedCost
+                } else if (row == 1) {
+                    controller.statType = StatsType.MonthlyPurchasedBottles
+                } else if (row == 2) {
+                        controller.statType = StatsType.MonthlyDrunkCost
+                } else if (row == 3) {
+                    controller.statType = StatsType.MonthlyDrunkBottles
+                } else if (row == 4) {
+                    controller.statType = StatsType.MonthlyAvailableCost
+                } else if (row == 5) {
+                    controller.statType = StatsType.MonthlyAvailableBottles
+                }
+            }
+            if segue.identifier == "showLineCharts" {
+                let controller = (segue.destinationViewController as! UINavigationController).topViewController as! LineChartsViewController
+                if (row == 0) {
+                    controller.statType = StatsType.CumulativeCost
+                } else if (row == 1) {
+                    controller.statType = StatsType.CumulativeBottles
+                } else if (row == 2) {
+                    controller.statType = StatsType.CumulativeAverage
                 }
             }
         }
@@ -124,25 +89,63 @@ class ChartsListController: UITableViewController {
     }
     
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return 1
+        return sections.count
     }
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return keys.count
+        switch section {
+        case 0:
+            return rowsMonthly.count
+        case 1:
+            return rowsCumulative.count
+        case 2:
+            return rowsVarietals.count
+        case 3:
+            return rowsCountries.count
+        default:
+            return 0
+        }
     }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        selectedRow = indexPath.row
+        switch indexPath.section {
+        case 0:
+            performSegueWithIdentifier("showBarCharts", sender: self)
+        case 1:
+            performSegueWithIdentifier("showLineCharts", sender: self)
+        case 2:
+            performSegueWithIdentifier("showPieCharts", sender: self)
+        case 3:
+            performSegueWithIdentifier("showPieCharts", sender: self)
+        default:
+            break
+        }
     }
     
     override func tableView(tableView: UITableView, willSelectRowAtIndexPath indexPath: NSIndexPath) -> NSIndexPath? {
-        selectedRow = indexPath.row
+        self.selectedRow = indexPath.row
+        self.selectedSection = indexPath.section
         return indexPath
+    }
+    
+    override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return sections[section]
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("cellCharts", forIndexPath: indexPath)
-        cell.textLabel?.text = keys[indexPath.row]
+        switch indexPath.section {
+        case 0:
+            cell.textLabel?.text = rowsMonthly[indexPath.row]
+        case 1:
+            cell.textLabel?.text = rowsCumulative[indexPath.row]
+        case 2:
+            cell.textLabel?.text = rowsVarietals[indexPath.row]
+        case 3:
+            cell.textLabel?.text = rowsCountries[indexPath.row]
+        default:
+            cell.textLabel?.text = ""
+        }
         return cell
     }
     
