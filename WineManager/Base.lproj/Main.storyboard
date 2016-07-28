@@ -1675,6 +1675,9 @@
                                                         <segment title="Drunk Only"/>
                                                         <segment title="All"/>
                                                     </segments>
+                                                    <connections>
+                                                        <action selector="onViewOptionChange:" destination="j9X-qv-fm3" eventType="valueChanged" id="2ze-lo-4rT"/>
+                                                    </connections>
                                                 </segmentedControl>
                                             </subviews>
                                             <constraints>
@@ -1694,7 +1697,7 @@
                     </tableView>
                     <toolbarItems/>
                     <navigationItem key="navigationItem" title="Filters" id="0jj-Aq-iA0">
-                        <barButtonItem key="rightBarButtonItem" title="Apply" id="qNd-PB-EW2">
+                        <barButtonItem key="rightBarButtonItem" title=" " id="qNd-PB-EW2">
                             <connections>
                                 <action selector="onBtnApplyPress:" destination="j9X-qv-fm3" id="zqU-WQ-4M3"/>
                             </connections>
