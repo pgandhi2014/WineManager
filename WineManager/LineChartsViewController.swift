@@ -65,19 +65,19 @@ class LineChartsViewController: UIViewController {
         let chartDataSet = LineChartDataSet(yVals: dataEntries, label: "Purchased")
         chartDataSet.drawCirclesEnabled = false
         chartDataSet.lineWidth = CGFloat(4.0)
-        chartDataSet.colors = [NSUIColor(red: 136/255.0, green: 180/255.0, blue: 187/255.0, alpha: 1.0)]
+        chartDataSet.colors = [NSUIColor(red: 200/255.0, green: 0/255.0, blue: 0/255.0, alpha: 1.0)]
         chartDataSet.drawValuesEnabled = false
         
         let chartDataSet2 = LineChartDataSet(yVals: dataEntries2, label: "Drunk")
         chartDataSet2.drawCirclesEnabled = false
         chartDataSet2.lineWidth = CGFloat(4.0)
-        chartDataSet2.colors = [NSUIColor(red: 136/255.0, green: 80/255.0, blue: 187/255.0, alpha: 1.0)]
+        chartDataSet2.colors = [NSUIColor(red: 200/255.0, green: 0/255.0, blue: 200/255.0, alpha: 1.0)]
         chartDataSet2.drawValuesEnabled = false
 
         let chartDataSet3 = LineChartDataSet(yVals: dataEntries3, label: "Available")
         chartDataSet3.drawCirclesEnabled = false
         chartDataSet3.lineWidth = CGFloat(4.0)
-        chartDataSet3.colors = [NSUIColor(red: 136/255.0, green: 180/255.0, blue: 87/255.0, alpha: 1.0)]
+        chartDataSet3.colors = [NSUIColor(red: 0/255.0, green: 0/255.0, blue: 200/255.0, alpha: 1.0)]
         chartDataSet3.drawValuesEnabled = false
         
         let dataSets = [chartDataSet, chartDataSet2, chartDataSet3]

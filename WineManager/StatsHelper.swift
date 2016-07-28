@@ -449,9 +449,15 @@ class StatsHelper: NSObject {
             drunkStat.varietal = country
             purchasedStat.varietal = country
             
-            countriesAvailableStats[country] = availableStat
-            countriesDrunkStats[country] = drunkStat
-            countriesPurchasedStats[country] = purchasedStat
+            if (availableStat.quantity != 0) {
+                countriesAvailableStats[country] = availableStat
+            }
+            if (drunkStat.quantity != 0) {
+                countriesDrunkStats[country] = drunkStat
+            }
+            if (purchasedStat.quantity != 0) {
+                countriesPurchasedStats[country] = purchasedStat
+            }
         }
     }
 
@@ -484,8 +490,10 @@ class StatsHelper: NSObject {
             let sortedValsByCost = Array(inputDict.values).sort {
                 return $0.totalCost > $1.totalCost
             }
-            thresholdStat = sortedValsByCost.dropLast(sortedValsByCost.count - 4).last!
-        
+            if (sortedValsByCost.count > 4) {
+                thresholdStat = sortedValsByCost.dropLast(sortedValsByCost.count - 4).last!
+            }
+            
             for (_, key) in sortedKeys.enumerate() {
                 if (inputDict[key]?.totalCost < thresholdStat.totalCost) {
                     othersStat.totalCost += inputDict[key]!.totalCost
@@ -498,8 +506,9 @@ class StatsHelper: NSObject {
             let sortedValsByQuantity = Array(inputDict.values).sort {
                 return $0.quantity > $1.quantity
             }
-            thresholdStat = sortedValsByQuantity.dropLast(sortedValsByQuantity.count - 4).last!
-            
+            if (sortedValsByQuantity.count > 4) {
+                thresholdStat = sortedValsByQuantity.dropLast(sortedValsByQuantity.count - 4).last!
+            }
             for (_, key) in sortedKeys.enumerate() {
                 if (inputDict[key]?.quantity < thresholdStat.quantity) {
                     othersStat.totalCost += inputDict[key]!.totalCost
@@ -512,8 +521,8 @@ class StatsHelper: NSObject {
             othersStat.avgCost = 0.0
         } else {
             othersStat.avgCost = othersStat.totalCost / Double(othersStat.quantity)
+            inputDict["Others"] = othersStat
         }
-        inputDict["Others"] = othersStat
         return inputDict
     }
 

@@ -28,6 +28,7 @@
 		756C7B181D3999D5004B8DF7 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 756C7B171D3999D5004B8DF7 /* CloudKit.framework */; };
 		756C7B1A1D399F1B004B8DF7 /* XMLHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 756C7B191D399F1B004B8DF7 /* XMLHelper.swift */; };
 		75B0FB901D455C6000231741 /* PieChartsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B0FB8F1D455C6000231741 /* PieChartsViewController.swift */; };
+		75B0FB9C1D497AC000231741 /* BalloonMarker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B0FB9B1D497AC000231741 /* BalloonMarker.swift */; };
 		75D8C5C41D415DBB00CB571E /* Charts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 75D8C5BD1D415D5D00CB571E /* Charts.framework */; };
 		75D8C5C51D415DBB00CB571E /* Charts.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 75D8C5BD1D415D5D00CB571E /* Charts.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		75D8C5CA1D41625500CB571E /* BarChartsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D8C5C91D41625500CB571E /* BarChartsViewController.swift */; };
@@ -122,6 +123,7 @@
 		756C7B171D3999D5004B8DF7 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		756C7B191D399F1B004B8DF7 /* XMLHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XMLHelper.swift; sourceTree = "<group>"; };
 		75B0FB8F1D455C6000231741 /* PieChartsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PieChartsViewController.swift; sourceTree = "<group>"; };
+		75B0FB9B1D497AC000231741 /* BalloonMarker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BalloonMarker.swift; sourceTree = "<group>"; };
 		75D8C5B51D415D5D00CB571E /* Charts.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Charts.xcodeproj; path = Charts/Charts.xcodeproj; sourceTree = "<group>"; };
 		75D8C5C91D41625500CB571E /* BarChartsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BarChartsViewController.swift; sourceTree = "<group>"; };
 		75D8C5CB1D41BBB900CB571E /* ChartsListController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChartsListController.swift; sourceTree = "<group>"; };
@@ -169,6 +171,7 @@
 		75F9DBB41CFC191400272A75 = {
 			isa = PBXGroup;
 			children = (
+				75B0FB9B1D497AC000231741 /* BalloonMarker.swift */,
 				75D8C5B51D415D5D00CB571E /* Charts.xcodeproj */,
 				75DDA8B81D3D9D4A00326452 /* Bottle+CoreDataProperties.swift */,
 				75DDA8B91D3D9D4A00326452 /* Bottle.swift */,
@@ -372,6 +375,7 @@
 				751AB0BA1D05359100A16375 /* StatsViewController.swift in Sources */,
 				756C7AFE1D28D236004B8DF7 /* ToastView.swift in Sources */,
 				756C7B0C1D2EC2A6004B8DF7 /* CustomPrototypeCell.swift in Sources */,
+				75B0FB9C1D497AC000231741 /* BalloonMarker.swift in Sources */,
 				75D8C5CC1D41BBB900CB571E /* ChartsListController.swift in Sources */,
 				75F9DBC81CFC191500272A75 /* DetailViewController.swift in Sources */,
 				75DDA8BA1D3D9D4A00326452 /* Bottle+CoreDataProperties.swift in Sources */,

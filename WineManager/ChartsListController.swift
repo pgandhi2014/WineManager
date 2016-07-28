@@ -34,6 +34,7 @@ class ChartsListController: UITableViewController {
             if segue.identifier == "showPieCharts" {
                 let controller = (segue.destinationViewController as! UINavigationController).topViewController as! PieChartsViewController
                 if (selectedSection == 2) {
+                    controller.title = rowsVarietals[row]
                     if (row == 0) {
                         controller.statType = StatsType.VarietalsPurchased
                     } else if (row == 1) {
@@ -42,6 +43,7 @@ class ChartsListController: UITableViewController {
                         controller.statType = StatsType.VarietalsAvailable
                     }
                 } else if (selectedSection == 3) {
+                    controller.title = rowsCountries[row]
                     if (row == 0) {
                         controller.statType = StatsType.CountriesPurchased
                     } else if (row == 1) {
@@ -53,6 +55,7 @@ class ChartsListController: UITableViewController {
             }
             if segue.identifier == "showBarCharts" {
                 let controller = (segue.destinationViewController as! UINavigationController).topViewController as! BarChartsViewController
+                controller.title = rowsMonthly[row]
                 if (row == 0) {
                     controller.statType = StatsType.MonthlyPurchasedCost
                 } else if (row == 1) {
@@ -69,6 +72,7 @@ class ChartsListController: UITableViewController {
             }
             if segue.identifier == "showLineCharts" {
                 let controller = (segue.destinationViewController as! UINavigationController).topViewController as! LineChartsViewController
+                controller.title = rowsCumulative[row]
                 if (row == 0) {
                     controller.statType = StatsType.CumulativeCost
                 } else if (row == 1) {

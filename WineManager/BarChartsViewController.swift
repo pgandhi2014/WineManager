@@ -51,23 +51,36 @@ class BarChartsViewController: UIViewController {
     
     func setChart() {
         var dataEntries = [BarChartDataEntry]()
-        
+        let chartDataSet = BarChartDataSet()
         let dataLabels = Array(monthlyStats.keys).sort(<)
+        let color = UIColor.lightGrayColor()
+        let font = UIFont.systemFontOfSize(12.0)
+        let insets = UIEdgeInsetsMake(8.0, 8.0, 20.0, 8.0)
+        let marker = BalloonMarker(color: color, font: font, insets: insets)
+        marker.minimumSize = CGSizeMake(60.0, 30.0);
         
         for (index, value) in dataLabels.enumerate() {
             let dataPoint = monthlyStats[value]! as MonthlyStats
             var dataEntry = BarChartDataEntry()
             if (statType == StatsType.MonthlyPurchasedCost || statType == StatsType.MonthlyDrunkCost || statType == StatsType.MonthlyAvailableCost) {
                 dataEntry = BarChartDataEntry(value: dataPoint.totalCost, xIndex: index)
+                chartDataSet.valueFormatter?.numberStyle = .CurrencyStyle
             } else if (statType == StatsType.MonthlyPurchasedBottles || statType == StatsType.MonthlyDrunkBottles || statType == StatsType.MonthlyAvailableBottles) {
                 dataEntry = BarChartDataEntry(value: Double(dataPoint.quantity), xIndex: index)
+                chartDataSet.valueFormatter?.numberStyle = .NoStyle
+                chartDataSet.valueFormatter?.maximumFractionDigits = 0
+                marker.formatter.numberStyle = .NoStyle
             }
             dataEntries.append(dataEntry)
         }
-        let chartDataSet = BarChartDataSet(yVals: dataEntries, label: chartLabel)
+        chartDataSet.yVals = dataEntries
+        //chartDataSet.label = chartLabel
         let chartData = BarChartData(xVals: dataLabels, dataSet: chartDataSet)
         chartDataSet.colors = ChartColorTemplates.liberty()
+        
+        barChartView.marker = marker
         barChartView.data = chartData
+        barChartView.legend.enabled = false
         barChartView.xAxis.labelPosition = .Bottom
         barChartView.barData?.setDrawValues(false)
         barChartView.descriptionText = ""
