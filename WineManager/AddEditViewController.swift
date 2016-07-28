@@ -9,6 +9,15 @@
 import UIKit
 import CoreData
 
+extension String
+{
+    func trim() -> String
+    {
+        return self.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet())
+    }
+}
+
+
 protocol EditLocationsViewControllerDelegate
 {
     func applyLocationChanges(dataChanged: Bool)
@@ -216,7 +225,10 @@ class AddEditViewController: UITableViewController, UIPickerViewDelegate, UIPick
             keyWindow?.makeToast(message: "Must provide atleast 1 lot", duration: 2.0, position: HRToastPositionCenter)
             return retVal
         }
-        
+        return !isDuplicateEntry()
+    }
+    
+    func isDuplicateEntry() -> Bool {
         var vintage = ""
         if let myNumber = NSNumberFormatter().numberFromString(txtVintage.text!) {
             vintage = myNumber.stringValue
@@ -224,21 +236,20 @@ class AddEditViewController: UITableViewController, UIPickerViewDelegate, UIPick
             vintage = "0"
         }
         let fetchRequest = NSFetchRequest(entityName: "Wine")
-        let predicateName = NSPredicate(format: "name == %@", txtName.text!)
-        let predicateVintage = NSPredicate(format: "vintage == %@", vintage)
+        let predicateName = NSPredicate(format: "name = %@", txtName.text!.trim())
+        let predicateVintage = NSPredicate(format: "vintage = %@", vintage)
         let predicateCompound = NSCompoundPredicate(andPredicateWithSubpredicates: [predicateName, predicateVintage])
         fetchRequest.predicate = predicateCompound
         do {
             let fetchedEntities = try appDelegate.managedObjectContext.executeFetchRequest(fetchRequest) as! [Wine]
             if (fetchedEntities.count > 0) {
                 keyWindow?.makeToast(message: "Duplicate entry", duration: 2.0, position: HRToastPositionCenter)
-                return retVal
+                return true
             }
         }
         catch {
             abort()
         }
-
         return false
     }
     
@@ -356,6 +367,10 @@ class AddEditViewController: UITableViewController, UIPickerViewDelegate, UIPick
         selectedRowIndex = textField.tag
         pickerView.reloadAllComponents()
         pickerView.selectRow(0, inComponent: 0, animated: false)
+        if (!txtName.text!.isEmpty && !txtVintage.text!.isEmpty) {
+            isDuplicateEntry()
+        }
+        
     }
     
     func textFieldDidEndEditing(textField: UITextField) {
