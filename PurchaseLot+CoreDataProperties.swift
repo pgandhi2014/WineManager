@@ -2,7 +2,7 @@
 //  PurchaseLot+CoreDataProperties.swift
 //  WineManager
 //
-//  Created by Prashant Gandhi (Intel) on 7/18/16.
+//  Created by Prashant Gandhi (Intel) on 7/31/16.
 //  Copyright © 2016 Prashant Gandhi. All rights reserved.
 //
 //  Choose "Create NSManagedObject Subclass…" from the Core Data editor menu
@@ -19,7 +19,7 @@ extension PurchaseLot {
     @NSManaged var price: NSDecimalNumber?
     @NSManaged var purchaseDate: NSDate?
     @NSManaged var quantity: NSNumber?
-    @NSManaged var wine: Wine?
     @NSManaged var bottles: NSSet?
+    @NSManaged var wine: Wine?
 
 }

@@ -8,6 +8,7 @@
 
 import Foundation
 import CoreData
+import CloudKit
 
 class XMLHelper: NSObject, NSXMLParserDelegate {
     var managedObjectContext: NSManagedObjectContext? = nil
@@ -21,10 +22,8 @@ class XMLHelper: NSObject, NSXMLParserDelegate {
 
     init(moc: NSManagedObjectContext) {
         super.init()
-        //self.managedObjectContext = moc
         self.managedObjectContext = NSManagedObjectContext(concurrencyType: .PrivateQueueConcurrencyType)
         self.managedObjectContext?.persistentStoreCoordinator = moc.persistentStoreCoordinator
-        
         
         dateFormatter.dateFormat = "yyyy-MM-dd"
         let path = NSBundle.mainBundle().pathForResource("NewWineList", ofType: "xml")
@@ -204,7 +203,7 @@ class XMLHelper: NSObject, NSXMLParserDelegate {
         }
     }
     
-    func saveContext() {
+        func saveContext() {
         do {
             try self.managedObjectContext!.save()
         } catch {
