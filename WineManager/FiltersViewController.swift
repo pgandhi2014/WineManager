@@ -58,76 +58,17 @@ class FiltersViewController: UITableViewController, UIPickerViewDelegate, UIPick
     @IBOutlet weak var btnApply: UIBarButtonItem!
     
     @IBAction func onBtnApplyPress(sender: UIBarButtonItem) {
-        var subANDPredicates = [NSPredicate]()
-        
-        if (!(txtVarietal.text!.isEmpty)) {
-            let predicateVarietal = NSPredicate(format: "varietal contains[cd] %@", txtVarietal.text!)
-            subANDPredicates.append(predicateVarietal)
-        }
-        if (!(txtCountry.text!.isEmpty)) {
-            let predicateCountry = NSPredicate(format: "country contains[cd] %@", txtCountry.text!)
-            subANDPredicates.append(predicateCountry)
-        }
-        if (!(txtRegion.text!.isEmpty)) {
-            let predicateRegion = NSPredicate(format: "region contains[cd] %@", txtRegion.text!)
-            subANDPredicates.append(predicateRegion)
-        }
-        if (!(txtLocation.text!.isEmpty)) {
-            let predicateLocation = NSPredicate(format: "SUBQUERY(lots, $l, ANY $l.statuses.location == %@).@count > 0", txtLocation.text!)
-            subANDPredicates.append(predicateLocation)
-        }
-        if (!(txtPrice.text!.isEmpty)) {
-            let predicatePriceMin = NSPredicate(format: "ANY lots.price >= %d", priceMin)
-            let predicatePriceMax = NSPredicate(format: "ANY lots.price <= %d", priceMax)
-            subANDPredicates.append(predicatePriceMin)
-            subANDPredicates.append(predicatePriceMax)
-        }
-        var predicateView = NSPredicate()
-        if (viewOptions.selectedSegmentIndex == 0) {
-            predicateView = NSPredicate(format: "availableBottles > 0")
-        } else if (viewOptions.selectedSegmentIndex == 1) {
-            predicateView = NSPredicate(format: "drunkBottles > 0")
-        } else if (viewOptions.selectedSegmentIndex == 2) {
-            predicateView = NSPredicate(value: true)
-        }
-        subANDPredicates.append(predicateView)
-        
-        let predicate = NSCompoundPredicate(type: NSCompoundPredicateType.AndPredicateType, subpredicates: subANDPredicates)
-        
-        var sortDescriptor = NSSortDescriptor(key: "maxPrice", ascending: false)
-        switch selectedSortOrderIndex {
-        case 0:
-            sortDescriptor = NSSortDescriptor(key: "name", ascending: true)
-        case 1:
-            sortDescriptor = NSSortDescriptor(key: "name", ascending: false)
-        case 2:
-            sortDescriptor = NSSortDescriptor(key: "vintage", ascending: false)
-        case 3:
-            sortDescriptor = NSSortDescriptor(key: "vintage", ascending: true)
-        case 4:
-            sortDescriptor = NSSortDescriptor(key: "maxPrice", ascending: false)
-        case 5:
-            sortDescriptor = NSSortDescriptor(key: "maxPrice", ascending: true)
-        case 6:
-            sortDescriptor = NSSortDescriptor(key: "points", ascending: false)
-        case 7:
-            sortDescriptor = NSSortDescriptor(key: "points", ascending: true)
-        case 8:
-            sortDescriptor = NSSortDescriptor(key: "lastPurchaseDate", ascending: true)
-        case 9:
-            sortDescriptor = NSSortDescriptor(key: "lastPurchaseDate", ascending: false)
-        case 10:
-            sortDescriptor = NSSortDescriptor(key: "lastDrunkDate", ascending: true)
-        case 11:
-            sortDescriptor = NSSortDescriptor(key: "lastDrunkDate", ascending: false)
-        default:
-            sortDescriptor = NSSortDescriptor(key: "maxPrice", ascending: false)
-        }
-        
         if((self.delegate) != nil)
         {
-            delegate?.applyFilters(predicate, sort: sortDescriptor)
+            let predicate = createFilterPredicate()
+            let sorter = createFilterSorter()
+            delegate?.applyFilters(predicate, sort: sorter)
         }
+    }
+    
+    
+    @IBAction func onViewOptionChange(sender: UISegmentedControl) {
+        queryForData()
     }
     
     override func viewDidLoad() {
@@ -159,7 +100,7 @@ class FiltersViewController: UITableViewController, UIPickerViewDelegate, UIPick
     func getDistinctVarietalsCountriesRegions() {
         let managedContext = appDelegate.managedObjectContext
         //FetchRequest
-        let fetchRequest = NSFetchRequest(entityName: "Bottle")
+        let fetchRequest = NSFetchRequest(entityName: "Wine")
         fetchRequest.propertiesToFetch = ["varietal", "country", "region"]
         fetchRequest.resultType = NSFetchRequestResultType.DictionaryResultType
         fetchRequest.returnsDistinctResults = true
@@ -193,7 +134,7 @@ class FiltersViewController: UITableViewController, UIPickerViewDelegate, UIPick
     func getDistinctLocatons() {
         let managedContext = appDelegate.managedObjectContext
         //FetchRequest
-        let fetchRequest = NSFetchRequest(entityName: "Status")
+        let fetchRequest = NSFetchRequest(entityName: "Bottle")
         fetchRequest.propertiesToFetch = ["location"]
         fetchRequest.resultType = NSFetchRequestResultType.DictionaryResultType
         fetchRequest.returnsDistinctResults = true
@@ -214,6 +155,93 @@ class FiltersViewController: UITableViewController, UIPickerViewDelegate, UIPick
         } catch {
             print("fetch failed:")
         }
+    }
+    
+    func createFilterPredicate() -> NSPredicate {
+        var subANDPredicates = [NSPredicate]()
+        
+        if (!(txtVarietal.text!.isEmpty)) {
+            let predicateVarietal = NSPredicate(format: "varietal contains[cd] %@", txtVarietal.text!)
+            subANDPredicates.append(predicateVarietal)
+        }
+        if (!(txtCountry.text!.isEmpty)) {
+            let predicateCountry = NSPredicate(format: "country contains[cd] %@", txtCountry.text!)
+            subANDPredicates.append(predicateCountry)
+        }
+        if (!(txtRegion.text!.isEmpty)) {
+            let predicateRegion = NSPredicate(format: "region contains[cd] %@", txtRegion.text!)
+            subANDPredicates.append(predicateRegion)
+        }
+        if (!(txtLocation.text!.isEmpty)) {
+            let predicateLocation = NSPredicate(format: "SUBQUERY(lots, $l, ANY $l.bottles.location == %@).@count > 0", txtLocation.text!)
+            subANDPredicates.append(predicateLocation)
+        }
+        if (!(txtPrice.text!.isEmpty)) {
+            let predicatePriceMin = NSPredicate(format: "ANY lots.price >= %d", priceMin)
+            let predicatePriceMax = NSPredicate(format: "ANY lots.price <= %d", priceMax)
+            subANDPredicates.append(predicatePriceMin)
+            subANDPredicates.append(predicatePriceMax)
+        }
+        var predicateView = NSPredicate()
+        if (viewOptions.selectedSegmentIndex == 0) {
+            predicateView = NSPredicate(format: "availableBottles > 0")
+        } else if (viewOptions.selectedSegmentIndex == 1) {
+            predicateView = NSPredicate(format: "drunkBottles > 0")
+        } else if (viewOptions.selectedSegmentIndex == 2) {
+            predicateView = NSPredicate(value: true)
+        }
+        subANDPredicates.append(predicateView)
+        
+        return NSCompoundPredicate(type: NSCompoundPredicateType.AndPredicateType, subpredicates: subANDPredicates)
+        
+    }
+    
+    func createFilterSorter() -> NSSortDescriptor {
+        var sortDescriptor = NSSortDescriptor(key: "maxPrice", ascending: false)
+        switch selectedSortOrderIndex {
+        case 0:
+            sortDescriptor = NSSortDescriptor(key: "name", ascending: true)
+        case 1:
+            sortDescriptor = NSSortDescriptor(key: "name", ascending: false)
+        case 2:
+            sortDescriptor = NSSortDescriptor(key: "vintage", ascending: false)
+        case 3:
+            sortDescriptor = NSSortDescriptor(key: "vintage", ascending: true)
+        case 4:
+            sortDescriptor = NSSortDescriptor(key: "maxPrice", ascending: false)
+        case 5:
+            sortDescriptor = NSSortDescriptor(key: "maxPrice", ascending: true)
+        case 6:
+            sortDescriptor = NSSortDescriptor(key: "points", ascending: false)
+        case 7:
+            sortDescriptor = NSSortDescriptor(key: "points", ascending: true)
+        case 8:
+            sortDescriptor = NSSortDescriptor(key: "lastPurchaseDate", ascending: true)
+        case 9:
+            sortDescriptor = NSSortDescriptor(key: "lastPurchaseDate", ascending: false)
+        case 10:
+            sortDescriptor = NSSortDescriptor(key: "lastDrunkDate", ascending: true)
+        case 11:
+            sortDescriptor = NSSortDescriptor(key: "lastDrunkDate", ascending: false)
+        default:
+            sortDescriptor = NSSortDescriptor(key: "maxPrice", ascending: false)
+        }
+        return sortDescriptor
+    }
+    
+    func queryForData() {
+        let fetchRequest = NSFetchRequest()
+        let entityDescription = NSEntityDescription.entityForName("Wine", inManagedObjectContext:  appDelegate.managedObjectContext)
+        fetchRequest.entity = entityDescription
+        fetchRequest.predicate = createFilterPredicate()
+        NSFetchedResultsController.deleteCacheWithName(nil)
+        do {
+            let result = try appDelegate.managedObjectContext.executeFetchRequest(fetchRequest)
+            btnApply.title = String(result.count) + " hits"
+        } catch {
+            abort()
+        }
+        
     }
 
     
@@ -243,7 +271,7 @@ class FiltersViewController: UITableViewController, UIPickerViewDelegate, UIPick
         selectedRowIndex = 0
     }
     
-
+    
     
     // MARK: - Table View
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -362,6 +390,7 @@ class FiltersViewController: UITableViewController, UIPickerViewDelegate, UIPick
             }
             txtPrice.text = "$" + String(priceMin) + " to $" + String(priceMax)
         }
+        queryForData()
     }
     
 }

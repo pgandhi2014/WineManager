@@ -155,7 +155,7 @@ class AddLotController: UITableViewController, UIPickerViewDelegate, UIPickerVie
     
     func getDistinctLocatons() {
         let managedContext = appDelegate.managedObjectContext
-        let fetchRequest = NSFetchRequest(entityName: "Status")
+        let fetchRequest = NSFetchRequest(entityName: "Bottle")
         fetchRequest.propertiesToFetch = ["location"]
         fetchRequest.resultType = NSFetchRequestResultType.DictionaryResultType
         fetchRequest.returnsDistinctResults = true

@@ -384,10 +384,10 @@
             <Quantity>1</Quantity>
             <Locations>
                <Loc>
-                  <Status>Available</Status>
-                  <Location>Rack6</Location>
-                  <DrunkDate />
-                  <Rating />
+                  <Status>Drunk</Status>
+                  <Location />
+                  <DrunkDate>2016-07-26</DrunkDate>
+                  <Rating>5</Rating>
                   <Notes />
                </Loc>
             </Locations>

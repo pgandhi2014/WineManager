@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="H1p-Uh-vWS">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="H1p-Uh-vWS">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
-        <!--Master-->
+        <!--Master Controller-->
         <scene sceneID="pY4-Hu-kfo">
             <objects>
-                <navigationController title="Master" toolbarHidden="NO" id="RMx-3f-FxP" sceneMemberID="viewController">
+                <navigationController title="Master" toolbarHidden="NO" id="RMx-3f-FxP" userLabel="Master Controller" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="Pmd-2v-anx">
                         <autoresizingMask key="autoresizingMask"/>
@@ -292,10 +292,10 @@
             </objects>
             <point key="canvasLocation" x="709" y="129"/>
         </scene>
-        <!--Mark Drunk View Controller-->
+        <!--MarkDrunk-->
         <scene sceneID="rfc-af-HmD">
             <objects>
-                <viewController storyboardIdentifier="markDrunkViewController" id="OOb-nY-f75" customClass="MarkDrunkViewController" customModule="WineManager" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="markDrunk" id="OOb-nY-f75" userLabel="MarkDrunk" customClass="MarkDrunkViewController" customModule="WineManager" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="ww5-mJ-v4n"/>
                         <viewControllerLayoutGuide type="bottom" id="pZH-Ja-4xT"/>
@@ -521,6 +521,11 @@
                     </toolbarItems>
                     <navigationItem key="navigationItem" title="Wine Manager" id="Zdf-7t-Un8">
                         <barButtonItem key="backBarButtonItem" title="Back" id="AGm-hU-5wR"/>
+                        <barButtonItem key="leftBarButtonItem" systemItem="action" id="IAN-T9-1Pz">
+                            <connections>
+                                <action selector="onSyncCloud:" destination="7bK-jq-Zjz" id="fQG-dr-EAd"/>
+                            </connections>
+                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="IlK-11-UU8">
                             <connections>
                                 <segue destination="7wL-nA-WGK" kind="show" identifier="showAddWine" id="UlH-PW-8MS"/>
@@ -538,10 +543,10 @@
             </objects>
             <point key="canvasLocation" x="709" y="-630"/>
         </scene>
-        <!--AddEdit Scene-->
+        <!--AddEdit-->
         <scene sceneID="0uz-5s-ZGy">
             <objects>
-                <tableViewController id="OLI-Tj-Jvd" userLabel="AddEdit Scene" customClass="AddEditViewController" customModule="WineManager" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController id="OLI-Tj-Jvd" userLabel="AddEdit" customClass="AddEditViewController" customModule="WineManager" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="SfH-sb-cDt">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -904,12 +909,12 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ve5-Jl-XEL" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2302" y="-1375"/>
+            <point key="canvasLocation" x="2252" y="129"/>
         </scene>
-        <!--Purchase Lot-->
+        <!--PurchaseLot-->
         <scene sceneID="qcA-zc-e33">
             <objects>
-                <tableViewController id="QOY-Fz-cKl" customClass="AddLotController" customModule="WineManager" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController id="QOY-Fz-cKl" userLabel="PurchaseLot" customClass="AddLotController" customModule="WineManager" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="default" allowsSelection="NO" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="VPm-pd-NCd">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1320,12 +1325,12 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="U3X-Fs-w1h" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3904" y="-1375"/>
+            <point key="canvasLocation" x="2252" y="1693"/>
         </scene>
-        <!--Navigation Controller-->
+        <!--PurchaseLot Controller-->
         <scene sceneID="5hd-CQ-rkE">
             <objects>
-                <navigationController toolbarHidden="NO" id="q8a-us-tUA" sceneMemberID="viewController">
+                <navigationController toolbarHidden="NO" id="q8a-us-tUA" userLabel="PurchaseLot Controller" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="EEe-59-FQD">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -1340,12 +1345,12 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="oor-HA-dAq" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3084" y="-1375"/>
+            <point key="canvasLocation" x="2252" y="905"/>
         </scene>
-        <!--AddEdit Scene Controller-->
+        <!--AddEdit Controller-->
         <scene sceneID="z0a-oN-pYv">
             <objects>
-                <navigationController toolbarHidden="NO" id="7wL-nA-WGK" userLabel="AddEdit Scene Controller" sceneMemberID="viewController">
+                <navigationController toolbarHidden="NO" id="7wL-nA-WGK" userLabel="AddEdit Controller" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="OcP-22-9gC">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -1360,7 +1365,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="MV4-gF-twa" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1482" y="-1375"/>
+            <point key="canvasLocation" x="1548" y="129"/>
         </scene>
         <!--Stats-->
         <scene sceneID="BK3-cK-v0z">
@@ -1401,27 +1406,120 @@
                             <outlet property="delegate" destination="cri-lQ-pEW" id="w7n-mb-rEJ"/>
                         </connections>
                     </tableView>
+                    <toolbarItems>
+                        <barButtonItem title="Show Charts" id="OEY-6c-meI">
+                            <connections>
+                                <segue destination="Xh3-DT-8g1" kind="show" identifier="showCharts" id="gzz-hv-N2I"/>
+                            </connections>
+                        </barButtonItem>
+                    </toolbarItems>
                     <navigationItem key="navigationItem" title="Stats" id="esv-XO-2kP"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ACL-I1-twL" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2302" y="-630"/>
+            <point key="canvasLocation" x="2252" y="-630"/>
         </scene>
-        <!--Navigation Controller-->
+        <!--ChartsList-->
+        <scene sceneID="XVR-Op-GFQ">
+            <objects>
+                <tableViewController id="ClF-2Y-ShT" userLabel="ChartsList" customClass="ChartsListController" customModule="WineManager" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="TXt-Oi-tgf">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="cellCharts" textLabel="JnS-8M-WuH" style="IBUITableViewCellStyleDefault" id="DEm-ve-zOm">
+                                <rect key="frame" x="0.0" y="92" width="600" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="DEm-ve-zOm" id="tCE-Pe-Xbt">
+                                    <rect key="frame" x="0.0" y="0.0" width="567" height="43"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="JnS-8M-WuH">
+                                            <rect key="frame" x="15" y="0.0" width="550" height="43"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="ClF-2Y-ShT" id="gxk-8S-Ifq"/>
+                            <outlet property="delegate" destination="ClF-2Y-ShT" id="LPA-cK-Mo9"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="Charts" id="UCo-Ts-dDc"/>
+                    <connections>
+                        <segue destination="T54-rw-LSO" kind="show" identifier="showBarCharts" id="bk8-7O-bOB"/>
+                        <segue destination="6jm-0y-Ysb" kind="show" identifier="showLineCharts" id="DJR-Ib-qGL"/>
+                        <segue destination="0sz-uq-pYs" kind="show" identifier="showPieCharts" id="dzk-gz-tQV"/>
+                    </connections>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="34m-tY-99S" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3854" y="-630"/>
+        </scene>
+        <!--ChartsList Controller-->
+        <scene sceneID="bcU-K4-Qhh">
+            <objects>
+                <navigationController id="Xh3-DT-8g1" userLabel="ChartsList Controller" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="vnt-VN-YEg">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="ClF-2Y-ShT" kind="relationship" relationship="rootViewController" id="axe-O5-Hr9"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="hS3-zy-3HR" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3034" y="-630"/>
+        </scene>
+        <!--BarCharts-->
+        <scene sceneID="9Dm-mV-OcD">
+            <objects>
+                <viewController id="Fwj-Gk-DAr" userLabel="BarCharts" customClass="BarChartsViewController" customModule="WineManager" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="Vtr-WS-cba"/>
+                        <viewControllerLayoutGuide type="bottom" id="bL8-XQ-KY2"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="0Sa-vU-RMb" customClass="BarChartView" customModule="Charts">
+                        <rect key="frame" x="0.0" y="64" width="600" height="536"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <extendedEdge key="edgesForExtendedLayout" bottom="YES"/>
+                    <navigationItem key="navigationItem" id="5Zt-mh-ISK"/>
+                    <connections>
+                        <outlet property="barChartView" destination="0Sa-vU-RMb" id="Te5-xV-GaK"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Mzn-LX-3iC" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3034" y="911"/>
+        </scene>
+        <!--Stats Controller-->
         <scene sceneID="uai-Ru-OCq">
             <objects>
-                <navigationController id="OiA-8U-vtR" sceneMemberID="viewController">
+                <navigationController toolbarHidden="NO" id="OiA-8U-vtR" userLabel="Stats Controller" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="iGp-XY-ZMq">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
+                    <toolbar key="toolbar" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="VU2-D1-yqf">
+                        <rect key="frame" x="0.0" y="556" width="600" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </toolbar>
                     <connections>
                         <segue destination="cri-lQ-pEW" kind="relationship" relationship="rootViewController" id="LVN-XX-seO"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="pQ2-Hl-cWh" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1482" y="-630"/>
+            <point key="canvasLocation" x="1548" y="-630"/>
         </scene>
         <!--Filters-->
         <scene sceneID="GBi-cR-HjR">
@@ -1577,6 +1675,9 @@
                                                         <segment title="Drunk Only"/>
                                                         <segment title="All"/>
                                                     </segments>
+                                                    <connections>
+                                                        <action selector="onViewOptionChange:" destination="j9X-qv-fm3" eventType="valueChanged" id="2ze-lo-4rT"/>
+                                                    </connections>
                                                 </segmentedControl>
                                             </subviews>
                                             <constraints>
@@ -1596,7 +1697,7 @@
                     </tableView>
                     <toolbarItems/>
                     <navigationItem key="navigationItem" title="Filters" id="0jj-Aq-iA0">
-                        <barButtonItem key="rightBarButtonItem" title="Apply" id="qNd-PB-EW2">
+                        <barButtonItem key="rightBarButtonItem" title=" " id="qNd-PB-EW2">
                             <connections>
                                 <action selector="onBtnApplyPress:" destination="j9X-qv-fm3" id="zqU-WQ-4M3"/>
                             </connections>
@@ -1616,12 +1717,12 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="JCV-TJ-cRx" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2302" y="129"/>
+            <point key="canvasLocation" x="2252" y="-1373"/>
         </scene>
-        <!--Filters Scene Controller-->
+        <!--Filters Controller-->
         <scene sceneID="bsD-Ee-z2B">
             <objects>
-                <navigationController title="Filterss" id="R3x-T1-9Lv" userLabel="Filters Scene Controller" sceneMemberID="viewController">
+                <navigationController title="Filterss" id="R3x-T1-9Lv" userLabel="Filters Controller" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="GPi-Rj-GaM">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -1632,12 +1733,12 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2Ky-Xr-gcd" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1482" y="129"/>
+            <point key="canvasLocation" x="1548" y="-1373"/>
         </scene>
-        <!--Navigation Controller-->
+        <!--Detail Controller-->
         <scene sceneID="r7l-gg-dq7">
             <objects>
-                <navigationController toolbarHidden="NO" id="vC3-pB-5Vb" sceneMemberID="viewController">
+                <navigationController toolbarHidden="NO" id="vC3-pB-5Vb" userLabel="Detail Controller" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="DjV-YW-jjY">
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -1653,9 +1754,146 @@
             </objects>
             <point key="canvasLocation" x="-45" y="129"/>
         </scene>
+        <!--BarCharts Controller-->
+        <scene sceneID="kpN-GC-sR2">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="T54-rw-LSO" userLabel="BarCharts Controller" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="opq-4x-oUd">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <toolbar key="toolbar" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="D2Q-kk-wPp">
+                        <rect key="frame" x="0.0" y="556" width="600" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </toolbar>
+                    <connections>
+                        <segue destination="Fwj-Gk-DAr" kind="relationship" relationship="rootViewController" id="Wef-Az-0FQ"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ndV-M5-tqJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3034" y="129"/>
+        </scene>
+        <!--LineCharts-->
+        <scene sceneID="Zsw-Im-UP1">
+            <objects>
+                <viewController id="CRU-qL-xLg" userLabel="LineCharts" customClass="LineChartsViewController" customModule="WineManager" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="kcK-Fv-urA"/>
+                        <viewControllerLayoutGuide type="bottom" id="rzS-jf-YiD"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="wOm-vu-LqX" customClass="LineChartView" customModule="Charts">
+                        <rect key="frame" x="0.0" y="64" width="600" height="536"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <extendedEdge key="edgesForExtendedLayout" bottom="YES"/>
+                    <navigationItem key="navigationItem" id="GbF-Zu-g4b"/>
+                    <connections>
+                        <outlet property="lineChartView" destination="wOm-vu-LqX" id="Y4g-jG-E3y"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="CK9-fK-0Vj" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="4668" y="905"/>
+        </scene>
+        <!--LineCharts Controller-->
+        <scene sceneID="ptQ-iX-y97">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="6jm-0y-Ysb" userLabel="LineCharts Controller" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="vmM-Uv-Gbr">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <toolbar key="toolbar" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="SUv-Ig-t5m">
+                        <rect key="frame" x="0.0" y="556" width="600" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </toolbar>
+                    <connections>
+                        <segue destination="CRU-qL-xLg" kind="relationship" relationship="rootViewController" id="G1F-6b-jLD"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="JIH-wl-VOg" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="4668" y="129"/>
+        </scene>
+        <!--PieCharts-->
+        <scene sceneID="jhP-uC-Vmg">
+            <objects>
+                <viewController id="KV4-I8-Ia1" userLabel="PieCharts" customClass="PieChartsViewController" customModule="WineManager" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="BTs-AL-Etn"/>
+                        <viewControllerLayoutGuide type="bottom" id="TeP-jQ-0Gh"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="cWt-k1-Ofe">
+                        <rect key="frame" x="0.0" y="64" width="600" height="536"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="PqX-8f-3GU" customClass="PieChartView" customModule="Charts">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="238"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4zY-it-LZp" customClass="PieChartView" customModule="Charts">
+                                <rect key="frame" x="0.0" y="254" width="600" height="238"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="TeP-jQ-0Gh" firstAttribute="top" secondItem="PqX-8f-3GU" secondAttribute="bottom" constant="254" id="Aq9-BG-rUH"/>
+                            <constraint firstItem="PqX-8f-3GU" firstAttribute="top" secondItem="BTs-AL-Etn" secondAttribute="bottom" id="PE8-7e-Kdy"/>
+                            <constraint firstItem="4zY-it-LZp" firstAttribute="leading" secondItem="cWt-k1-Ofe" secondAttribute="leadingMargin" constant="-20" id="Uen-Me-w2e"/>
+                            <constraint firstItem="TeP-jQ-0Gh" firstAttribute="top" secondItem="4zY-it-LZp" secondAttribute="bottom" id="aoQ-yr-8YS"/>
+                            <constraint firstItem="PqX-8f-3GU" firstAttribute="leading" secondItem="cWt-k1-Ofe" secondAttribute="leadingMargin" constant="-20" id="dvu-rH-Qt2"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="4zY-it-LZp" secondAttribute="trailing" constant="-20" id="qIk-hC-6tI"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="PqX-8f-3GU" secondAttribute="trailing" constant="-20" id="tzw-AQ-ed6"/>
+                            <constraint firstItem="4zY-it-LZp" firstAttribute="top" secondItem="BTs-AL-Etn" secondAttribute="bottom" constant="254" id="uQS-wo-BRp"/>
+                        </constraints>
+                    </view>
+                    <extendedEdge key="edgesForExtendedLayout" bottom="YES"/>
+                    <navigationItem key="navigationItem" id="C6U-DB-ayF"/>
+                    <connections>
+                        <outlet property="bottomViewLeadingConstraint" destination="Uen-Me-w2e" id="Q9Y-py-Ubs"/>
+                        <outlet property="bottomViewTopConstraint" destination="uQS-wo-BRp" id="ef9-Ye-zG4"/>
+                        <outlet property="pieChartViewBottom" destination="4zY-it-LZp" id="ZVk-vF-PJh"/>
+                        <outlet property="pieChartViewTop" destination="PqX-8f-3GU" id="Ggy-jm-Pb8"/>
+                        <outlet property="topViewBottomConstraint" destination="Aq9-BG-rUH" id="IQa-Hj-J5E"/>
+                        <outlet property="topViewTrailingConstraint" destination="tzw-AQ-ed6" id="SJq-Cs-O68"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="8Sa-2D-h4f" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3854" y="905"/>
+        </scene>
+        <!--PieCharts Controller-->
+        <scene sceneID="g5X-3W-VlR">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="0sz-uq-pYs" userLabel="PieCharts Controller" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="2kk-f5-nGR">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <toolbar key="toolbar" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="5Xf-aP-2oI">
+                        <rect key="frame" x="0.0" y="556" width="600" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </toolbar>
+                    <connections>
+                        <segue destination="KV4-I8-Ia1" kind="relationship" relationship="rootViewController" id="SIl-EV-GJL"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="glA-Cw-bmN" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3854" y="129"/>
+        </scene>
     </scenes>
     <inferredMetricsTieBreakers>
+        <segue reference="UlH-PW-8MS"/>
         <segue reference="6S0-TO-JiA"/>
-        <segue reference="4sO-At-QLW"/>
     </inferredMetricsTieBreakers>
 </document>

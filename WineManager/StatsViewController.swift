@@ -9,6 +9,18 @@
 import UIKit
 import CoreData
 
+extension NSDate
+{
+    convenience
+    init(dateString:String) {
+        let dateStringFormatter = NSDateFormatter()
+        dateStringFormatter.dateFormat = "yyyy/MM/dd"
+        dateStringFormatter.locale = NSLocale(localeIdentifier: "en_US_POSIX")
+        let d = dateStringFormatter.dateFromString(dateString)!
+        self.init(timeInterval:0, sinceDate:d)
+    }
+}
+
 class StatsViewController: UITableViewController {
     var fetchPredicate: NSPredicate? = nil
     var showFilteredStats = false
@@ -17,12 +29,11 @@ class StatsViewController: UITableViewController {
     var valsDrunk = [String]()
     var valsTotal = [String]()
     var valsFilter = [String]()
-
+    
     let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         calculateStats("Available", valsArray: &valsAvailable)
         calculateStats("Drunk", valsArray: &valsDrunk)
         calculateStats("Total", valsArray: &valsTotal)
@@ -41,7 +52,7 @@ class StatsViewController: UITableViewController {
 
     func calculateStats(statsMode: String, inout valsArray: [String]) {
         let fetchRequest = NSFetchRequest()
-        let entityDescription = NSEntityDescription.entityForName("Bottle", inManagedObjectContext:  appDelegate.managedObjectContext)
+        let entityDescription = NSEntityDescription.entityForName("Wine", inManagedObjectContext:  appDelegate.managedObjectContext)
         fetchRequest.entity = entityDescription
         if (statsMode == "Available") {
             fetchRequest.predicate = NSPredicate(format: "availableBottles > 0")
@@ -70,7 +81,7 @@ class StatsViewController: UITableViewController {
             let result = try appDelegate.managedObjectContext.executeFetchRequest(fetchRequest)
             if (result.count > 0) {
                 for (_, value) in result.enumerate() {
-                    let bottle = value as! Bottle
+                    let bottle = value as! Wine
                     if (bottle.points!.integerValue < minPoints) {
                         minPoints = bottle.points!.integerValue
                     }
@@ -114,7 +125,6 @@ class StatsViewController: UITableViewController {
         valsArray.append(String(maxPoints) + " pts")
         valsArray.append(String(minPoints) + " pts")
     }
-    
     
     
     // MARK: - Table View

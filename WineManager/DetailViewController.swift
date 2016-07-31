@@ -9,8 +9,16 @@
 import UIKit
 import CoreData
 
+protocol DetailViewControllerDelegate
+{
+    func BottleDetailsDidChange(dataChanged: Bool)
+}
+
+
 class DetailViewController: UIViewController, SavingDrunkViewControllerDelegate, EditLocationsViewControllerDelegate  {
 
+    var delegate : DetailViewControllerDelegate?
+    
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var regionLabel: UILabel!
@@ -56,7 +64,7 @@ class DetailViewController: UIViewController, SavingDrunkViewControllerDelegate,
         let sorter = NSSortDescriptor(key: "purchaseDate", ascending: false)
 
         if let bottle = detailItem {
-            let bottleDetails = bottle as! Bottle
+            let bottleDetails = bottle as! Wine
             ratingLabel!.text = bottleDetails.points!.stringValue + " pts by " + bottleDetails.reviewSource!
             reviewView!.text = bottleDetails.review!
     
@@ -79,8 +87,8 @@ class DetailViewController: UIViewController, SavingDrunkViewControllerDelegate,
                     lotDescription = lotDescription + lot.quantity!.stringValue + " bottles on " + dateFormatter.stringFromDate(lot.purchaseDate!) + " for $" + lot.price!.stringValue + " each"
                 }
                 
-                for (_, value) in lot.statuses!.enumerate() {
-                    let loc = value as! Status
+                for (_, value) in lot.bottles!.enumerate() {
+                    let loc = value as! Bottle
                     if (loc.available == 0) {
                         drunkArray.append((date: loc.drunkDate!, rating: loc.rating!.doubleValue))
                     } else {
@@ -151,7 +159,7 @@ class DetailViewController: UIViewController, SavingDrunkViewControllerDelegate,
     // MARK: - Segues
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        let bottle = detailItem as! Bottle
+        let bottle = detailItem as! Wine
         if segue.identifier == "showMarkDrunk" {
             let controller = segue.destinationViewController as! MarkDrunkViewController
             controller.bottleName = bottle.name!
@@ -172,16 +180,20 @@ class DetailViewController: UIViewController, SavingDrunkViewControllerDelegate,
     func applyLocationChanges(dataChanged: Bool) {
         if (dataChanged) {
             self.configureView()
+            if((self.delegate) != nil)
+            {
+                delegate?.BottleDetailsDidChange(dataChanged)
+            }
         }
     }
     
     func saveDrunkInfo(rating: Float, date: NSDate, location: String) {
         var flagDone = false
-        let bottle = detailItem as! Bottle
+        let bottle = detailItem as! Wine
         for (_, value) in bottle.lots!.enumerate() {
             let lot = value as! PurchaseLot
-            for (_, value) in lot.statuses!.enumerate() {
-                let loc = value as! Status
+            for (_, value) in lot.bottles!.enumerate() {
+                let loc = value as! Bottle
                 if (loc.available! == 1 && loc.location! == location && !flagDone) {
                     loc.available = 0
                     loc.location = ""

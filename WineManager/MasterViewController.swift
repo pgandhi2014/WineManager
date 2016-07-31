@@ -10,7 +10,7 @@ import UIKit
 import CoreData
 import CloudKit
 
-class MasterViewController: UITableViewController, NSFetchedResultsControllerDelegate, NSXMLParserDelegate, UISearchBarDelegate, SavingFilterViewControllerDelegate {
+class MasterViewController: UITableViewController, NSFetchedResultsControllerDelegate, NSXMLParserDelegate, UISearchBarDelegate, SavingFilterViewControllerDelegate, DetailViewControllerDelegate {
 
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var filtersButton: UIBarButtonItem!
@@ -31,7 +31,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
     var searchApplied = false
     var fetchRequest = NSFetchRequest()
     
-    var arrBottles: Array<CKRecord> = []
+    
     
     let dateFormatter = NSDateFormatter()
     var xmlHelper: XMLHelper? = nil
@@ -45,6 +45,21 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         fetchRequest.sortDescriptors = [sorter]
         performFetchAndRefresh()
     }
+    
+    @IBAction func onSyncCloud(sender: AnyObject) {
+        showAlert("Sync with iCloud", message: "Would you like to sync with iCloud now?")
+    }
+    
+    func showAlert(title: String, message: String) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .Alert)
+        
+        alert.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil));
+        alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: {(action:UIAlertAction) in
+            print ("Fetching")
+        }))
+        presentViewController(alert, animated: true, completion: nil);
+    }
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -102,36 +117,12 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
             return
         }
         let object = self.fetchedResultsController.objectAtIndexPath(indexPath)
-        let bottle = object as! Bottle
         self.detailViewController?.detailItem = object
         self.detailViewController?.navigationItem.leftBarButtonItem = self.splitViewController?.displayModeButtonItem()
         self.detailViewController?.navigationItem.leftItemsSupplementBackButton = true
     }
     
 
-    //MARK: - Cloudkit
-    func fetchNotes() {
-        let container = CKContainer.defaultContainer()
-        let privateDatabase = container.privateCloudDatabase
-        let predicate = NSPredicate(value: true)
-        
-        let query = CKQuery(recordType: "Bottles", predicate: predicate)
-        privateDatabase.performQuery(query, inZoneWithID: nil) { (results, error) -> Void in
-            if error != nil {
-                print(error)
-            }
-            else {
-                print(results)
-                
-                for result in results! {
-                    self.arrBottles.append(result)
-                }
-            }
-        }
-        
-    }
-    
-    
     func setPredicateAndFilterResults(searchText: String) {
         var subANDPredicates = [NSPredicate]()
         
@@ -209,6 +200,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
                 controller.detailItem = object
                 controller.navigationItem.leftBarButtonItem = self.splitViewController?.displayModeButtonItem()
                 controller.navigationItem.leftItemsSupplementBackButton = true
+                controller.delegate = self
             }
         }
         if segue.identifier == "showStats" {
@@ -240,6 +232,12 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         fetchRequest.sortDescriptors = [sort]
         self.navigationController?.popViewControllerAnimated(true)
         performFetchAndRefresh()
+    }
+    
+    func BottleDetailsDidChange(dataChanged: Bool) {
+        if dataChanged {
+            self.tableView.reloadData()
+        }
     }
 
     // MARK: - Table View
@@ -279,7 +277,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
 
     func configureCell(cell: UITableViewCell, withObject object: NSManagedObject) {
         let customCell = cell as! CustomPrototypeCell
-        let currentBottle = object as! Bottle
+        let currentBottle = object as! Wine
         let formatter = NSNumberFormatter()
         let pointsFormatter = NSNumberFormatter()
         formatter.maximumFractionDigits = 1
@@ -309,7 +307,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         }
         
         // Edit the entity name as appropriate.
-        let entity = NSEntityDescription.entityForName("Bottle", inManagedObjectContext: self.managedObjectContext!)
+        let entity = NSEntityDescription.entityForName("Wine", inManagedObjectContext: self.managedObjectContext!)
         fetchRequest.entity = entity
         
         // Set the batch size to a suitable number.
@@ -386,4 +384,100 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
      */
 
 }
+
+/*
+ var arrBottles: Array<CKRecord> = []
+ let container = CKContainer.defaultContainer()
+ var privateDatabase : CKDatabase? = nil
+ 
+ //MARK: - Cloudkit
+ func fetchNotes(callback: ((success: Bool) -> ())?) {
+ let predicate = NSPredicate(value: true)
+ 
+ let query = CKQuery(recordType: "Wine", predicate: predicate)
+ self.privateDatabase!.performQuery(query, inZoneWithID: nil) { (results, error) -> Void in
+ if error != nil {
+ print(error)
+ callback?(success: false)
+ }
+ else {
+ print(results)
+ for result in results! {
+ self.arrBottles.append(result)
+ }
+ callback?(success: true)
+ }
+ 
+ }
+ }
+ 
+ func fetchLot(lotID: CKRecordID) {
+ self.privateDatabase!.fetchRecordWithID(lotID) {
+ (record, error) in
+ if error != nil {
+ print("There was an error: \(error)")
+ } else {
+ print (record)
+ let parsedLot = ParsedLot(purchaseDate: self.dateFormatter.stringFromDate(record!["purchaseDate"] as! NSDate), price: (record!["price"] as! NSNumber).stringValue, quantity: (record!["quantity"] as! NSNumber).stringValue, locations: [ParsedLoc]())
+ print(parsedLot.purchaseDate)
+ }
+ }
+ }
+ 
+ func printResults() {
+ print ("entering print")
+ for (_, value) in arrBottles.enumerate() {
+ let parsedWine = ParsedWineBottle()
+ parsedWine.name = value["name"] as! String
+ parsedWine.country = value["country"] as! String
+ parsedWine.points = (value["points"] as! NSNumber).stringValue
+ parsedWine.region = value["region"] as! String
+ parsedWine.review = value["review"] as! String
+ parsedWine.reviewSource = value["reviewSource"] as! String
+ parsedWine.vintage = (value["vintage"] as! NSNumber).stringValue
+ parsedWine.varietal = value["varietal"] as! String
+ let lots = value["lots"] as! [CKReference]
+ for (_, lot) in lots.enumerate() {
+ fetchLot(lot.recordID)
+ }
+ }
+ }
+ 
+ internal func saveToCloud(wine: Wine) {
+ let recordWine = CKRecord(recordType: "Wine")
+ let recordLot = CKRecord(recordType: "PurchaseLot")
+ let recordBottle = CKRecord(recordType: "Bottle")
+ 
+ recordWine["name"] = wine.name
+ recordWine["country"] = wine.country
+ recordWine["points"] = wine.points
+ recordWine["region"] = wine.region
+ recordWine["review"] = wine.review
+ recordWine["reviewSource"] = wine.reviewSource
+ recordWine["vintage"] = wine.vintage
+ recordWine["varietal"] = wine.varietal
+ for (_, value) in (wine.lots?.enumerate())! {
+ let lot = value as! PurchaseLot
+ recordLot["purchaseDate"] = lot.purchaseDate
+ recordLot["price"] = lot.price
+ recordLot["quantity"] = lot.quantity
+ recordLot["wine"] = CKReference(recordID: recordWine.recordID, action: .DeleteSelf)
+ }
+ 
+ 
+ privateDatabase!.saveRecord(recordWine) { (record, error) in
+ if error != nil {
+ print("There was an error: \(error)")
+ } else {
+ print("Record saved successfully")
+ print (record)
+ }
+ }
+ }
+ 
+*/
+ 
+ 
+ 
+
 
