@@ -31,7 +31,8 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
     var searchApplied = false
     var fetchRequest = NSFetchRequest()
     
-    
+    let container = CKContainer.defaultContainer()
+    var privateDatabase : CKDatabase? = nil
     
     let dateFormatter = NSDateFormatter()
     var xmlHelper: XMLHelper? = nil
@@ -77,6 +78,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         viewFilter = availableFilter
         
         dateFormatter.dateFormat = "yyyy-MM-dd"
+        privateDatabase = container.privateCloudDatabase
         
         let bottles = self.fetchedResultsController.sections![0].numberOfObjects
         self.title = "Wine Manager (" + String(bottles) + ")"
