@@ -3,14 +3,23 @@
     <entity name="Bottle" representedClassName=".Bottle" syncable="YES">
         <attribute name="available" attributeType="Boolean" defaultValueString="YES" syncable="YES"/>
         <attribute name="drunkDate" attributeType="Date" defaultDateTimeInterval="473328000" syncable="YES"/>
+        <attribute name="id" attributeType="String" defaultValueString="NotSet" syncable="YES"/>
         <attribute name="location" attributeType="String" defaultValueString="None" syncable="YES"/>
+        <attribute name="modifiedDate" attributeType="Date" defaultDateTimeInterval="-1609390800" syncable="YES"/>
         <attribute name="notes" attributeType="String" defaultValueString="None" syncable="YES"/>
         <attribute name="rating" attributeType="Decimal" defaultValueString="0.0" syncable="YES"/>
         <relationship name="lot" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="PurchaseLot" inverseName="bottles" inverseEntity="PurchaseLot" syncable="YES"/>
     </entity>
+    <entity name="DirtyRecord" representedClassName=".DirtyRecord" syncable="YES">
+        <attribute name="id" attributeType="String" defaultValueString="NA" syncable="YES"/>
+        <attribute name="modifiedDate" attributeType="Date" defaultDateTimeInterval="-1609390800" syncable="YES"/>
+        <attribute name="type" attributeType="String" defaultValueString="NA" syncable="YES"/>
+    </entity>
     <entity name="PurchaseLot" representedClassName=".PurchaseLot" syncable="YES">
         <attribute name="availableBottles" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="drunkBottles" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="id" attributeType="String" defaultValueString="NotSet" syncable="YES"/>
+        <attribute name="modifiedDate" attributeType="Date" defaultDateTimeInterval="-1609390800" syncable="YES"/>
         <attribute name="price" attributeType="Decimal" defaultValueString="0.0" syncable="YES"/>
         <attribute name="purchaseDate" attributeType="Date" defaultDateTimeInterval="473328000" syncable="YES"/>
         <attribute name="quantity" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
@@ -21,9 +30,11 @@
         <attribute name="availableBottles" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="country" attributeType="String" defaultValueString="None" syncable="YES"/>
         <attribute name="drunkBottles" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="id" attributeType="String" defaultValueString="NotSet" syncable="YES"/>
         <attribute name="lastDrunkDate" attributeType="Date" defaultDateTimeInterval="-1609394400" syncable="YES"/>
         <attribute name="lastPurchaseDate" attributeType="Date" defaultDateTimeInterval="-1609394400" syncable="YES"/>
         <attribute name="maxPrice" attributeType="Decimal" defaultValueString="0" syncable="YES"/>
+        <attribute name="modifiedDate" attributeType="Date" defaultDateTimeInterval="-1609390800" syncable="YES"/>
         <attribute name="name" attributeType="String" defaultValueString="None" syncable="YES"/>
         <attribute name="points" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="region" attributeType="String" defaultValueString="None" syncable="YES"/>
@@ -34,8 +45,9 @@
         <relationship name="lots" toMany="YES" deletionRule="Cascade" destinationEntity="PurchaseLot" inverseName="wine" inverseEntity="PurchaseLot" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Bottle" positionX="277" positionY="3026" width="128" height="135"/>
-        <element name="PurchaseLot" positionX="457" positionY="2970" width="128" height="150"/>
-        <element name="Wine" positionX="682" positionY="2901" width="128" height="255"/>
+        <element name="Bottle" positionX="277" positionY="3026" width="128" height="165"/>
+        <element name="PurchaseLot" positionX="457" positionY="2970" width="128" height="180"/>
+        <element name="Wine" positionX="682" positionY="2901" width="128" height="285"/>
+        <element name="DirtyRecord" positionX="477" positionY="3033" width="128" height="90"/>
     </elements>
 </model>

@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreData
+import CloudKit
 
 extension String
 {
@@ -29,6 +30,7 @@ class AddEditViewController: UITableViewController, UIPickerViewDelegate, UIPick
     var delegate : EditLocationsViewControllerDelegate?
     let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
     let keyWindow = UIApplication.sharedApplication().keyWindow
+    let cloudHelper = CloudHelper.sharedInstance
     
     @IBOutlet weak var txtVintage: UITextField!
     @IBOutlet weak var txtName: UITextField!
@@ -138,67 +140,84 @@ class AddEditViewController: UITableViewController, UIPickerViewDelegate, UIPick
             for (_, value) in sorted.enumerate() {
                 let lot = value as! PurchaseLot
                 var newLot = SimpleLot()
+                newLot.id = lot.id!
                 newLot.bottlePrice = lot.price!.floatValue
                 newLot.purchaseDate = lot.purchaseDate!
                 newLot.totalBottles = (lot.quantity!.integerValue)
                 
-                for (_, value) in lot.bottles!.enumerate() {
+                let bottleSorter = NSSortDescriptor(key: "id", ascending: true)
+                let sortedBottles = lot.bottles!.sortedArrayUsingDescriptors([bottleSorter])
+                for (_, value) in sortedBottles.enumerate() {
                     let loc = value as! Bottle
+                    var newLoc = SimpleLoc()
+                    newLoc.id = loc.id!
                     if (loc.available == 1) {
-                        if (newLot.locations.indexForKey(loc.location!) != nil) {
-                            newLot.locations[loc.location!] = newLot.locations[loc.location!]! + 1
-                        } else {
-                            newLot.locations[loc.location!] = 1
-                        }
+                        newLoc.location = loc.location!
+                    } else {
+                        newLoc.location = "Drunk"
                     }
+                    newLot.locs[newLot.locs.count] = newLoc
                 }
-            saveALot(newLot)
+                saveALot(newLot)
             }
         }
     }
     
     func saveExistingBottle() {
-        var oldLot: PurchaseLot
         let oldBottle = self.bottleInfo as! Wine
-        oldBottle.availableBottles = 0
+        let idDateFormatter = NSDateFormatter()
+        idDateFormatter.dateFormat = "MMddyyyy"
+        
         for lot in allLots {
             let datePredicate = predicateForDayFromDate(lot.purchaseDate)
             let matchingLots = oldBottle.lots?.filteredSetUsingPredicate(datePredicate)
-            if (matchingLots?.count > 0) {  // We are editing an existing lot so remove all available entries
-                oldLot = matchingLots?.first as! PurchaseLot
-                oldLot.availableBottles = 0
-                for tempValue in oldLot.bottles! {
-                    let status = tempValue as! Bottle
-                    if (status.available == 1) {
-                        appDelegate.managedObjectContext.deleteObject(status)
+            if (matchingLots?.count > 0) {  // We are editing an existing lot
+                let oldLot = matchingLots?.first as! PurchaseLot
+                for (_, location) in lot.locs {
+                    if (location.status == .Dirty) {
+                        let bottlePredicate = NSPredicate(format: "id == %@", location.id)
+                        let matchingBottle = oldLot.bottles?.filteredSetUsingPredicate(bottlePredicate)
+                        if (matchingBottle?.count != 1) {
+                            print ("Too many bottles or no bottles")
+                        } else {
+                            let bottle = matchingBottle?.first as! Bottle
+                            bottle.modifiedDate = NSDate()
+                            bottle.location = location.location
+                            cloudHelper.addRecordToUpload(cloudHelper.getRecordForBottle(bottle, shouldPopulate: true))
+                        }
                     }
                 }
-            } else {    // User added a new lot to an existing bottle
-                oldLot = NSEntityDescription.insertNewObjectForEntityForName("PurchaseLot", inManagedObjectContext: appDelegate.managedObjectContext) as! PurchaseLot
-                oldLot.wine = oldBottle
-                oldLot.purchaseDate = lot.purchaseDate
-                if (oldLot.purchaseDate!.compare(oldBottle.lastPurchaseDate!) == NSComparisonResult.OrderedDescending) {
-                    oldBottle.lastPurchaseDate = oldLot.purchaseDate
+            } else {    // User added a new lot to an existing wine
+                let newLot = NSEntityDescription.insertNewObjectForEntityForName("PurchaseLot", inManagedObjectContext: appDelegate.managedObjectContext) as! PurchaseLot
+                newLot.modifiedDate = NSDate()
+                newLot.wine = oldBottle
+                newLot.purchaseDate = lot.purchaseDate
+                if (newLot.purchaseDate!.compare(oldBottle.lastPurchaseDate!) == NSComparisonResult.OrderedDescending) {
+                    oldBottle.lastPurchaseDate = newLot.purchaseDate
                 }
-                oldLot.price = NSDecimalNumber(float: lot.bottlePrice)
-                if (oldLot.price!.compare(oldBottle.maxPrice!) == NSComparisonResult.OrderedDescending) {
-                    oldBottle.maxPrice = oldLot.price
+                newLot.id = oldBottle.id! + "." + idDateFormatter.stringFromDate(newLot.purchaseDate!)
+                newLot.price = NSDecimalNumber(float: lot.bottlePrice)
+                if (newLot.price!.compare(oldBottle.maxPrice!) == NSComparisonResult.OrderedDescending) {
+                    oldBottle.maxPrice = newLot.price
                 }
-                oldLot.quantity = lot.totalBottles
-            }
-            
-            for (loc, count) in lot.locations {
-                var loopIndex = 0
-                while (loopIndex < count) {
+                newLot.quantity = lot.totalBottles
+                for (_, location) in lot.locs {
                     let newLoc = NSEntityDescription.insertNewObjectForEntityForName("Bottle", inManagedObjectContext: appDelegate.managedObjectContext) as! Bottle
-                    newLoc.lot = oldLot
+                    newLoc.modifiedDate = NSDate()
+                    newLoc.lot = newLot
+                    newLoc.id = newLot.id! + "." + String(arc4random())
+                    
                     newLoc.available = 1
-                    oldLot.availableBottles = (oldLot.availableBottles?.integerValue)! + 1
-                    newLoc.location = loc
-                    loopIndex += 1
+                    newLot.availableBottles = (newLot.availableBottles?.integerValue)! + 1
+                    newLoc.location = location.location
+                    cloudHelper.addRecordToUpload(cloudHelper.getRecordForBottle(newLoc, shouldPopulate: true))
                 }
+                cloudHelper.addRecordToUpload(cloudHelper.getRecordForLot(newLot, shouldPopulate: true))
+                
+                oldBottle.modifiedDate = NSDate()
+                oldBottle.availableBottles = (oldBottle.availableBottles?.integerValue)! + (newLot.availableBottles?.integerValue)!
+                cloudHelper.addRecordToUpload(cloudHelper.getRecordForWine(oldBottle, shouldPopulate: true))
             }
-            oldBottle.availableBottles = (oldBottle.availableBottles?.integerValue)! + (oldLot.availableBottles?.integerValue)!
         }
         saveContext()
     }
@@ -225,7 +244,7 @@ class AddEditViewController: UITableViewController, UIPickerViewDelegate, UIPick
             keyWindow?.makeToast(message: "Must provide atleast 1 lot", duration: 2.0, position: HRToastPositionCenter)
             return retVal
         }
-        return !isDuplicateEntry()
+        return isDuplicateEntry()
     }
     
     func isDuplicateEntry() -> Bool {
@@ -254,15 +273,21 @@ class AddEditViewController: UITableViewController, UIPickerViewDelegate, UIPick
     }
     
     func saveNewBottle() {
+        let idDateFormatter = NSDateFormatter()
+        idDateFormatter.dateFormat = "MMddyyyy"
         if (doChecksFail()) {
             return
         }
         
         let newBottle = NSEntityDescription.insertNewObjectForEntityForName("Wine", inManagedObjectContext: appDelegate.managedObjectContext) as! Wine
+        newBottle.modifiedDate = NSDate()
         newBottle.name = txtName.text
         if let myNumber = NSNumberFormatter().numberFromString(txtVintage.text!) {
             newBottle.vintage = myNumber
         }
+        newBottle.id = newBottle.vintage!.stringValue + "." + newBottle.name!.removeWhitespace()
+        print (newBottle.id!)
+        
         newBottle.varietal = txtVarietal.text
         newBottle.region = txtRegion.text
         newBottle.country = txtCountry.text
@@ -275,31 +300,38 @@ class AddEditViewController: UITableViewController, UIPickerViewDelegate, UIPick
         for (_, value) in allLots.enumerate() {
             let newLot = NSEntityDescription.insertNewObjectForEntityForName("PurchaseLot", inManagedObjectContext: appDelegate.managedObjectContext) as! PurchaseLot
             let lot = value
+            newLot.modifiedDate = NSDate()
             newLot.wine = newBottle
             newLot.purchaseDate = lot.purchaseDate
             if (newLot.purchaseDate!.compare(newBottle.lastPurchaseDate!) == NSComparisonResult.OrderedDescending) {
                 newBottle.lastPurchaseDate = newLot.purchaseDate
             }
+            newLot.id = newBottle.id! + "." + idDateFormatter.stringFromDate(newLot.purchaseDate!)
+            print (newLot.id!)
+            
             newLot.price = NSDecimalNumber(float: lot.bottlePrice)
             if (newLot.price!.compare(newBottle.maxPrice!) == NSComparisonResult.OrderedDescending) {
                 newBottle.maxPrice = newLot.price
             }
             newLot.quantity = lot.totalBottles
             
-            for (loc, count) in lot.locations {
-                var loopIndex = 0
-                while (loopIndex < count) {
-                    let newLoc = NSEntityDescription.insertNewObjectForEntityForName("Bottle", inManagedObjectContext: appDelegate.managedObjectContext) as! Bottle
-                    newLoc.lot = newLot
-                    newLoc.available = 1
-                    newLot.availableBottles = (newLot.availableBottles?.integerValue)! + 1
-                    newLoc.location = loc
-                    loopIndex += 1
-                }
+            for (_, location) in lot.locs {
+                let newLoc = NSEntityDescription.insertNewObjectForEntityForName("Bottle", inManagedObjectContext: appDelegate.managedObjectContext) as! Bottle
+                newLoc.modifiedDate = NSDate()
+                newLoc.lot = newLot
+                newLoc.id = newLot.id! + "." + String(arc4random())
+                print(newLoc.id!)
+                
+                newLoc.available = 1
+                newLot.availableBottles = (newLot.availableBottles?.integerValue)! + 1
+                newLoc.location = location.location
+                cloudHelper.addRecordToUpload(cloudHelper.getRecordForBottle(newLoc, shouldPopulate: true))
             }
+            cloudHelper.addRecordToUpload(cloudHelper.getRecordForLot(newLot, shouldPopulate: true))
             newBottle.availableBottles = (newBottle.availableBottles?.integerValue)! + (newLot.availableBottles?.integerValue)!
             newBottle.drunkBottles = (newBottle.drunkBottles?.integerValue)! + (newLot.drunkBottles?.integerValue)!
         }
+        cloudHelper.addRecordToUpload(cloudHelper.getRecordForWine(newBottle, shouldPopulate: true))
         saveContext()
     }
     

@@ -521,7 +521,7 @@
                     </toolbarItems>
                     <navigationItem key="navigationItem" title="Wine Manager" id="Zdf-7t-Un8">
                         <barButtonItem key="backBarButtonItem" title="Back" id="AGm-hU-5wR"/>
-                        <barButtonItem key="leftBarButtonItem" systemItem="action" id="IAN-T9-1Pz">
+                        <barButtonItem key="leftBarButtonItem" enabled="NO" systemItem="action" id="IAN-T9-1Pz">
                             <connections>
                                 <action selector="onSyncCloud:" destination="7bK-jq-Zjz" id="fQG-dr-EAd"/>
                             </connections>
@@ -537,6 +537,7 @@
                         <outlet property="filtersButton" destination="ISS-TC-OvO" id="8hf-gZ-t9p"/>
                         <outlet property="searchBar" destination="iUl-Rt-5mv" id="bHc-IZ-kVF"/>
                         <outlet property="statsButton" destination="nUZ-oF-n6x" id="Wa2-kq-JRJ"/>
+                        <outlet property="syncCloudButton" destination="IAN-T9-1Pz" id="ppf-dV-g1G"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Rux-fX-hf1" sceneMemberID="firstResponder"/>
@@ -897,9 +898,6 @@
                         <outlet property="txtCountry" destination="awE-tM-G86" id="j7o-Og-mDf"/>
                         <outlet property="txtName" destination="8aU-2e-rWl" id="hDl-X7-Gjk"/>
                         <outlet property="txtPoints" destination="Sbs-kE-y5z" id="h8K-5p-hTs"/>
-                        <outlet property="txtPrice" destination="fJe-nE-i91" id="quJ-Pw-WbG"/>
-                        <outlet property="txtPurchaseDate" destination="e5d-0b-c56" id="s0a-cL-Jc0"/>
-                        <outlet property="txtQuantity" destination="ItZ-2f-Bza" id="ZSB-BL-g8I"/>
                         <outlet property="txtRegion" destination="H7b-kT-usP" id="dub-Cc-2dp"/>
                         <outlet property="txtReview" destination="dVF-Zj-Odi" id="U1l-Ut-Kef"/>
                         <outlet property="txtSource" destination="4FL-hp-AyQ" id="WLg-H2-uRa"/>
@@ -915,382 +913,79 @@
         <scene sceneID="qcA-zc-e33">
             <objects>
                 <tableViewController id="QOY-Fz-cKl" userLabel="PurchaseLot" customClass="AddLotController" customModule="WineManager" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="default" allowsSelection="NO" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="VPm-pd-NCd">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" allowsSelection="NO" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="VPm-pd-NCd">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <sections>
-                            <tableViewSection id="bjF-T9-bdV">
-                                <cells>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="88O-i8-1rS">
-                                        <rect key="frame" x="0.0" y="64" width="600" height="44"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="88O-i8-1rS" id="rDF-te-ZTO">
-                                            <rect key="frame" x="0.0" y="0.0" width="600" height="43"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <textField opaque="NO" clipsSubviews="YES" tag="18" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Purchase Date" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="e5d-0b-c56">
-                                                    <rect key="frame" x="8" y="6" width="140" height="30"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits"/>
-                                                </textField>
-                                                <textField opaque="NO" clipsSubviews="YES" tag="19" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Bottle Price" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="fJe-nE-i91">
-                                                    <rect key="frame" x="233" y="6" width="140" height="30"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits" keyboardType="decimalPad"/>
-                                                </textField>
-                                                <textField opaque="NO" clipsSubviews="YES" tag="20" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Quantity" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ItZ-2f-Bza">
-                                                    <rect key="frame" x="452" y="6" width="140" height="30"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits" keyboardType="numberPad"/>
-                                                </textField>
-                                            </subviews>
-                                            <constraints>
-                                                <constraint firstItem="fJe-nE-i91" firstAttribute="centerY" secondItem="rDF-te-ZTO" secondAttribute="centerY" id="1Ld-rE-xTA"/>
-                                                <constraint firstItem="e5d-0b-c56" firstAttribute="centerY" secondItem="rDF-te-ZTO" secondAttribute="centerY" id="A0J-Xq-ckh"/>
-                                                <constraint firstItem="ItZ-2f-Bza" firstAttribute="centerY" secondItem="rDF-te-ZTO" secondAttribute="centerY" id="Fka-aw-uHK"/>
-                                                <constraint firstItem="e5d-0b-c56" firstAttribute="width" secondItem="fJe-nE-i91" secondAttribute="width" id="TqO-ZZ-Uwe"/>
-                                                <constraint firstItem="ItZ-2f-Bza" firstAttribute="width" secondItem="fJe-nE-i91" secondAttribute="width" id="X14-XF-guf"/>
-                                                <constraint firstAttribute="trailingMargin" secondItem="ItZ-2f-Bza" secondAttribute="trailing" id="cb8-OY-tgs"/>
-                                                <constraint firstItem="e5d-0b-c56" firstAttribute="trailing" secondItem="fJe-nE-i91" secondAttribute="leading" constant="-10" id="hXm-MO-qD3"/>
-                                                <constraint firstItem="fJe-nE-i91" firstAttribute="trailing" secondItem="ItZ-2f-Bza" secondAttribute="leading" constant="-10" id="jYH-Nz-Q8a"/>
-                                                <constraint firstAttribute="leadingMargin" secondItem="e5d-0b-c56" secondAttribute="leading" id="xF6-jZ-Whr"/>
-                                            </constraints>
-                                        </tableViewCellContentView>
-                                    </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="CLK-Xp-d5P">
-                                        <rect key="frame" x="0.0" y="108" width="600" height="44"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="CLK-Xp-d5P" id="5pD-cO-d00">
-                                            <rect key="frame" x="0.0" y="0.0" width="600" height="43"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Location" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Nsj-ho-x76">
-                                                    <rect key="frame" x="8" y="7" width="436" height="30"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits"/>
-                                                </textField>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Bottles" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Uy2-ZQ-mx9">
-                                                    <rect key="frame" x="452" y="7" width="140" height="30"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="width" constant="140" id="OsL-y6-M2o"/>
-                                                    </constraints>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits"/>
-                                                </textField>
-                                            </subviews>
-                                            <constraints>
-                                                <constraint firstAttribute="trailingMargin" secondItem="Uy2-ZQ-mx9" secondAttribute="trailing" id="88P-hC-Fvq"/>
-                                                <constraint firstAttribute="leadingMargin" secondItem="Nsj-ho-x76" secondAttribute="leading" id="Drr-Gn-zj5"/>
-                                                <constraint firstItem="Uy2-ZQ-mx9" firstAttribute="centerY" secondItem="5pD-cO-d00" secondAttribute="centerY" id="UIX-zb-1vT"/>
-                                                <constraint firstItem="Nsj-ho-x76" firstAttribute="trailing" secondItem="Uy2-ZQ-mx9" secondAttribute="leading" constant="-10" id="igQ-l6-50F"/>
-                                                <constraint firstItem="Nsj-ho-x76" firstAttribute="centerY" secondItem="5pD-cO-d00" secondAttribute="centerY" id="isc-2J-pqX"/>
-                                            </constraints>
-                                        </tableViewCellContentView>
-                                    </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="aLm-R0-bOU">
-                                        <rect key="frame" x="0.0" y="152" width="600" height="44"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="aLm-R0-bOU" id="nsT-wT-fUr">
-                                            <rect key="frame" x="0.0" y="0.0" width="600" height="43"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Location" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Urz-y6-ZAN">
-                                                    <rect key="frame" x="8" y="7" width="436" height="30"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits"/>
-                                                </textField>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Bottles" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="igG-5I-1Nh">
-                                                    <rect key="frame" x="452" y="7" width="140" height="30"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="width" constant="140" id="vLa-H6-SKB"/>
-                                                    </constraints>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits"/>
-                                                </textField>
-                                            </subviews>
-                                            <constraints>
-                                                <constraint firstItem="Urz-y6-ZAN" firstAttribute="centerY" secondItem="nsT-wT-fUr" secondAttribute="centerY" id="YTp-ed-55M"/>
-                                                <constraint firstItem="Urz-y6-ZAN" firstAttribute="trailing" secondItem="igG-5I-1Nh" secondAttribute="leading" constant="-10" id="Z5j-7O-5jh"/>
-                                                <constraint firstAttribute="trailingMargin" secondItem="igG-5I-1Nh" secondAttribute="trailing" id="ayZ-Xa-iDq"/>
-                                                <constraint firstItem="igG-5I-1Nh" firstAttribute="centerY" secondItem="nsT-wT-fUr" secondAttribute="centerY" id="boa-6i-G6a"/>
-                                                <constraint firstAttribute="leadingMargin" secondItem="Urz-y6-ZAN" secondAttribute="leading" id="l6U-Bk-AP8"/>
-                                            </constraints>
-                                        </tableViewCellContentView>
-                                    </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="usO-Ye-0Vt">
-                                        <rect key="frame" x="0.0" y="196" width="600" height="44"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="usO-Ye-0Vt" id="20K-zc-Ouy">
-                                            <rect key="frame" x="0.0" y="0.0" width="600" height="43"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Location" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="xvQ-x6-SbO">
-                                                    <rect key="frame" x="8" y="7" width="436" height="30"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits"/>
-                                                </textField>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Bottles" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="NZD-T3-zpx">
-                                                    <rect key="frame" x="452" y="7" width="140" height="30"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="width" constant="140" id="rmR-vQ-qyM"/>
-                                                    </constraints>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits"/>
-                                                </textField>
-                                            </subviews>
-                                            <constraints>
-                                                <constraint firstAttribute="leadingMargin" secondItem="xvQ-x6-SbO" secondAttribute="leading" id="8wb-Ep-v3s"/>
-                                                <constraint firstItem="NZD-T3-zpx" firstAttribute="centerY" secondItem="20K-zc-Ouy" secondAttribute="centerY" id="RRL-GF-tS1"/>
-                                                <constraint firstItem="xvQ-x6-SbO" firstAttribute="centerY" secondItem="20K-zc-Ouy" secondAttribute="centerY" id="adf-SN-Mh6"/>
-                                                <constraint firstItem="xvQ-x6-SbO" firstAttribute="trailing" secondItem="NZD-T3-zpx" secondAttribute="leading" constant="-10" id="rTu-rJ-LFY"/>
-                                                <constraint firstAttribute="trailingMargin" secondItem="NZD-T3-zpx" secondAttribute="trailing" id="tEM-0Y-Tie"/>
-                                            </constraints>
-                                        </tableViewCellContentView>
-                                    </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="uu7-qz-hQ9">
-                                        <rect key="frame" x="0.0" y="240" width="600" height="44"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="uu7-qz-hQ9" id="c9O-oD-RRw">
-                                            <rect key="frame" x="0.0" y="0.0" width="600" height="43"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Location" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="jeE-ou-ZTc">
-                                                    <rect key="frame" x="8" y="7" width="436" height="30"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits"/>
-                                                </textField>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Bottles" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="3fp-Pt-KhP">
-                                                    <rect key="frame" x="452" y="7" width="140" height="30"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="width" constant="140" id="KGU-KC-5D7"/>
-                                                    </constraints>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits"/>
-                                                </textField>
-                                            </subviews>
-                                            <constraints>
-                                                <constraint firstItem="jeE-ou-ZTc" firstAttribute="trailing" secondItem="3fp-Pt-KhP" secondAttribute="leading" constant="-10" id="Mby-X5-7gC"/>
-                                                <constraint firstAttribute="trailingMargin" secondItem="3fp-Pt-KhP" secondAttribute="trailing" id="VhZ-FH-A7g"/>
-                                                <constraint firstAttribute="leadingMargin" secondItem="jeE-ou-ZTc" secondAttribute="leading" id="Yvh-ue-NXk"/>
-                                                <constraint firstItem="3fp-Pt-KhP" firstAttribute="centerY" secondItem="c9O-oD-RRw" secondAttribute="centerY" id="c0L-7x-zdM"/>
-                                                <constraint firstItem="jeE-ou-ZTc" firstAttribute="centerY" secondItem="c9O-oD-RRw" secondAttribute="centerY" id="ibx-IQ-lGf"/>
-                                            </constraints>
-                                        </tableViewCellContentView>
-                                    </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="kG9-V9-mpd">
-                                        <rect key="frame" x="0.0" y="284" width="600" height="44"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="kG9-V9-mpd" id="ETw-q5-hxs">
-                                            <rect key="frame" x="0.0" y="0.0" width="600" height="43"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Location" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ar9-3g-GyV">
-                                                    <rect key="frame" x="8" y="7" width="436" height="30"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits"/>
-                                                </textField>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Bottles" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="uhU-TP-Alx">
-                                                    <rect key="frame" x="452" y="7" width="140" height="30"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="width" constant="140" id="1TG-6x-qOE"/>
-                                                    </constraints>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits"/>
-                                                </textField>
-                                            </subviews>
-                                            <constraints>
-                                                <constraint firstAttribute="leadingMargin" secondItem="ar9-3g-GyV" secondAttribute="leading" id="0n8-12-c6v"/>
-                                                <constraint firstItem="ar9-3g-GyV" firstAttribute="trailing" secondItem="uhU-TP-Alx" secondAttribute="leading" constant="-10" id="P8u-Dp-z8k"/>
-                                                <constraint firstItem="uhU-TP-Alx" firstAttribute="centerY" secondItem="ETw-q5-hxs" secondAttribute="centerY" id="mJ8-WY-2lb"/>
-                                                <constraint firstItem="ar9-3g-GyV" firstAttribute="centerY" secondItem="ETw-q5-hxs" secondAttribute="centerY" id="p4D-8z-H4i"/>
-                                                <constraint firstAttribute="trailingMargin" secondItem="uhU-TP-Alx" secondAttribute="trailing" id="yoW-3B-nmg"/>
-                                            </constraints>
-                                        </tableViewCellContentView>
-                                    </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="Nch-XM-qyQ">
-                                        <rect key="frame" x="0.0" y="328" width="600" height="44"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Nch-XM-qyQ" id="jzL-Zv-voq">
-                                            <rect key="frame" x="0.0" y="0.0" width="600" height="43"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Location" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="2Rw-TQ-018">
-                                                    <rect key="frame" x="8" y="7" width="436" height="30"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits"/>
-                                                </textField>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Bottles" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="CZz-gS-aKD">
-                                                    <rect key="frame" x="452" y="7" width="140" height="30"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="width" constant="140" id="eWC-6Z-8Yh"/>
-                                                    </constraints>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits"/>
-                                                </textField>
-                                            </subviews>
-                                            <constraints>
-                                                <constraint firstAttribute="leadingMargin" secondItem="2Rw-TQ-018" secondAttribute="leading" id="EvG-za-FkN"/>
-                                                <constraint firstItem="CZz-gS-aKD" firstAttribute="centerY" secondItem="jzL-Zv-voq" secondAttribute="centerY" id="Kyr-RJ-iUX"/>
-                                                <constraint firstItem="2Rw-TQ-018" firstAttribute="trailing" secondItem="CZz-gS-aKD" secondAttribute="leading" constant="-10" id="Vu0-5a-zNI"/>
-                                                <constraint firstAttribute="trailingMargin" secondItem="CZz-gS-aKD" secondAttribute="trailing" id="W3K-7b-jXx"/>
-                                                <constraint firstItem="2Rw-TQ-018" firstAttribute="centerY" secondItem="jzL-Zv-voq" secondAttribute="centerY" id="wVR-Wr-cvo"/>
-                                            </constraints>
-                                        </tableViewCellContentView>
-                                    </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="3rK-eo-Pn0">
-                                        <rect key="frame" x="0.0" y="372" width="600" height="44"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="3rK-eo-Pn0" id="iam-3k-qTs">
-                                            <rect key="frame" x="0.0" y="0.0" width="600" height="43"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Location" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="SF1-d1-Y5T">
-                                                    <rect key="frame" x="8" y="7" width="436" height="30"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits"/>
-                                                </textField>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Bottles" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="SYF-zx-ode">
-                                                    <rect key="frame" x="452" y="7" width="140" height="30"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="width" constant="140" id="ZxB-CL-UWl"/>
-                                                    </constraints>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits"/>
-                                                </textField>
-                                            </subviews>
-                                            <constraints>
-                                                <constraint firstItem="SF1-d1-Y5T" firstAttribute="centerY" secondItem="iam-3k-qTs" secondAttribute="centerY" id="88P-Ic-Qkt"/>
-                                                <constraint firstAttribute="leadingMargin" secondItem="SF1-d1-Y5T" secondAttribute="leading" id="Ad9-pD-vRO"/>
-                                                <constraint firstAttribute="trailingMargin" secondItem="SYF-zx-ode" secondAttribute="trailing" id="Jfo-DS-C5I"/>
-                                                <constraint firstItem="SF1-d1-Y5T" firstAttribute="trailing" secondItem="SYF-zx-ode" secondAttribute="leading" constant="-10" id="afW-NL-8Xz"/>
-                                                <constraint firstItem="SYF-zx-ode" firstAttribute="centerY" secondItem="iam-3k-qTs" secondAttribute="centerY" id="bDC-Y7-Pw2"/>
-                                            </constraints>
-                                        </tableViewCellContentView>
-                                    </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="gYf-qx-Dz4">
-                                        <rect key="frame" x="0.0" y="416" width="600" height="44"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="gYf-qx-Dz4" id="gYJ-7k-yw1">
-                                            <rect key="frame" x="0.0" y="0.0" width="600" height="43"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Location" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="TQ4-Wc-0I2">
-                                                    <rect key="frame" x="8" y="7" width="436" height="30"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits"/>
-                                                </textField>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Bottles" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="GyO-BE-ZbH">
-                                                    <rect key="frame" x="452" y="7" width="140" height="30"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="width" constant="140" id="oKg-Do-bKm"/>
-                                                    </constraints>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits"/>
-                                                </textField>
-                                            </subviews>
-                                            <constraints>
-                                                <constraint firstItem="TQ4-Wc-0I2" firstAttribute="centerY" secondItem="gYJ-7k-yw1" secondAttribute="centerY" id="4Kb-ru-vJj"/>
-                                                <constraint firstItem="GyO-BE-ZbH" firstAttribute="centerY" secondItem="gYJ-7k-yw1" secondAttribute="centerY" id="B0l-MS-9kT"/>
-                                                <constraint firstAttribute="leadingMargin" secondItem="TQ4-Wc-0I2" secondAttribute="leading" id="aq2-Xb-J7O"/>
-                                                <constraint firstAttribute="trailingMargin" secondItem="GyO-BE-ZbH" secondAttribute="trailing" id="j9h-SB-cCb"/>
-                                                <constraint firstItem="TQ4-Wc-0I2" firstAttribute="trailing" secondItem="GyO-BE-ZbH" secondAttribute="leading" constant="-10" id="zWS-4Y-ryB"/>
-                                            </constraints>
-                                        </tableViewCellContentView>
-                                    </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="rdd-db-IRe">
-                                        <rect key="frame" x="0.0" y="460" width="600" height="44"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="rdd-db-IRe" id="Xjh-M3-f9W">
-                                            <rect key="frame" x="0.0" y="0.0" width="600" height="43"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Location" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="emM-w2-KO9">
-                                                    <rect key="frame" x="8" y="7" width="436" height="30"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits"/>
-                                                </textField>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Bottles" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="7nz-4r-jyk">
-                                                    <rect key="frame" x="452" y="7" width="140" height="30"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="width" constant="140" id="dvm-eg-PHQ"/>
-                                                    </constraints>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits"/>
-                                                </textField>
-                                            </subviews>
-                                            <constraints>
-                                                <constraint firstItem="emM-w2-KO9" firstAttribute="trailing" secondItem="7nz-4r-jyk" secondAttribute="leading" constant="-10" id="27o-kK-g6b"/>
-                                                <constraint firstAttribute="leadingMargin" secondItem="emM-w2-KO9" secondAttribute="leading" id="G5z-Y1-4mW"/>
-                                                <constraint firstItem="7nz-4r-jyk" firstAttribute="centerY" secondItem="Xjh-M3-f9W" secondAttribute="centerY" id="XGY-PS-K7m"/>
-                                                <constraint firstAttribute="trailingMargin" secondItem="7nz-4r-jyk" secondAttribute="trailing" id="gQq-0W-bcY"/>
-                                                <constraint firstItem="emM-w2-KO9" firstAttribute="centerY" secondItem="Xjh-M3-f9W" secondAttribute="centerY" id="v55-3c-KtH"/>
-                                            </constraints>
-                                        </tableViewCellContentView>
-                                    </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="6ub-z0-nYg">
-                                        <rect key="frame" x="0.0" y="504" width="600" height="44"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="6ub-z0-nYg" id="F0E-a6-N51">
-                                            <rect key="frame" x="0.0" y="0.0" width="600" height="43"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Location" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Gv3-8c-1k6">
-                                                    <rect key="frame" x="8" y="7" width="436" height="30"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits"/>
-                                                </textField>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Bottles" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="zUs-EO-hrG">
-                                                    <rect key="frame" x="452" y="7" width="140" height="30"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="width" constant="140" id="Hun-ci-Y89"/>
-                                                    </constraints>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits"/>
-                                                </textField>
-                                            </subviews>
-                                            <constraints>
-                                                <constraint firstAttribute="trailingMargin" secondItem="zUs-EO-hrG" secondAttribute="trailing" id="1Cw-Vq-exE"/>
-                                                <constraint firstItem="Gv3-8c-1k6" firstAttribute="trailing" secondItem="zUs-EO-hrG" secondAttribute="leading" constant="-10" id="2yF-0y-rvO"/>
-                                                <constraint firstItem="Gv3-8c-1k6" firstAttribute="centerY" secondItem="F0E-a6-N51" secondAttribute="centerY" id="JfN-bf-diO"/>
-                                                <constraint firstAttribute="leadingMargin" secondItem="Gv3-8c-1k6" secondAttribute="leading" id="MjX-Fs-eXb"/>
-                                                <constraint firstItem="zUs-EO-hrG" firstAttribute="centerY" secondItem="F0E-a6-N51" secondAttribute="centerY" id="bnt-5h-Id6"/>
-                                            </constraints>
-                                        </tableViewCellContentView>
-                                    </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="W5K-OW-3k7">
-                                        <rect key="frame" x="0.0" y="548" width="600" height="44"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="W5K-OW-3k7" id="ErQ-Y0-IZ1">
-                                            <rect key="frame" x="0.0" y="0.0" width="600" height="43"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Location" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="4ok-Ot-5HS">
-                                                    <rect key="frame" x="8" y="7" width="436" height="30"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits"/>
-                                                </textField>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Bottles" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="GFO-pz-0r8">
-                                                    <rect key="frame" x="452" y="7" width="140" height="30"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="width" constant="140" id="amZ-Dd-NrB"/>
-                                                    </constraints>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits"/>
-                                                </textField>
-                                            </subviews>
-                                            <constraints>
-                                                <constraint firstItem="4ok-Ot-5HS" firstAttribute="centerY" secondItem="ErQ-Y0-IZ1" secondAttribute="centerY" id="0Wg-Tb-FWP"/>
-                                                <constraint firstItem="4ok-Ot-5HS" firstAttribute="trailing" secondItem="GFO-pz-0r8" secondAttribute="leading" constant="-10" id="3C2-0L-JFP"/>
-                                                <constraint firstAttribute="leadingMargin" secondItem="4ok-Ot-5HS" secondAttribute="leading" id="ABt-SH-ACv"/>
-                                                <constraint firstItem="GFO-pz-0r8" firstAttribute="centerY" secondItem="ErQ-Y0-IZ1" secondAttribute="centerY" id="HUl-wL-bJL"/>
-                                                <constraint firstAttribute="trailingMargin" secondItem="GFO-pz-0r8" secondAttribute="trailing" id="LZL-4w-j7P"/>
-                                            </constraints>
-                                        </tableViewCellContentView>
-                                    </tableViewCell>
-                                </cells>
-                            </tableViewSection>
-                        </sections>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cellTopRow" id="88O-i8-1rS" customClass="CustomLotTopCell" customModule="WineManager" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="92" width="600" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="88O-i8-1rS" id="rDF-te-ZTO">
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="43"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <textField opaque="NO" clipsSubviews="YES" tag="18" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Purchase Date" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="e5d-0b-c56">
+                                            <rect key="frame" x="8" y="6" width="140" height="30"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                            <textInputTraits key="textInputTraits"/>
+                                        </textField>
+                                        <textField opaque="NO" clipsSubviews="YES" tag="19" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Bottle Price" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="fJe-nE-i91">
+                                            <rect key="frame" x="233" y="6" width="140" height="30"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                            <textInputTraits key="textInputTraits" keyboardType="decimalPad"/>
+                                        </textField>
+                                        <textField opaque="NO" clipsSubviews="YES" tag="20" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Quantity" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ItZ-2f-Bza">
+                                            <rect key="frame" x="452" y="6" width="140" height="30"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                            <textInputTraits key="textInputTraits" keyboardType="numberPad"/>
+                                        </textField>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="fJe-nE-i91" firstAttribute="centerY" secondItem="rDF-te-ZTO" secondAttribute="centerY" id="1Ld-rE-xTA"/>
+                                        <constraint firstItem="e5d-0b-c56" firstAttribute="centerY" secondItem="rDF-te-ZTO" secondAttribute="centerY" id="A0J-Xq-ckh"/>
+                                        <constraint firstItem="ItZ-2f-Bza" firstAttribute="centerY" secondItem="rDF-te-ZTO" secondAttribute="centerY" id="Fka-aw-uHK"/>
+                                        <constraint firstItem="e5d-0b-c56" firstAttribute="width" secondItem="fJe-nE-i91" secondAttribute="width" id="TqO-ZZ-Uwe"/>
+                                        <constraint firstItem="ItZ-2f-Bza" firstAttribute="width" secondItem="fJe-nE-i91" secondAttribute="width" id="X14-XF-guf"/>
+                                        <constraint firstAttribute="trailingMargin" secondItem="ItZ-2f-Bza" secondAttribute="trailing" id="cb8-OY-tgs"/>
+                                        <constraint firstItem="e5d-0b-c56" firstAttribute="trailing" secondItem="fJe-nE-i91" secondAttribute="leading" constant="-10" id="hXm-MO-qD3"/>
+                                        <constraint firstItem="fJe-nE-i91" firstAttribute="trailing" secondItem="ItZ-2f-Bza" secondAttribute="leading" constant="-10" id="jYH-Nz-Q8a"/>
+                                        <constraint firstAttribute="leadingMargin" secondItem="e5d-0b-c56" secondAttribute="leading" id="xF6-jZ-Whr"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="txtPrice" destination="fJe-nE-i91" id="Xce-tb-g7G"/>
+                                    <outlet property="txtPurchaseDate" destination="e5d-0b-c56" id="0gn-qT-XHm"/>
+                                    <outlet property="txtQuantity" destination="ItZ-2f-Bza" id="rul-6N-Bkc"/>
+                                </connections>
+                            </tableViewCell>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cellLotRows" id="hUm-i3-Uun" customClass="CustomLotCell" customModule="WineManager" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="136" width="600" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="hUm-i3-Uun" id="Cg3-mt-lje">
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="43"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <textField opaque="NO" clipsSubviews="YES" tag="20" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Location" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Yuz-zt-MKp">
+                                            <rect key="frame" x="8" y="6" width="584" height="30"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                            <textInputTraits key="textInputTraits" keyboardType="numberPad"/>
+                                        </textField>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="Yuz-zt-MKp" firstAttribute="centerY" secondItem="Cg3-mt-lje" secondAttribute="centerY" id="JQ9-Ps-EVU"/>
+                                        <constraint firstAttribute="trailingMargin" secondItem="Yuz-zt-MKp" secondAttribute="trailing" id="V7A-UJ-e5l"/>
+                                        <constraint firstAttribute="leadingMargin" secondItem="Yuz-zt-MKp" secondAttribute="leading" id="ubR-Fx-HjO"/>
+                                        <constraint firstItem="Yuz-zt-MKp" firstAttribute="top" secondItem="Cg3-mt-lje" secondAttribute="topMargin" constant="-2" id="x88-lk-Qey"/>
+                                        <constraint firstAttribute="bottomMargin" secondItem="Yuz-zt-MKp" secondAttribute="bottom" constant="-1" id="yla-yR-8KL"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="txtBottleLocation" destination="Yuz-zt-MKp" id="qmj-vJ-xbl"/>
+                                </connections>
+                            </tableViewCell>
+                        </prototypes>
+                        <sections/>
                         <connections>
                             <outlet property="dataSource" destination="QOY-Fz-cKl" id="ZRP-yd-IZg"/>
                             <outlet property="delegate" destination="QOY-Fz-cKl" id="QCs-6G-fmt"/>
@@ -1311,17 +1006,6 @@
                             </connections>
                         </barButtonItem>
                     </navigationItem>
-                    <connections>
-                        <outlet property="txtPrice" destination="fJe-nE-i91" id="I3D-1m-dt0"/>
-                        <outlet property="txtPurchaseDate" destination="e5d-0b-c56" id="Vdy-6c-o3d"/>
-                        <outlet property="txtQuantity" destination="ItZ-2f-Bza" id="pSr-mw-SL0"/>
-                        <outletCollection property="txtLocations" destination="Nsj-ho-x76" collectionClass="NSMutableArray" id="xn2-52-DM5"/>
-                        <outletCollection property="txtLocations" destination="Urz-y6-ZAN" collectionClass="NSMutableArray" id="Vkc-h2-LHp"/>
-                        <outletCollection property="txtLocations" destination="xvQ-x6-SbO" collectionClass="NSMutableArray" id="CN5-l8-l77"/>
-                        <outletCollection property="txtBottles" destination="Uy2-ZQ-mx9" collectionClass="NSMutableArray" id="2gT-0j-TaF"/>
-                        <outletCollection property="txtBottles" destination="igG-5I-1Nh" collectionClass="NSMutableArray" id="QPv-kK-3Z8"/>
-                        <outletCollection property="txtBottles" destination="NZD-T3-zpx" collectionClass="NSMutableArray" id="kE9-HT-fvo"/>
-                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="U3X-Fs-w1h" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

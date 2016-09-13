@@ -12,6 +12,8 @@
 		7507B4091CFD01390072A92D /* WineBottle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7507B4081CFD01390072A92D /* WineBottle.swift */; };
 		751AB0B81D04AD3D00A16375 /* MarkDrunkViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 751AB0B71D04AD3D00A16375 /* MarkDrunkViewController.swift */; };
 		751AB0BA1D05359100A16375 /* StatsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 751AB0B91D05359100A16375 /* StatsViewController.swift */; };
+		7541262F1D60EB540004575C /* DirtyRecord+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7541262D1D60EB540004575C /* DirtyRecord+CoreDataProperties.swift */; };
+		754126301D60EB540004575C /* DirtyRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7541262E1D60EB540004575C /* DirtyRecord.swift */; };
 		756C7AEE1D172BB4004B8DF7 /* NewWineList.xml in Resources */ = {isa = PBXBuildFile; fileRef = 756C7AED1D172BB4004B8DF7 /* NewWineList.xml */; };
 		756C7AF01D1A2CA9004B8DF7 /* FiltersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 756C7AEF1D1A2CA9004B8DF7 /* FiltersViewController.swift */; };
 		756C7AF61D225024004B8DF7 /* AddEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 756C7AF51D225024004B8DF7 /* AddEditViewController.swift */; };
@@ -21,6 +23,9 @@
 		756C7B101D2F77BC004B8DF7 /* IconLaunch.png in Resources */ = {isa = PBXBuildFile; fileRef = 756C7B0F1D2F77BC004B8DF7 /* IconLaunch.png */; };
 		756C7B181D3999D5004B8DF7 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 756C7B171D3999D5004B8DF7 /* CloudKit.framework */; };
 		756C7B1A1D399F1B004B8DF7 /* XMLHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 756C7B191D399F1B004B8DF7 /* XMLHelper.swift */; };
+		758DAE701D54206C00CD26E7 /* CloudHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 758DAE6F1D54206C00CD26E7 /* CloudHelper.swift */; };
+		758DAE751D5A796F00CD26E7 /* CustomLotCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 758DAE741D5A796F00CD26E7 /* CustomLotCell.swift */; };
+		758DAE7B1D5ACDBC00CD26E7 /* CustomLotTopCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 758DAE7A1D5ACDBC00CD26E7 /* CustomLotTopCell.swift */; };
 		75B0FB901D455C6000231741 /* PieChartsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B0FB8F1D455C6000231741 /* PieChartsViewController.swift */; };
 		75B0FB9C1D497AC000231741 /* BalloonMarker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B0FB9B1D497AC000231741 /* BalloonMarker.swift */; };
 		75D8C5C41D415DBB00CB571E /* Charts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 75D8C5BD1D415D5D00CB571E /* Charts.framework */; };
@@ -100,6 +105,8 @@
 		7507B4081CFD01390072A92D /* WineBottle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WineBottle.swift; sourceTree = "<group>"; };
 		751AB0B71D04AD3D00A16375 /* MarkDrunkViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MarkDrunkViewController.swift; sourceTree = "<group>"; };
 		751AB0B91D05359100A16375 /* StatsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatsViewController.swift; sourceTree = "<group>"; };
+		7541262D1D60EB540004575C /* DirtyRecord+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "DirtyRecord+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		7541262E1D60EB540004575C /* DirtyRecord.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DirtyRecord.swift; sourceTree = "<group>"; };
 		756C7AED1D172BB4004B8DF7 /* NewWineList.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = NewWineList.xml; sourceTree = SOURCE_ROOT; };
 		756C7AEF1D1A2CA9004B8DF7 /* FiltersViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FiltersViewController.swift; sourceTree = "<group>"; };
 		756C7AF51D225024004B8DF7 /* AddEditViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddEditViewController.swift; sourceTree = "<group>"; };
@@ -110,6 +117,9 @@
 		756C7B161D3999AE004B8DF7 /* WineManager.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = WineManager.entitlements; sourceTree = "<group>"; };
 		756C7B171D3999D5004B8DF7 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		756C7B191D399F1B004B8DF7 /* XMLHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XMLHelper.swift; sourceTree = "<group>"; };
+		758DAE6F1D54206C00CD26E7 /* CloudHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CloudHelper.swift; sourceTree = "<group>"; };
+		758DAE741D5A796F00CD26E7 /* CustomLotCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CustomLotCell.swift; path = ../CustomLotCell.swift; sourceTree = "<group>"; };
+		758DAE7A1D5ACDBC00CD26E7 /* CustomLotTopCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomLotTopCell.swift; sourceTree = "<group>"; };
 		75B0FB8F1D455C6000231741 /* PieChartsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PieChartsViewController.swift; sourceTree = "<group>"; };
 		75B0FB9B1D497AC000231741 /* BalloonMarker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BalloonMarker.swift; path = ../BalloonMarker.swift; sourceTree = "<group>"; };
 		75D8C5B51D415D5D00CB571E /* Charts.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Charts.xcodeproj; path = Charts/Charts.xcodeproj; sourceTree = "<group>"; };
@@ -159,6 +169,8 @@
 		75F9DBB41CFC191400272A75 = {
 			isa = PBXGroup;
 			children = (
+				7541262D1D60EB540004575C /* DirtyRecord+CoreDataProperties.swift */,
+				7541262E1D60EB540004575C /* DirtyRecord.swift */,
 				75D8C5B51D415D5D00CB571E /* Charts.xcodeproj */,
 				75DDA8B81D3D9D4A00326452 /* Bottle+CoreDataProperties.swift */,
 				75DDA8B91D3D9D4A00326452 /* Bottle.swift */,
@@ -190,6 +202,8 @@
 				756C7AFD1D28D236004B8DF7 /* ToastView.swift */,
 				75F9DBC51CFC191500272A75 /* MasterViewController.swift */,
 				756C7B0B1D2EC2A6004B8DF7 /* CustomPrototypeCell.swift */,
+				758DAE7A1D5ACDBC00CD26E7 /* CustomLotTopCell.swift */,
+				758DAE741D5A796F00CD26E7 /* CustomLotCell.swift */,
 				756C7AEF1D1A2CA9004B8DF7 /* FiltersViewController.swift */,
 				751AB0B91D05359100A16375 /* StatsViewController.swift */,
 				75B0FB9B1D497AC000231741 /* BalloonMarker.swift */,
@@ -202,6 +216,7 @@
 				756C7AF51D225024004B8DF7 /* AddEditViewController.swift */,
 				756C7AF91D24AC6E004B8DF7 /* AddLotViewController.swift */,
 				756C7B191D399F1B004B8DF7 /* XMLHelper.swift */,
+				758DAE6F1D54206C00CD26E7 /* CloudHelper.swift */,
 				75D8C5CD1D42A13000CB571E /* StatsHelper.swift */,
 				75F9DBC91CFC191500272A75 /* Main.storyboard */,
 				75F9DBCE1CFC191500272A75 /* LaunchScreen.storyboard */,
@@ -332,6 +347,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				75DDA8B71D3D9A7200326452 /* Wine.swift in Sources */,
+				758DAE751D5A796F00CD26E7 /* CustomLotCell.swift in Sources */,
+				758DAE7B1D5ACDBC00CD26E7 /* CustomLotTopCell.swift in Sources */,
+				754126301D60EB540004575C /* DirtyRecord.swift in Sources */,
 				7507B4031CFCC0DD0072A92D /* PurchaseLot.swift in Sources */,
 				75DDA8BB1D3D9D4A00326452 /* Bottle.swift in Sources */,
 				75D8C5CE1D42A13000CB571E /* StatsHelper.swift in Sources */,
@@ -339,7 +357,9 @@
 				75F9DBC41CFC191500272A75 /* WineManager.xcdatamodeld in Sources */,
 				75F9DBC11CFC191500272A75 /* AppDelegate.swift in Sources */,
 				756C7AFA1D24AC6E004B8DF7 /* AddLotViewController.swift in Sources */,
+				7541262F1D60EB540004575C /* DirtyRecord+CoreDataProperties.swift in Sources */,
 				756C7AF61D225024004B8DF7 /* AddEditViewController.swift in Sources */,
+				758DAE701D54206C00CD26E7 /* CloudHelper.swift in Sources */,
 				75D8C5CA1D41625500CB571E /* BarChartsViewController.swift in Sources */,
 				75D8C5D01D42DECD00CB571E /* LineChartsViewController.swift in Sources */,
 				751AB0B81D04AD3D00A16375 /* MarkDrunkViewController.swift in Sources */,
