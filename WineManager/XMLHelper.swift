@@ -8,7 +8,6 @@
 
 import Foundation
 import CoreData
-import CloudKit
 
 class XMLHelper: NSObject, NSXMLParserDelegate {
     var managedObjectContext: NSManagedObjectContext? = nil
@@ -20,11 +19,6 @@ class XMLHelper: NSObject, NSXMLParserDelegate {
     private var parsedLot = ParsedLot(purchaseDate: "", price: "", quantity: "", locations: [ParsedLoc]())
     private var parsedLoc = ParsedLoc(status: "", location: "", drunkDate: "", rating: "", notes: "")
 
-    //private var wineRecordsToSave = [CKRecord]()
-    //private var lotRecordsToSave = [CKRecord]()
-    //private var bottleRecordsToSave = [CKRecord]()
-    
-    private var cloudHelper = CloudHelper.sharedInstance
     
     init(moc: NSManagedObjectContext) {
         super.init()
@@ -48,11 +42,6 @@ class XMLHelper: NSObject, NSXMLParserDelegate {
     // MARK: - Parser
     @objc internal func parserDidEndDocument(parser: NSXMLParser) {
         saveContext()
-//        cloudHelper.saveRecords(wineRecordsToSave)
-//        sleep(5)
-//        cloudHelper.saveRecords(lotRecordsToSave)
-//        sleep(5)
-//        cloudHelper.saveRecords(bottleRecordsToSave)
     }
     
     @objc internal func parser(parser: NSXMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String])
@@ -217,16 +206,10 @@ class XMLHelper: NSObject, NSXMLParserDelegate {
                 if let myNumber = NSNumberFormatter().numberFromString(loc.rating) {
                     newLoc.rating = NSDecimalNumber(decimal: myNumber.decimalValue)
                 }
-                cloudHelper.addRecordToUpload(cloudHelper.getRecordForBottle(newLoc, shouldPopulate: true))
-//                bottleRecordsToSave.append(cloudHelper.getRecordForBottle(newLoc, shouldPopulate: true))
             }
-            cloudHelper.addRecordToUpload(cloudHelper.getRecordForLot(newLot, shouldPopulate: true))
-            //lotRecordsToSave.append(cloudHelper.getRecordForLot(newLot, shouldPopulate: true))
             newBottle.availableBottles = (newBottle.availableBottles?.integerValue)! + (newLot.availableBottles?.integerValue)!
             newBottle.drunkBottles = (newBottle.drunkBottles?.integerValue)! + (newLot.drunkBottles?.integerValue)!
         }
-        cloudHelper.addRecordToUpload(cloudHelper.getRecordForWine(newBottle, shouldPopulate: true))
-        //wineRecordsToSave.append(cloudHelper.getRecordForWine(newBottle, shouldPopulate: true))
     }
     
     func saveContext() {

@@ -8,7 +8,6 @@
 
 import UIKit
 import CoreData
-import CloudKit
 
 extension String {
     func replace(string:String, replacement:String) -> String {
@@ -30,7 +29,7 @@ extension Array {
     }
 }
 
-class MasterViewController: UITableViewController, NSFetchedResultsControllerDelegate, NSXMLParserDelegate, UISearchBarDelegate, SavingFilterViewControllerDelegate, DetailViewControllerDelegate, UploadPendingDelegate {
+class MasterViewController: UITableViewController, NSFetchedResultsControllerDelegate, NSXMLParserDelegate, UISearchBarDelegate, SavingFilterViewControllerDelegate, DetailViewControllerDelegate {
 
     @IBOutlet weak var syncCloudButton: UIBarButtonItem!
     @IBOutlet weak var searchBar: UISearchBar!
@@ -53,12 +52,10 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
     var searchApplied = false
     var fetchRequest = NSFetchRequest()
     
-    let container = CKContainer.defaultContainer()
-    var privateDatabase : CKDatabase? = nil
     
     let dateFormatter = NSDateFormatter()
     var xmlHelper: XMLHelper? = nil
-    var cloudHelper = CloudHelper.sharedInstance
+    
     
     @IBAction func onClearFilters(sender: UIBarButtonItem) {
         filtersApplied = false
@@ -69,22 +66,6 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         fetchRequest.sortDescriptors = [sorter]
         performFetchAndRefresh()
     }
-    
-    @IBAction func onSyncCloud(sender: AnyObject) {
-        showAlert("Sync with iCloud", message: "Would you like to sync with iCloud now?")
-    }
-    
-    func showAlert(title: String, message: String) {
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .Alert)
-        
-        alert.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil));
-        alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: {(action:UIAlertAction) in
-            print("Record to upload: " + String(self.cloudHelper.numberOfRecordsToUpload()))
-            self.cloudHelper.uploadRecords()
-        }))
-        presentViewController(alert, animated: true, completion: nil);
-    }
-
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -100,10 +81,8 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         sorter = defaultSorter
         searchFilter = defaultFilter
         viewFilter = availableFilter
-        cloudHelper.delegate = self
         
         dateFormatter.dateFormat = "yyyy-MM-dd"
-        privateDatabase = container.privateCloudDatabase
         
         let bottles = self.fetchedResultsController.sections![0].numberOfObjects
         self.title = "Wine Manager (" + String(bottles) + ")"
@@ -115,7 +94,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         }
         
         xmlHelper = XMLHelper(moc: self.managedObjectContext!)
-        parseXML()
+        //parseXML()
     }
     
     override func viewWillAppear(animated: Bool) {

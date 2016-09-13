@@ -8,7 +8,6 @@
 
 import UIKit
 import CoreData
-import CloudKit
 
 extension String
 {
@@ -30,7 +29,6 @@ class AddEditViewController: UITableViewController, UIPickerViewDelegate, UIPick
     var delegate : EditLocationsViewControllerDelegate?
     let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
     let keyWindow = UIApplication.sharedApplication().keyWindow
-    let cloudHelper = CloudHelper.sharedInstance
     
     @IBOutlet weak var txtVintage: UITextField!
     @IBOutlet weak var txtName: UITextField!
@@ -183,7 +181,6 @@ class AddEditViewController: UITableViewController, UIPickerViewDelegate, UIPick
                             let bottle = matchingBottle?.first as! Bottle
                             bottle.modifiedDate = NSDate()
                             bottle.location = location.location
-                            cloudHelper.addRecordToUpload(cloudHelper.getRecordForBottle(bottle, shouldPopulate: true))
                         }
                     }
                 }
@@ -210,13 +207,9 @@ class AddEditViewController: UITableViewController, UIPickerViewDelegate, UIPick
                     newLoc.available = 1
                     newLot.availableBottles = (newLot.availableBottles?.integerValue)! + 1
                     newLoc.location = location.location
-                    cloudHelper.addRecordToUpload(cloudHelper.getRecordForBottle(newLoc, shouldPopulate: true))
                 }
-                cloudHelper.addRecordToUpload(cloudHelper.getRecordForLot(newLot, shouldPopulate: true))
-                
                 oldBottle.modifiedDate = NSDate()
                 oldBottle.availableBottles = (oldBottle.availableBottles?.integerValue)! + (newLot.availableBottles?.integerValue)!
-                cloudHelper.addRecordToUpload(cloudHelper.getRecordForWine(oldBottle, shouldPopulate: true))
             }
         }
         saveContext()
@@ -325,13 +318,10 @@ class AddEditViewController: UITableViewController, UIPickerViewDelegate, UIPick
                 newLoc.available = 1
                 newLot.availableBottles = (newLot.availableBottles?.integerValue)! + 1
                 newLoc.location = location.location
-                cloudHelper.addRecordToUpload(cloudHelper.getRecordForBottle(newLoc, shouldPopulate: true))
             }
-            cloudHelper.addRecordToUpload(cloudHelper.getRecordForLot(newLot, shouldPopulate: true))
             newBottle.availableBottles = (newBottle.availableBottles?.integerValue)! + (newLot.availableBottles?.integerValue)!
             newBottle.drunkBottles = (newBottle.drunkBottles?.integerValue)! + (newLot.drunkBottles?.integerValue)!
         }
-        cloudHelper.addRecordToUpload(cloudHelper.getRecordForWine(newBottle, shouldPopulate: true))
         saveContext()
     }
     

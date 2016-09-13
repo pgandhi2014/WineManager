@@ -18,7 +18,6 @@ protocol DetailViewControllerDelegate
 class DetailViewController: UIViewController, SavingDrunkViewControllerDelegate, EditLocationsViewControllerDelegate  {
 
     var delegate : DetailViewControllerDelegate?
-    let cloudHelper = CloudHelper.sharedInstance
     
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var nameLabel: UILabel!
@@ -210,10 +209,6 @@ class DetailViewController: UIViewController, SavingDrunkViewControllerDelegate,
                     wine.drunkBottles! = (wine.drunkBottles?.integerValue)! + 1
                     wine.lastDrunkDate! = date
                     flagDone = true
-                    cloudHelper.addRecordToUpload(cloudHelper.getRecordForBottle(bottle, shouldPopulate: true))
-                    cloudHelper.addRecordToUpload(cloudHelper.getRecordForLot(lot, shouldPopulate: true))
-                    cloudHelper.addRecordToUpload(cloudHelper.getRecordForWine(wine, shouldPopulate: true))
-                    
                     break
                 }
             }
