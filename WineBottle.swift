@@ -9,10 +9,23 @@
 import Foundation
 
 struct SimpleLot {
+    var id: String = ""
     var purchaseDate: NSDate = NSDate()
     var bottlePrice: Float = 0.0
     var totalBottles: Int = 0
-    var locations = [String:Int]()
+    var locs = [Int: SimpleLoc]()
+}
+
+enum LotState {
+    case New
+    case Dirty
+    case Unchanged
+}
+
+struct SimpleLoc {
+    var id : String = ""
+    var location: String = ""
+    var status: LotState = .Unchanged
 }
 
 

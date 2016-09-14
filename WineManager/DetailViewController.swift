@@ -40,6 +40,7 @@ class DetailViewController: UIViewController, SavingDrunkViewControllerDelegate,
 
 
     @IBOutlet weak var markDrunkButton: UIBarButtonItem!
+    let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
     
     var drunkArray : [(date: NSDate, rating: Double)] = []
     var locationArray = Set<String>()
@@ -189,36 +190,40 @@ class DetailViewController: UIViewController, SavingDrunkViewControllerDelegate,
     
     func saveDrunkInfo(rating: Float, date: NSDate, location: String) {
         var flagDone = false
-        let bottle = detailItem as! Wine
-        for (_, value) in bottle.lots!.enumerate() {
+        let wine = detailItem as! Wine
+        for (_, value) in wine.lots!.enumerate() {
             let lot = value as! PurchaseLot
             for (_, value) in lot.bottles!.enumerate() {
-                let loc = value as! Bottle
-                if (loc.available! == 1 && loc.location! == location && !flagDone) {
-                    loc.available = 0
-                    loc.location = ""
-                    loc.drunkDate! = date
-                    loc.rating! = NSDecimalNumber(float: rating)
+                let bottle = value as! Bottle
+                if (bottle.available! == 1 && bottle.location! == location && !flagDone) {
+                    bottle.modifiedDate = NSDate()
+                    bottle.available = 0
+                    bottle.location = ""
+                    bottle.drunkDate! = date
+                    bottle.rating! = NSDecimalNumber(float: rating)
+                    lot.modifiedDate = NSDate()
                     lot.availableBottles = (lot.availableBottles?.integerValue)! - 1
                     lot.drunkBottles = (lot.drunkBottles?.integerValue)! + 1
-                    bottle.availableBottles! = (bottle.availableBottles?.integerValue)! - 1
-                    bottle.drunkBottles! = (bottle.drunkBottles?.integerValue)! + 1
-                    bottle.lastDrunkDate! = date
+                    wine.modifiedDate = NSDate()
+                    wine.availableBottles! = (wine.availableBottles?.integerValue)! - 1
+                    wine.drunkBottles! = (wine.drunkBottles?.integerValue)! + 1
+                    wine.lastDrunkDate! = date
                     flagDone = true
                     break
                 }
             }
         }
-        do {
-            try bottle.managedObjectContext?.save()
-            detailItem = bottle
-            self.configureView()
-        } catch {
-            let saveError = error as NSError
-            NSLog(String(saveError))
-        }
-        
+    saveContext()
     }
+    
+    func saveContext() {
+        do {
+            try appDelegate.managedObjectContext.save()
+        } catch {
+            abort()
+        }
+    }
+
 
 }
 

@@ -1307,7 +1307,33 @@
       </PurchaseLots>
    </bottle>
    <bottle>
-      <Name>Chateau Cos D Estournel</Name>
+       <Name>Chateau Clerc Milon</Name>
+       <Vintage>1993</Vintage>
+       <Varietal>Cabernet Sauvignon</Varietal>
+       <Region>Bordeaux</Region>
+       <Country>France</Country>
+       <ReviewSource>Wine Spectator</ReviewSource>
+       <Points>93</Points>
+       <Review>Clerc Milon is a sure bet for a very good wine in any vintage. Impressive medium to full body, tobacco, cherry, tar and chestnut character, velvety tannins and medium finish</Review>
+       <PurchaseLots>
+           <Lot>
+               <PurchaseDate>2016-08-26</PurchaseDate>
+               <Price>85</Price>
+               <Quantity>1</Quantity>
+               <Locations>
+                   <Loc>
+                       <Status>Drunk</Status>
+                       <Location />
+                       <DrunkDate>2016-08-26</DrunkDate>
+                       <Rating>4</Rating>
+                       <Notes />
+                   </Loc>
+               </Locations>
+           </Lot>
+       </PurchaseLots>
+   </bottle>
+   <bottle>
+       <Name>Chateau Cos D Estournel</Name>
       <Vintage>1985</Vintage>
       <Varietal>Cabernet Sauvignon</Varietal>
       <Region>Bordeaux</Region>
@@ -1437,7 +1463,33 @@
       </PurchaseLots>
    </bottle>
    <bottle>
-      <Name>Chateau de la Meuliere Emotion Grand Reserve</Name>
+       <Name>Chateau d Yquem</Name>
+       <Vintage>1997</Vintage>
+       <Varietal>Sauternes</Varietal>
+       <Region>Bordeaux</Region>
+       <Country>France</Country>
+       <ReviewSource>Wine Advocate</ReviewSource>
+       <Points>96</Points>
+       <Review>A sensational Yquem, this may be this estate's finest effort since 1990. The light gold color is accompanied a gorgeous perfume of caramel, honeysuckle, peach, apricot, and smoky wood. Full-bodied and unctuously-textured, with good underlying acidity as well as loads of sweetness and glycerin, it looks to be a great vintage for this renowned Sauternes estate. Anticipated maturity: 2005-2055</Review>
+       <PurchaseLots>
+           <Lot>
+               <PurchaseDate>2016-08-26</PurchaseDate>
+               <Price>250</Price>
+               <Quantity>1</Quantity>
+               <Locations>
+                   <Loc>
+                       <Status>Available</Status>
+                       <Location>RackTop</Location>
+                       <DrunkDate />
+                       <Rating />
+                       <Notes />
+                   </Loc>
+               </Locations>
+           </Lot>
+       </PurchaseLots>
+   </bottle>
+   <bottle>
+       <Name>Chateau de la Meuliere Emotion Grand Reserve</Name>
       <Vintage>2009</Vintage>
       <Varietal>Cabernet Sauvignon</Varietal>
       <Region>Bordeaux</Region>
@@ -1704,7 +1756,33 @@
       </PurchaseLots>
    </bottle>
    <bottle>
-      <Name>Chateau Latour</Name>
+       <Name>Chateau Larose de Gruaud</Name>
+       <Vintage>2010</Vintage>
+       <Varietal>Cabernet Sauvignon</Varietal>
+       <Region>Bordeaux</Region>
+       <Country>France</Country>
+       <ReviewSource>Wine Advocate</ReviewSource>
+       <Points>93</Points>
+       <Review>Dark garnet with loads of spice, earth, underbrush, red and black currants, licorice, and even a hint of Provencal garrigue, this full-bodied, tannic, masculine style of St.-Julien needs 5-6 years of cellaring, but is full, beefy, rich and impressively endowed. There are plenty of firm tannins in the background of this blockbuster wine, which has been built for the long haul.</Review>
+       <PurchaseLots>
+           <Lot>
+               <PurchaseDate>2016-08-28</PurchaseDate>
+               <Price>50</Price>
+               <Quantity>1</Quantity>
+               <Locations>
+                   <Loc>
+                       <Status>Drunk</Status>
+                       <Location />
+                       <DrunkDate>2016-08-28</DrunkDate>
+                       <Rating>3.5</Rating>
+                       <Notes />
+                   </Loc>
+               </Locations>
+           </Lot>
+       </PurchaseLots>
+   </bottle>
+   <bottle>
+       <Name>Chateau Latour</Name>
       <Vintage>1980</Vintage>
       <Varietal>Cabernet Sauvignon</Varietal>
       <Region>Bordeaux</Region>
@@ -2033,10 +2111,10 @@
             <Quantity>2</Quantity>
             <Locations>
                <Loc>
-                  <Status>Available</Status>
-                  <Location>Rack3</Location>
-                  <DrunkDate />
-                  <Rating />
+                  <Status>Drunk</Status>
+                  <Location />
+                  <DrunkDate>2016-08-30</DrunkDate>
+                  <Rating>5</Rating>
                   <Notes />
                </Loc>
                <Loc>
@@ -2555,10 +2633,10 @@
             <Quantity>2</Quantity>
             <Locations>
                <Loc>
-                  <Status>Available</Status>
-                  <Location>RackTop</Location>
-                  <DrunkDate />
-                  <Rating />
+                  <Status>Drunk</Status>
+                  <Location />
+                  <DrunkDate>2016-07-31</DrunkDate>
+                  <Rating>5</Rating>
                   <Notes />
                </Loc>
                <Loc>
@@ -3650,7 +3728,7 @@
       </PurchaseLots>
    </bottle>
    <bottle>
-      <Name>Joseph Phelps</Name>
+      <Name>Joseph Phelps Syrah</Name>
       <Vintage>2011</Vintage>
       <Varietal>Syrah</Varietal>
       <Region>Napa</Region>
@@ -3709,7 +3787,7 @@
       </PurchaseLots>
    </bottle>
    <bottle>
-      <Name>Joseph Phelps</Name>
+      <Name>Joseph Phelps Syrah</Name>
       <Vintage>2012</Vintage>
       <Varietal>Syrah</Varietal>
       <Region>Napa</Region>
@@ -3967,10 +4045,10 @@
             <Quantity>1</Quantity>
             <Locations>
                <Loc>
-                  <Status>Available</Status>
-                  <Location>Rack9</Location>
-                  <DrunkDate />
-                  <Rating />
+                  <Status>Drunk</Status>
+                  <Location />
+                  <DrunkDate>2016-08-07</DrunkDate>
+                  <Rating>5</Rating>
                   <Notes />
                </Loc>
             </Locations>
@@ -5816,10 +5894,10 @@
             <Quantity>1</Quantity>
             <Locations>
                <Loc>
-                  <Status>Available</Status>
-                  <Location>Rack11</Location>
-                  <DrunkDate />
-                  <Rating />
+                  <Status>Drunk</Status>
+                  <Location />
+                  <DrunkDate>2016-08-13</DrunkDate>
+                  <Rating>5</Rating>
                   <Notes />
                </Loc>
             </Locations>

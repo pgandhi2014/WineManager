@@ -8,7 +8,6 @@
 
 import Foundation
 import CoreData
-import CloudKit
 
 class XMLHelper: NSObject, NSXMLParserDelegate {
     var managedObjectContext: NSManagedObjectContext? = nil
@@ -20,6 +19,7 @@ class XMLHelper: NSObject, NSXMLParserDelegate {
     private var parsedLot = ParsedLot(purchaseDate: "", price: "", quantity: "", locations: [ParsedLoc]())
     private var parsedLoc = ParsedLoc(status: "", location: "", drunkDate: "", rating: "", notes: "")
 
+    
     init(moc: NSManagedObjectContext) {
         super.init()
         self.managedObjectContext = NSManagedObjectContext(concurrencyType: .PrivateQueueConcurrencyType)
@@ -63,7 +63,6 @@ class XMLHelper: NSObject, NSXMLParserDelegate {
         if element.isEqualToString("Name") {
             if (parsedBottle.name.isEmpty) {
                 parsedBottle.name = parsedBottle.name + string
-                NSLog (string)
             }
         } else if element.isEqualToString("Vintage") {
             if (parsedBottle.vintage.isEmpty) {
@@ -112,7 +111,6 @@ class XMLHelper: NSObject, NSXMLParserDelegate {
         } else if element.isEqualToString("Location") {
             if (parsedLoc.location.isEmpty && !(string.containsString("\n") || string.isEmpty)) {
                 parsedLoc.location = parsedLoc.location + string
-                NSLog (string)
             }
         } else if element.isEqualToString("DrunkDate") {
             if (parsedLoc.drunkDate.isEmpty && !string.containsString("\n")) {
@@ -142,11 +140,16 @@ class XMLHelper: NSObject, NSXMLParserDelegate {
 
     internal func insertNewBottle() {
         let newBottle = NSEntityDescription.insertNewObjectForEntityForName("Wine", inManagedObjectContext: self.managedObjectContext!) as! Wine
+        let idDateFormatter = NSDateFormatter()
+        idDateFormatter.dateFormat = "MMddyyyy"
         
+        newBottle.modifiedDate = NSDate()
         newBottle.name = parsedBottle.name
         if let myNumber = NSNumberFormatter().numberFromString(parsedBottle.vintage) {
             newBottle.vintage = myNumber
         }
+        newBottle.id = newBottle.vintage!.stringValue + "." + newBottle.name!.removeWhitespace()
+        print (newBottle.id!)
         newBottle.varietal = parsedBottle.varietal
         newBottle.region = parsedBottle.region
         newBottle.country = parsedBottle.country
@@ -160,11 +163,14 @@ class XMLHelper: NSObject, NSXMLParserDelegate {
         for (_, value) in parsedBottle.purchaseLots.enumerate() {
             let newLot = NSEntityDescription.insertNewObjectForEntityForName("PurchaseLot", inManagedObjectContext: self.managedObjectContext!) as! PurchaseLot
             let lot = value as! ParsedLot
+            newLot.modifiedDate = NSDate()
             newLot.wine = newBottle
             newLot.purchaseDate = self.dateFormatter.dateFromString(lot.purchaseDate)
             if (newLot.purchaseDate!.compare(newBottle.lastPurchaseDate!) == NSComparisonResult.OrderedDescending) {
                 newBottle.lastPurchaseDate = newLot.purchaseDate
             }
+            newLot.id = newBottle.id! + "." + idDateFormatter.stringFromDate(newLot.purchaseDate!)
+            print (newLot.id!)
             if let myNumber = NSNumberFormatter().numberFromString(lot.price) {
                 newLot.price = NSDecimalNumber(decimal: myNumber.decimalValue)
                 if (newLot.price!.compare(newBottle.maxPrice!) == NSComparisonResult.OrderedDescending) {
@@ -178,7 +184,10 @@ class XMLHelper: NSObject, NSXMLParserDelegate {
             for (_, value) in lot.locations.enumerate() {
                 let newLoc = NSEntityDescription.insertNewObjectForEntityForName("Bottle", inManagedObjectContext: self.managedObjectContext!) as! Bottle
                 let loc = value
+                newLoc.modifiedDate = NSDate()
                 newLoc.lot = newLot
+                newLoc.id = newLot.id! + "." + String(arc4random())
+                print(newLoc.id!)
                 if let myDate = self.dateFormatter.dateFromString(loc.drunkDate) {
                     newLoc.drunkDate = myDate
                     if (newLoc.drunkDate!.compare(newBottle.lastDrunkDate!) == NSComparisonResult.OrderedDescending) {
@@ -203,7 +212,7 @@ class XMLHelper: NSObject, NSXMLParserDelegate {
         }
     }
     
-        func saveContext() {
+    func saveContext() {
         do {
             try self.managedObjectContext!.save()
         } catch {

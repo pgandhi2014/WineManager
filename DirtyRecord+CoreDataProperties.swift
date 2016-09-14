@@ -1,5 +1,5 @@
 //
-//  PurchaseLot+CoreDataProperties.swift
+//  DirtyRecord+CoreDataProperties.swift
 //  WineManager
 //
 //  Created by Prashant Gandhi (Intel) on 8/14/16.
@@ -12,16 +12,10 @@
 import Foundation
 import CoreData
 
-extension PurchaseLot {
+extension DirtyRecord {
 
-    @NSManaged var availableBottles: NSNumber?
-    @NSManaged var drunkBottles: NSNumber?
     @NSManaged var id: String?
-    @NSManaged var price: NSDecimalNumber?
-    @NSManaged var purchaseDate: NSDate?
-    @NSManaged var quantity: NSNumber?
     @NSManaged var modifiedDate: NSDate?
-    @NSManaged var bottles: NSSet?
-    @NSManaged var wine: Wine?
+    @NSManaged var type: String?
 
 }

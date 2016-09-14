@@ -24,6 +24,4 @@ class CustomPrototypeCell: UITableViewCell {
         lblRating.layer.borderWidth = 2.0
         lblRating.layer.cornerRadius = 20
     }
-    
-    
 }
