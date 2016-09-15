@@ -54,8 +54,6 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
     
     
     let dateFormatter = NSDateFormatter()
-    var xmlHelper: XMLHelper? = nil
-    
     
     @IBAction func onClearFilters(sender: UIBarButtonItem) {
         filtersApplied = false
@@ -93,8 +91,6 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
             setupFirstView()
         }
         
-        xmlHelper = XMLHelper(moc: self.managedObjectContext!)
-        //parseXML()
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -106,15 +102,6 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
-    }
-    
-    func parseXML() {
-        dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0), {
-            self.xmlHelper!.startParsing()
-            dispatch_async(dispatch_get_main_queue()) {
-                self.performFetchAndRefresh()
-            }
-        })
     }
     
     func setupFirstView() {
